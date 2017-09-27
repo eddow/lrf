@@ -1,126 +1,95 @@
 <template>
-	<s-table
-		celled
-		:rows="dishes"
-		striped
-		selectable
-		:current="selected"
-		@row-click="select"
-	>
-		<s-column prop="title" :edit="$access.admin">
-			<search-header slot="header" label="Title" v-model="filters.title" />
-		</s-column>
-		<s-column
-			prop="tags"
-			width="180"
-			:edit="$access.admin"
-		>
-			<search-header slot="header" label="Tags" v-model="filters.tags" />
-		</s-column>
-		<s-column
-			width="180"
-			:edit="$access.admin"
-			prop="language"
-			type="languages"
-		>
-			<label slot="header">
-				Language
-				<s-select multiple fluid transparent v-model="filters.language" placeholder="All languages">
-					<s-option
-						v-for="(txt, val) in languages" :key="val"
-						:value="val"
-						:text="txt"
-					>
-					<s-icon slot="prepend" icon="search" />
-				</s-select>
-			</label>
-		</s-column>
-		<s-column
-			prop="authors"
-			width="180"
-			:edit="$access.admin"
-		>
-			<search-header slot="header" label="Authors" v-model="filters.authors" />
-		</s-column>
-		<s-row-edit-column v-if="$access.admin"
-			@save="book=> book.save()"
-			@cancel="book=> book.revert()"
-			@remove="delBook"
-			:hasChanges="book => book.hasChanges()"
-			save-icon="save"
-			remove-icon="+database+large teal dont"
-			prop="editing"
-		/>
-	</s-table>
-</template>
 
+	<div class="ui stackable grid">
+		<s-table
+			class="four wide column"
+			celled
+			:rows="dishes"
+			striped
+			selectable
+			:current="selected"
+			@row-click="select"
+		>
+			<div slot="header">
+				<s-button @click="addOne" icon="add circle">Ajouter</s-button>
+			</div>
+			
+			<s-column v-for="(ldenom, lcode) in languages" :key="lcode" :prop="'title.'+lcode" :header="ldenom" />
+		</s-table>
+		<s-form class="twelve wide column" :model="selected" label-width="120px">
+			<template scope="scope">
+				<div class="ui stackable grid">
+					<div class="ten wide column">
+						<div v-for="(ldenom, lcode) in languages" :key="lcode">
+							<div class="field ui segments">
+								<s-input class="ui segment labeled" v-model="scope.model.title[lcode]">
+									<label slot="prepend" class="ui label">
+										{{ldenom}}
+									</label>
+								</s-input>
+								<textarea class="ui input segment" rows="4" v-model="scope.model.description[lcode]" />
+							</div>
+						</div>
+					</div>
+					<div class="six wide column">
+						<s-field prop="price" label="Prix" inline />
+					</div>
+				</div>
+			</template>
+		</s-form>
+	</div>
+</template>
+<style>
+.ui.segment.labeled {
+	padding: 0;
+}
+</style>
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Book, {Languages} from 'models/book'
-import 'models/book'
+import Dish, {Languages} from 'models/dish'
 import {store} from 'common/central'
 import {bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
+import {observeDeeply} from 'biz/js-data'
 
-const books = bindCollection('Book');
+const dishes = bindCollection('Dish');
 @Component
-export default class BooksList extends Vue {
-	books: Book[] = null
+export default class Edit extends Vue {
+	dishes: Dish[] = null
 	
-	@Model('input')
-	selected: Book
 	languages: any = Languages
+	selected: Dish = null
 	filters: any = {
-		title: '',
-		authors: '',
-		tags: '',
-		language: ''
+		title: ''
 	}
-  created() { books.on('all', this.filter); }
-	destroyed() { books.off('all', this.filter); }
+  created() { dishes.on('all', this.filter); }
+	destroyed() { dishes.off('all', this.filter); }
 	@Watch('filters', {deep: true, immediate: true})
 	@Watch('$access', {deep: true})
 	filter() {
-		function test(filters, value, all) {
-			if(!filters || !filters.length) return true;
-			if(!value) return false;
-			if(value instanceof Array) {
-				for(let v of value) if(test(filters, v, all)) return true;
-				return false;
-			}
-			console.assert('string'=== typeof value);
-			value = value.comparable();
-			for(let filter of filters)
-				if(all === !~value.indexOf(filter))	//if we don't find one item of the filter in the value
-					return !all;
-			return all;
-		}
-		var filters = {}, unfiltered = books.getAll();
-		this.books = [];
-		for(let i in this.filters)
-			filters[i] = this.filters[i].comparable().split(' ').filter(x=> !!x.trim());
-		for(let book of unfiltered) {
-			var kept = this.$access.admin || book.files.length;
-			if(kept) for(let f in filters) {
-				let filter = filters[f], excluded = false;
-				//if filter is given "don bro", `filter` is here ['don', 'bro'] and we keep all that contains 'don' and 'bro'
-				if(!test(filter, book[f], f!== 'language')) {
-					kept = false;
-					break;
-				}
-			}
-			if(kept) this.books.push(book);
+		this.dishes = dishes.getAll();
+		// ?
+	}
+	select(dish) {
+		this.selected = dish;
+	}
+	delDish(dish, doer, cancel) {
+		if(dish._id) {
+			alertify.confirm(`Effacer "${dish.title.fr}" ?`, ()=> {
+				dish.destroy();
+				doer();
+			});
+			cancel();
 		}
 	}
-	select(book) {
-		this.$emit('input', book);
-	}
-	delBook(book, doer, cancel) {
-		alertify.confirm(`Unreference "${book.title}" ?`, ()=> {
-			book.destroy();
-		});
-		cancel();
+	addOne() {
+		this.selected = observeDeeply(new Dish({
+			title: {fr: '', en: '', ro: ''},
+			description: {fr: '', en: '', ro: ''},
+			picture: ''
+		}), Dish.schema);
+		//this.selected.editing = true;
 	}
 }
 </script>

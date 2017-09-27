@@ -4,11 +4,11 @@
 			<img src="/logo100.png" />
 			<div>Cart</div>
 			<div class="user">
-				<div v-if="!$auth.isAuthenticated()">
+				<s-button v-if="isAuthenticated" @click="logout">Log out</s-button>
+				<div v-else>
 					<s-button @click="login">Log in</s-button>
 					<s-button @click="register">Register</s-button>
 				</div>
-				<s-button v-if="$auth.isAuthenticated()" @click="logout">Log out</s-button>
 			</div>
 		</nav>
 		<section id="content_section">
@@ -31,14 +31,46 @@ import * as $ from 'jquery'
 
 @Component
 export default class App extends Vue {
+	shoot = 1
+	signalShoot() { this.shoot = 3-this.shoot; }
 	login() {
-		this.$auth.login({email:'test', password:'test'});
+		this.$store.dispatch('login', {
+			user: {
+				email: 'this.email',
+				password: 'this.password'
+			}
+		}).then(() => {
+			//this.$router.push('profile')
+		}).catch(reason=> {
+			this.signalShoot();
+		});
 	}
 	register() {
-		this.$auth.register({name:'name', email:'email@googl.com', password:'pwd'});
+		this.$store.dispatch('register', {
+			user: {
+				name:'name', email:'email@googl.com', password:'pwd'
+			}
+		}).then(() => {
+			this.$router.push('profile')
+		}).catch(reason=> {
+			this.signalShoot();
+		});
 	}
 	logout() {
-		this.$auth.logout();
+		this.$store.dispatch('logout').then(() => {
+			this.$router.push('/')
+		}).catch(reason=> {
+			this.signalShoot();
+		});
+	}
+	
+	/*authenticate (provider) {
+		this.$store.dispatch('authenticate', { provider }).then(() => {
+			this.$router.push('profile')
+		})
+	}*/
+	get isAuthenticated() {
+		return !!this.$store.state.auth.profile;
 	}
 }
 </script>

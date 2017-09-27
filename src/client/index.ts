@@ -4,14 +4,8 @@ import './libs'
 import * as Vue from 'vue'
 import * as VueAuthenticate from 'vue-authenticate'
 
-Vue.use(VueAuthenticate, {
-  baseUrl: window.location.origin,
-  providers: {/*
-    github: {
-      clientId: '',
-      redirectUri: 'http://localhost:8080/auth/callback' // Your client app URL
-    }
-  */}
+var test = Vue.use(VueAuthenticate, {
+  baseUrl: window.location.origin
 });
 
 import * as VueRouter from 'vue-router'
