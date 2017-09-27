@@ -1,5 +1,6 @@
 import {join} from 'path'
 import * as express from 'express';
+import auth from './controllers/auth'
 
 export function statics(app, sockets) {
 	app.use(express.static('dist/client'));
@@ -10,6 +11,7 @@ export function statics(app, sockets) {
 			root: join(__dirname, '../node_modules/semantic-ui/dist/themes/')
 		});
 	});
+	app.use('/auth', auth);
 }
 
 export function controllers(app, sockets) {

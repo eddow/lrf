@@ -1,4 +1,3 @@
-import * as config from 'config'
 import {observeDeeply} from 'biz/js-data'
 import './libs'
 
@@ -6,7 +5,7 @@ import * as Vue from 'vue'
 import * as VueAuthenticate from 'vue-authenticate'
 
 Vue.use(VueAuthenticate, {
-  baseUrl: 'http://'+config.server.url,
+  baseUrl: window.location.origin,
   providers: {/*
     github: {
       clientId: '',

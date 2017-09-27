@@ -49,8 +49,8 @@ store.registerAdapter('http', httpAdapter, { 'default': true });
 var cachedCollections = {};
 export function bindCollection(name) {
 	if(!cachedCollections[name]) {
-		cachedCollections[name] = store.getCollection('Book');
-		store.findAll('Book');
+		cachedCollections[name] = store.getCollection(name);
+		store.findAll(name);
 	}
 	return cachedCollections[name];
 }

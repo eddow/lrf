@@ -1,15 +1,12 @@
 <template>
 	<s-table
 		celled
-		:rows="books"
+		:rows="dishes"
 		striped
-		body-height="200"
-		row-height="42"
 		selectable
 		:current="selected"
 		@row-click="select"
 	>
-		<book-mold />
 		<s-column prop="title" :edit="$access.admin">
 			<search-header slot="header" label="Title" v-model="filters.title" />
 		</s-column>
