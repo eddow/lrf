@@ -1,0 +1,5 @@
+mongo:
+  debug: false
+  uri: mongodb://localhost:27017/lrf
+path:
+  pictures: ./pictures
