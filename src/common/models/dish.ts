@@ -16,19 +16,21 @@ export const Categories = {
 	entrance: 'Entrée',
 	main: 'Plat principal',
 	dessert: 'Dessert',
-	daily: 'Du jour'
+	daily: 'Du jour',
+	archived: 'Inutilisé'
 }
 @Model()
 class Translated {
-	@Property() fr: string
-	@Property() en: string
-	@Property() ro: string
+	@MinLength() @Required() fr: string
+	@MinLength() @Required() en: string
+	@MinLength() @Required() ro: string
 }
 @Model()
 export default class Dish extends Record {
-	@Property() title: Translated
-	@Property() description: Translated
-	@Property() price: Number
-	@Enum(...Object.keys(Categories)) Category: String
-	@Property() picture: string
+	@Required() title: Translated
+	@Required() description: Translated
+	@Required() price: number
+	@Enum(...Object.keys(Categories))
+	@MinLength() @Required() category: string
+	@Required() picture: string
 }

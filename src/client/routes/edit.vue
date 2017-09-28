@@ -1,22 +1,46 @@
 <template>
 
 	<div class="ui stackable grid">
-		<s-table
-			class="four wide column"
-			celled
-			:rows="dishes"
-			striped
-			selectable
-			:current="selected"
-			@row-click="select"
-		>
-			<div slot="header">
-				<s-button @click="addOne" icon="add circle">Ajouter</s-button>
-			</div>
-			
-			<s-column v-for="(ldenom, lcode) in languages" :key="lcode" :prop="'title.'+lcode" :header="ldenom" />
-		</s-table>
+		<div class="four wide column">
+			<s-table
+				style="width: 100%;"
+				celled
+				:rows="dishes"
+				striped
+				selectable
+				:current="selected"
+				@row-click="select"
+			>
+				<div slot="header">
+					<s-button @click="addOne" icon="add circle" :disabled="!canAdd">Ajouter</s-button>
+					<s-button @click="saveOne" primary icon="save" :disabled="!canSave">Sauver</s-button>
+					<s-button @click="delOne" negative icon="trash" :disabled="!canDel">Supprimer</s-button>
+				</div>
+				
+				<!--s-column v-for="(ldenom, lcode) in languages" :key="lcode" :prop="'title.'+lcode" :header="ldenom" /-->
+				<s-column header="Catégorie">
+					<template scope="row">
+						{{categories[row.model.category]}}
+					</template>
+				</s-column>
+				<s-column prop="title.fr" header="Titre" />
+			</s-table>
+		</div>
 		<s-form class="twelve wide column" :model="selected" label-width="120px">
+			<s-data-mold select="languages">
+				<template slot="input" scope="field">
+					<s-select :name="field.name" v-model="field.value">
+						<s-option
+							v-for="(txt, val) in categories" :key="val"
+							:value="val"
+							:text="txt"
+						>
+					</s-select>
+				</template>
+				<template slot="display" scope="field">
+					{{categories[field.value]}}
+				</template>
+			</s-data-mold>
 			<template scope="scope">
 				<div class="ui stackable grid">
 					<div class="ten wide column">
@@ -32,7 +56,21 @@
 						</div>
 					</div>
 					<div class="six wide column">
-						<s-field prop="price" label="Prix" inline />
+						<s-field prop="price" label="Prix" inline 
+							:input="number"
+							:output="x=> ''+ x"
+						/>
+						<s-field prop="category" label="Catégorie" inline>
+							<template slot="input" scope="field">
+								<s-select :name="field.name" v-model="field.value">
+									<s-option
+										v-for="(txt, val) in categories" :key="val"
+										:value="val"
+										:text="txt"
+									>
+								</s-select>
+							</template>
+						</s-field>
 					</div>
 				</div>
 			</template>
@@ -47,7 +85,7 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Dish, {Languages} from 'models/dish'
+import Dish, {Languages, Categories} from 'models/dish'
 import {store} from 'common/central'
 import {bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
@@ -59,9 +97,15 @@ export default class Edit extends Vue {
 	dishes: Dish[] = null
 	
 	languages: any = Languages
+	categories: any = Categories
 	selected: Dish = null
 	filters: any = {
 		title: ''
+	}
+	number(string) {
+		var rv = Number(string);
+		if(isNaN(rv)) throw new Error('bad number');
+		return rv;
 	}
   created() { dishes.on('all', this.filter); }
 	destroyed() { dishes.off('all', this.filter); }
@@ -74,22 +118,43 @@ export default class Edit extends Vue {
 	select(dish) {
 		this.selected = dish;
 	}
-	delDish(dish, doer, cancel) {
-		if(dish._id) {
-			alertify.confirm(`Effacer "${dish.title.fr}" ?`, ()=> {
-				dish.destroy();
-				doer();
-			});
-			cancel();
-		}
+	catch(err) {
+		if(err.errors) {
+			alertify.alert(err.errors.map(x=> `${x.path}(${x.actual}) : ${x.expected}`).join('<br />'));
+		} else alertify.alert('bug...');
+	}
+	get canAdd() {
+		return !this.selected || this.selected._id;
 	}
 	addOne() {
-		this.selected = observeDeeply(new Dish({
+		this.selected = /*observeDeeply(new Dish(*/{
 			title: {fr: '', en: '', ro: ''},
 			description: {fr: '', en: '', ro: ''},
-			picture: ''
-		}), Dish.schema);
+			picture: '',
+			price: 0,
+			category: 'archived'
+		}/*), Dish.schema)*/;
 		//this.selected.editing = true;
+	}
+	get canSave() {
+		return this.selected && (!this.selected._id || this.selected.hasChanges());
+	}
+	saveOne() {
+		try {
+			if(!(this.selected instanceof Dish))
+				this.selected = observeDeeply(new Dish(this.selected), Dish.schema);
+			this.selected.save().catch(this.catch);
+		} catch(err) { this.catch(err); }
+	}
+	get canDel() {
+		return !!this.selected;
+	}
+	delOne() {
+		alertify.confirm(`Effacer "${this.selected.title.fr}" ?`, ()=> {
+			if(this.selected._id)
+				this.selected.destroy();
+			this.selected = null;
+		});
 	}
 }
 </script>
