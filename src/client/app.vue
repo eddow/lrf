@@ -4,7 +4,10 @@
 			<img src="/logo100.png" />
 			<div>Cart</div>
 			<div class="user">
-				<s-button v-if="isAuthenticated" @click="logout">Log out</s-button>
+				<div v-if="isAuthenticated">
+					<router-link to="/edit">Éditer</router-link>
+					<s-button @click="logout">Log out</s-button>
+				</div>
 				<div v-else>
 					<s-button @click="login">Log in</s-button>
 					<s-button @click="register">Register</s-button>

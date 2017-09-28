@@ -13,7 +13,8 @@
 			>
 				<div slot="header">
 					<s-button @click="addOne" icon="add circle" :disabled="!canAdd">Ajouter</s-button>
-					<s-button @click="saveOne" primary icon="save" :disabled="!canSave">Sauver</s-button>
+					<s-button @click="saveOne" primary icon="save" :disabled="!hasChanged">Sauver</s-button>
+					<s-button @click="cancelOne" secondary icon="remove circle" :disabled="!hasChanged">Annuler</s-button>
 					<s-button @click="delOne" negative icon="trash" :disabled="!canDel">Supprimer</s-button>
 				</div>
 				
@@ -71,6 +72,14 @@
 								</s-select>
 							</template>
 						</s-field>
+						<vue-clip :options="optUpload" v-show="selected && selected._id" :on-sending="upload">
+							<template slot="clip-uploader-action" scope="params">
+								<div :class="['dz-message', params.dragging && 'is-dragging']">
+									<img class="ui image" v-if="selected.pictureUrl" :src="selected.pictureUrl" />
+									<s-icon v-else icon="huge cloud upload" />
+								</div>
+							</template>
+						</vue-clip>
 					</div>
 				</div>
 			</template>
@@ -80,6 +89,17 @@
 <style>
 .ui.segment.labeled {
 	padding: 0;
+}
+.dz-message {
+	padding: 70px;
+	border: 1px blue dashed;
+	background-color: white;
+	z-index: 1;
+	text-align: center;
+}
+.is-dragging {
+	border-style: solid;
+	background-color: lightblue;
 }
 </style>
 <script lang="ts">
@@ -102,6 +122,15 @@ export default class Edit extends Vue {
 	filters: any = {
 		title: ''
 	}
+
+	get optUpload() {
+		return {
+			url: '/picture/'+this.selected._id,
+			paramName: 'file',
+			acceptedFiles: 'image/*',
+			uploadMultiple: false
+		};
+	}
 	number(string) {
 		var rv = Number(string);
 		if(isNaN(rv)) throw new Error('bad number');
@@ -117,6 +146,8 @@ export default class Edit extends Vue {
 	}
 	select(dish) {
 		this.selected = dish;
+		if(!dish.pictureUrl)
+			Vue.set(dish, 'pictureUrl', dish.picture?'/picture/'+dish._id:'');
 	}
 	catch(err) {
 		if(err.errors) {
@@ -136,25 +167,51 @@ export default class Edit extends Vue {
 		}/*), Dish.schema)*/;
 		//this.selected.editing = true;
 	}
-	get canSave() {
-		return this.selected && (!this.selected._id || this.selected.hasChanges());
+	get hasChanged() {
+		if(this.selected && !this.selected.pictureChanged)
+			Vue.set(this.selected, 'pictureChanged', false);
+		return this.selected && (!this.selected._id || this.selected.hasChanges() || this.selected.pictureChanged);
+	}
+	pictureAsServer(dish) {
+		dish.pictureChanged = false;
+		dish.pictureUrl = dish.picture?'/picture/'+dish._id:'';
 	}
 	saveOne() {
 		try {
-			if(!(this.selected instanceof Dish))
-				this.selected = observeDeeply(new Dish(this.selected), Dish.schema);
-			this.selected.save().catch(this.catch);
+			var dish = this.selected;
+			if(!(dish instanceof Dish))
+				dish = observeDeeply(new Dish(dish), Dish.schema);
+			dish.save().catch(this.catch).then(()=> {
+				this.pictureAsServer(dish);
+			});
 		} catch(err) { this.catch(err); }
 	}
 	get canDel() {
-		return !!this.selected;
+		return this.selected && this.selected._id;
 	}
 	delOne() {
 		alertify.confirm(`Effacer "${this.selected.title.fr}" ?`, ()=> {
-			if(this.selected._id)
-				this.selected.destroy();
-			this.selected = null;
+			this.selected.destroy();
 		});
+	}
+	cancelOne() {
+		var dish = this.selected;
+		alertify.confirm(`Annuler les modifications sur ce plat ?`, ()=> {
+			if(dish._id) {
+				dish.revert();
+				this.pictureAsServer(dish);
+			} else this.selected = null
+		});
+	}
+	upload(file, xhr, formData) {
+		var dish = this.selected, content = file._file;
+		dish.picture = file.name;
+		var reader = new FileReader();
+		reader.addEventListener("load", function () {
+			dish.pictureUrl = reader.result;
+		}, false);
+		reader.readAsDataURL(content);
+		dish.pictureChanged = true;
 	}
 }
 </script>

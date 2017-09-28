@@ -22,7 +22,7 @@ var io = require('socket.io')(server);
 routes.statics(app, io.sockets);
 import jsData from './controllers/js-data'
 jsData(app, io.sockets, store);
-routes.controllers(app, io.sockets);
+routes.controllers(app, io.sockets, store);
 console.log(`Listening on port ${config.server.port}`);
 var listener = server.listen(config.server.port);
 export default {
