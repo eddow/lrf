@@ -44,23 +44,7 @@
 			</s-data-mold>
 			<template scope="scope">
 				<div class="ui stackable grid">
-					<div class="ten wide column">
-						<div v-for="(ldenom, lcode) in languages" :key="lcode">
-							<div class="field ui segments">
-								<s-input class="ui segment labeled" v-model="scope.model.title[lcode]">
-									<label slot="prepend" class="ui label">
-										{{ldenom}}
-									</label>
-								</s-input>
-								<textarea class="ui input segment" rows="4" v-model="scope.model.description[lcode]" />
-							</div>
-						</div>
-					</div>
 					<div class="six wide column">
-						<s-field prop="price" label="Prix" inline 
-							:input="number"
-							:output="x=> ''+ x"
-						/>
 						<s-field prop="category" label="Catégorie" inline>
 							<template slot="input" scope="field">
 								<s-select :name="field.name" v-model="field.value">
@@ -72,6 +56,10 @@
 								</s-select>
 							</template>
 						</s-field>
+						<s-field prop="price" label="Prix" inline 
+							:input="number"
+							:output="x=> ''+ x"
+						/>
 						<vue-clip :options="optUpload" v-show="selected && selected._id" :on-sending="upload">
 							<template slot="clip-uploader-action" scope="params">
 								<div :class="['dz-message', params.dragging && 'is-dragging']">
@@ -80,6 +68,18 @@
 								</div>
 							</template>
 						</vue-clip>
+					</div>
+					<div class="ten wide column">
+						<div v-for="(ldenom, lcode) in languages" :key="lcode">
+							<div class="field ui segments">
+								<s-input class="ui segment labeled" v-model="scope.model.title[lcode]">
+									<label slot="prepend" class="ui label">
+										{{ldenom}}
+									</label>
+								</s-input>
+								<textarea class="ui input segment" rows="4" v-model="scope.model.description[lcode]" />
+							</div>
+						</div>
 					</div>
 				</div>
 			</template>
