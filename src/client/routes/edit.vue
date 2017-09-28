@@ -13,8 +13,8 @@
 			>
 				<div slot="header">
 					<s-button @click="addOne" icon="add circle" :disabled="!canAdd">Ajouter</s-button>
-					<s-button @click="saveOne" primary icon="save" :disabled="!hasChanged">Sauver</s-button>
-					<s-button @click="cancelOne" secondary icon="remove circle" :disabled="!hasChanged">Annuler</s-button>
+					<s-button @click="saveOne" primary icon="save" :disabled="!hasChanged()">Sauver</s-button>
+					<s-button @click="cancelOne" secondary icon="remove circle" :disabled="!hasChanged()">Annuler</s-button>
 					<s-button @click="delOne" negative icon="trash" :disabled="!canDel">Supprimer</s-button>
 				</div>
 				
@@ -60,14 +60,10 @@
 							:input="number"
 							:output="x=> ''+ x"
 						/>
-						<vue-clip :options="optUpload" v-show="selected && selected._id" :on-sending="upload">
-							<template slot="clip-uploader-action" scope="params">
-								<div :class="['dz-message', params.dragging && 'is-dragging']">
-									<img class="ui image" v-if="selected.pictureUrl" :src="selected.pictureUrl" />
-									<s-icon v-else icon="huge cloud upload" />
-								</div>
-							</template>
-						</vue-clip>
+						<div>
+							<input type="file" @change="pictureChange" accept="image/*" />
+							<img class="ui image" v-if="selected.picture" :src="selected.picture" />
+						</div>
 					</div>
 					<div class="ten wide column">
 						<div v-for="(ldenom, lcode) in languages" :key="lcode">
@@ -146,8 +142,6 @@ export default class Edit extends Vue {
 	}
 	select(dish) {
 		this.selected = dish;
-		if(!dish.pictureUrl)
-			Vue.set(dish, 'pictureUrl', dish.picture?'/picture/'+dish._id:'');
 	}
 	catch(err) {
 		if(err.errors) {
@@ -167,23 +161,15 @@ export default class Edit extends Vue {
 		}/*), Dish.schema)*/;
 		//this.selected.editing = true;
 	}
-	get hasChanged() {
-		if(this.selected && !this.selected.pictureChanged)
-			Vue.set(this.selected, 'pictureChanged', false);
-		return this.selected && (!this.selected._id || this.selected.hasChanges() || this.selected.pictureChanged);
-	}
-	pictureAsServer(dish) {
-		dish.pictureChanged = false;
-		dish.pictureUrl = dish.picture?'/picture/'+dish._id:'';
+	hasChanged() {
+		return this.selected && (!this.selected._id || this.selected.hasChanges());
 	}
 	saveOne() {
 		try {
 			var dish = this.selected;
 			if(!(dish instanceof Dish))
 				dish = observeDeeply(new Dish(dish), Dish.schema);
-			dish.save().catch(this.catch).then(()=> {
-				this.pictureAsServer(dish);
-			});
+			dish.save().catch(this.catch)/*.then(()=> this.$forceUpdate())*/;
 		} catch(err) { this.catch(err); }
 	}
 	get canDel() {
@@ -199,19 +185,40 @@ export default class Edit extends Vue {
 		alertify.confirm(`Annuler les modifications sur ce plat ?`, ()=> {
 			if(dish._id) {
 				dish.revert();
-				this.pictureAsServer(dish);
 			} else this.selected = null
 		});
 	}
-	upload(file, xhr, formData) {
-		var dish = this.selected, content = file._file;
-		dish.picture = file.name;
+	pictureChange(event) {
+		var dish = this.selected, content = event.target.files[0];
 		var reader = new FileReader();
 		reader.addEventListener("load", function () {
-			dish.pictureUrl = reader.result;
+			//dish.picture = reader.result;
+			var image = new Image();
+			image.onload = function(imageEvent) {
+					// Resize the image
+					var canvas = document.createElement('canvas'),
+						max_size = 320,
+						width = image.width,
+						height = image.height;
+					if (width > height) {
+						if (width > max_size) {
+							height *= max_size / width;
+							width = max_size;
+						}
+					} else {
+						if (height > max_size) {
+							width *= max_size / height;
+							height = max_size;
+						}
+					}
+					canvas.width = width;
+					canvas.height = height;
+					canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+					dish.picture = canvas.toDataURL('image/jpeg');
+			}
+			image.src = reader.result;
 		}, false);
 		reader.readAsDataURL(content);
-		dish.pictureChanged = true;
 	}
 }
 </script>

@@ -6,7 +6,8 @@ import {store, initStore} from 'common/central'
 import {Container} from 'js-data'
 import * as routes from './routes'
 import * as io from 'socket.io'
-console.log(__assign);
+import * as bodyParser from 'body-parser'
+console.log(__assign);	//we need to refer it for ts-json-schema; if not, it won't be defined globally
 
 initStore(new Container({
 	mapperDefaults: {
@@ -17,6 +18,8 @@ initStore(new Container({
 store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': true });
 
 const app = express();
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 routes.statics(app, io.sockets);
