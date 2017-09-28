@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<s-select fluid transparent class="icon labeled button" action="hide" @change="addDish">
+		<s-select v-if="!dndGroup" fluid transparent class="icon labeled button" action="hide" @change="addDish">
 			<template slot="bar">
 				<s-icon icon="add square" />
 				<span class="text">Ajouter</span>
@@ -8,19 +8,19 @@
 			<s-option
 				v-for="val in addible" :key="val"
 				:value="val"
-				:text="dishes[val].title.fr"
+				:text="dishById[val].title.fr"
 			>
 			<s-icon slot="prepend" icon="search" />
 		</s-select>
 		<draggable
-			v-model="menu.dishes"
-			class="ui relaxed divided list"
-			:options="{draggable:'.item'}"
+			v-model="dishClone"
+			class="ui divided list"
+			:options="dndOptions"
 		>
-			<div class="item" v-for="dishId in menu.dishes" :key="dishId">			
-				<div v-if="dishes[dishId]" class="content">
-					<div class="header">{{dishes[dishId].title.fr}}</div>
-					<div class="description">{{dishes[dishId].description.fr}}</div>
+			<div class="item" v-for="dishId in dishClone" :key="dishId">			
+				<div v-if="dishById[dishId]" class="content">
+					<div class="header">{{dishById[dishId].title.fr}}</div>
+					<div class="description">{{dishById[dishId].description.fr}}</div>
 				</div>
 				<div v-else class="content">
 					<div class="ui negative message">Plat fantôme</div>
@@ -30,43 +30,36 @@
 	</div>
 </template>
 <style>
+.ui.divided.list {
+	min-height: 100px;
+}
 </style>
 <script lang="ts">
 import * as Vue from 'vue'
-import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Menu from 'models/menu'
-import Dish, {Languages} from 'models/dish'
-import {observeDeeply, bindCollection} from 'biz/js-data'
-const menus = bindCollection('Menu');
-const dishes = bindCollection('Dish');
+import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
 
 @Component
 export default class MenuEdit extends Vue {
-	@Prop() menuId: string
-	dishes: {[_id: string]: Dish} = {}
-	indexDishes() {
-		var dishList = dishes.getAll();
-		this.dishes = {};
-		for(let dish of dishList)
-			this.dishes[dish._id] = dish;
-	}
-	menu: Menu = null
-  created() {
-		dishes.on('all', this.indexDishes); this.indexDishes();
-		menus.on('all', this.indexMenus); this.indexMenus();
-	}
-	destroyed() {
-		dishes.off('all', this.indexDishes);
-		menus.off('all', this.indexMenus);
-	}
-	indexMenus() {
-		var found = menus.getAll().find(menu=> menu.identification=== this.menuId);
-		if(found) this.menu = found;
-		else if(!this.menu) this.menu = {
-			identification: this.menuId,
-			dishes: []
+	@Prop() dndGroup: string
+	@Prop() dishById: any
+	@Prop() dishes: string[]
+	dishClone = [];
+	@Watch('dishes', {deep: true, immediate: true}) input(dishes) { this.dishClone = dishes; }
+	@Watch('dishClone', {deep: true})
+	@Emit()
+	change(dishes) {
+		if(dishes.length === this.dishes.length) {
+			let i;
+			for(i = 0; i < dishes.length; ++i)
+				if(dishes[i] !== this.dishes[i])
+					break;
+			if(i >= dishes.length) return false;
 		}
+		this.dishes.length = 0;
+		this.dishes.push(...dishes);
 	}
+
+	/*
 	cachedAddible: string[] = []
 	get addible() {
 		this.cachedAddible.length = 0;
@@ -77,6 +70,14 @@ export default class MenuEdit extends Vue {
 	}
 	addDish(value) {
 		this.menu.dishes.push(value);
+	}*/
+	get dndOptions() {
+		var rv = {draggable:'.item'};
+		if(this.dndGroup) rv.group = {
+			name: this.dndGroup,
+			pull: true, put: true
+		}
+		return rv;
 	}
 }
 </script>
