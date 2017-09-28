@@ -8,10 +8,12 @@ import {
 import {Record} from 'js-data'
 
 export const Categories = {
-	entrance: 'Entrée',
-	main: 'Plat principal',
-	dessert: 'Dessert',
-	chicken: 'Poulet'
+	all: 'Général',
+	mon: 'Lundi',
+	tue: 'Mardi',
+	wed: 'Mercredi',
+	thu: 'Jeudi',
+	fri: 'Vendredi'
 }
 
 @Model()

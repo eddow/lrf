@@ -2,25 +2,35 @@
 	<div v-if="!menus">
 		Chargement...
 	</div>
-	<div v-else class="ui five column grid">
-		<div v-for="(cdenom, ccode) in categories" :key="ccode" class="ui column">
-			<div class="ui message">{{cdenom}}</div>
-			<menu-edit @change="save(ccode)" dnd-group="categories" :dishById="dishes" :dishes="menus[ccode].dishes" />
+	<div v-else class="ui segments">
+		<div class="segment ui four column grid">
+			<div v-for="(pdenom, pcode) in parts" :key="ccode" class="ui column">
+				<h1 class="ui header">{{pdenom}}</h1>
+			</div>
 		</div>
-		<div class="ui column">
-			<menu-edit dnd-group="categories" :dishById="dishes" :dishes="remaining" />
-		</div>
+		<day-edit class="remaining segment" :dishById="dishes" :dishes="remaining" />
+		<s-accordion :exclusive="false" :styled="false" class="segment">
+			<s-panel v-for="(cdenom, ccode) in categories" :key="ccode" :title="cdenom">
+				<day-edit
+					:dishById="dishes" :dishes="menus[ccode].dishes"
+					@change="save(ccode)"
+				/>
+			</s-panel>
+		</s-accordion>
 	</div>
 </template>
 <style>
+.accordion .title {
+	border-top: 1px solid black;
+}
 </style>
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
+import Dish, {Languages, Parts} from 'models/dish'
 import Menu, {Categories} from 'models/menu'
 import {observeDeeply, bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
-import Dish, {Languages} from 'models/dish'
 
 const menus = bindCollection('Menu');
 const dishes = bindCollection('Dish');
@@ -28,6 +38,7 @@ const dishes = bindCollection('Dish');
 @Component
 export default class Menus extends Vue {
 	categories = Categories
+	parts = Parts
 
 	dishes: {[_id: string]: Dish} = {}
 	indexDishes() {

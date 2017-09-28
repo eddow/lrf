@@ -24,6 +24,17 @@
 			<template scope="scope">
 				<div class="ui stackable grid">
 					<div class="six wide column">
+						<s-field prop="part" label="Place" inline>
+							<template slot="input" scope="field">
+								<s-select :name="field.name" selection v-model="field.value">
+									<s-option
+										v-for="(txt, val) in parts" :key="val"
+										:value="val"
+										:text="txt"
+									>
+								</s-select>
+							</template>
+						</s-field>
 						<s-field prop="price" label="Prix" inline 
 							:input="number"
 							:output="x=> ''+ x"
@@ -69,7 +80,7 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Dish, {Languages} from 'models/dish'
+import Dish, {Languages, Parts} from 'models/dish'
 import {observeDeeply, bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
 
@@ -79,6 +90,7 @@ export default class Dishes extends Vue {
 	dishes: Dish[] = null
 	
 	languages: any = Languages
+	parts: any = Parts
 	selected: Dish = null
 	filters: any = {
 		title: ''
@@ -120,7 +132,8 @@ export default class Dishes extends Vue {
 			title: {fr: '', en: '', ro: ''},
 			description: {fr: '', en: '', ro: ''},
 			picture: '',
-			price: 0
+			price: 0,
+			part: ''
 		}/*), Dish.schema)*/;
 		//this.selected.editing = true;
 	}

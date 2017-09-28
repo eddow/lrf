@@ -12,6 +12,14 @@ export const Languages = {
 	en: 'Anglais',
 	ro: 'Roumain'
 };
+
+export const Parts = {
+	entrance: 'Entrée',
+	main: 'Plat principal',
+	side: 'Accompagnement',
+	dessert: 'Dessert'
+}
+
 @Model()
 class Translated {
 	@MinLength() @Required() fr: string
@@ -20,6 +28,8 @@ class Translated {
 }
 @Model()
 export default class Dish extends Record {
+	@Enum('', ...Object.keys(Parts))
+	@Required() part: string
 	@Required() title: Translated
 	@Required() description: Translated
 	@Required() price: number
