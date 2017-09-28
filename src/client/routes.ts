@@ -1,5 +1,6 @@
 import Food from './routes/food.vue'
-import Edit from './routes/edit.vue'
+import Dishes from './routes/dishes.vue'
+import Menus from './routes/menus.vue'
 
 export default [{
 	path: '/',
@@ -7,8 +8,13 @@ export default [{
 	name: 'food',
 	component: Food
 }, {
-	//admin: true,
-	menu: 'Edit',
-	component: Edit,
-	path: '/edit'
+	admin: true,
+	menu: 'Plats',
+	component: Dishes,
+	path: '/dishes'
+}, {
+	admin: true,
+	menu: 'Menus',
+	component: Menus,
+	path: '/menus'
 }];

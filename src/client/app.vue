@@ -5,7 +5,8 @@
 			<div>Cart</div>
 			<div class="user">
 				<div v-if="isAuthenticated">
-					<router-link to="/edit">Éditer</router-link>
+					<router-link to="/dishes">Plats</router-link>
+					<router-link to="/menus">Menus</router-link>
 					<s-button @click="logout">Log out</s-button>
 				</div>
 				<div v-else>

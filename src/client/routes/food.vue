@@ -10,7 +10,9 @@
 <script lang="ts">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
-import Dish from 'models/dish'
+import Dish, {Languages} from 'models/dish'
+
+global
 
 @Component
 export default class Food extends Vue {

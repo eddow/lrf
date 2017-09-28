@@ -8,12 +8,15 @@ Vue.use(semanticVue);
 import 'alertify'
 import 'alertify.js/dist/css/alertify.css'
 
+import * as draggable from 'vuedraggable'
+Vue.component('draggable', draggable);
+
 import * as Vuex from 'vuex'
 import * as VueAxios from 'vue-axios'
 import * as axios from 'axios'
  
 Vue.use(Vuex);
-Vue.use(VueAxios, axios); 
+Vue.use(VueAxios, axios);
 
 import vueClip from 'vue-clip'
 Vue.use(vueClip);
