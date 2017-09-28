@@ -14,27 +14,28 @@ Sparky.task("build", ()=> {
 		plugins: [
 			TypeScriptHelpers(),
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
-			CSSPlugin(), production && UglifyJSPlugin(),
+			CSSPlugin(),
 			VuePlugin(),
 			JSONPlugin(),
-			ConfigPlugin()
+			ConfigPlugin(),
+			production && UglifyJSPlugin()
+			/*production && QuantumPlugin({
+				bakeApiIntoBundle : 'client/vendor',
+				target: 'browser'
+			})*/
 		],
 		hash: production,
-		//hmr: true,
-		//sourceMaps: {project: true, vendor: false},
-		//cache: false,
 		cache: !production,
 		alias: {
 			models: "~/common/models",
 			common: "~/common",
-			//'semantic-vue': "semantic-vue/src",
 			bluebird: 'bluebird/js/release/bluebird.js',
 			vue: 'vue/dist/vue.js'
 		},
 		debug: true, log: true
 	});
 
-	fuse.bundle("server/app")
+	fuse.bundle("server/app").target('server')
 		.watch("(server|common)/**")
 		//.sourceMaps(true)
 		.instructions("> [server/index.ts] +[common/**/*.*] -*.d.ts")
@@ -55,17 +56,16 @@ Sparky.task("build", ()=> {
 		//.instructions(`~ client/*.ts +tslib`);
 		.shim({
 			jquery: {
-				source: "node_modules/jquery/dist/jquery.js",
+				//source: "node_modules/jquery/dist/jquery.js",
 				exports: "$"
 			},
 			alertify: {
-				source: "node_modules/alertify.js/dist/js/alertify.js",
+				//source: "node_modules/alertify.js/dist/js/alertify.js",
 				exports: "alertify"
 			}
 		})
-		.instructions(`~ client/index.ts ~[client/routes/*.vue] ~[common/**/*.*] +tslib`);
+		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[client/routes/*.vue] ~[common/**/*.*]`);
 	//if (!production) vendor.hmr();
-
 	return fuse.run().then((fuseProducer)=> {
 		producer = fuseProducer;
 	});

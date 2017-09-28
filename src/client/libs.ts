@@ -1,6 +1,8 @@
 import * as S from 'string'
 S.extendPrototype();
 import 'semantic-ui/dist/semantic.min.css'
+//import 'jquery'	//for `v-semantic` source import
+import 'vue-property-decorator'	//for `v-semantic` source import
 
 import * as Vue from 'vue'
 import semanticVue from 'v-semantic'

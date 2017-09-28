@@ -1,12 +1,12 @@
 import './extensions/*'
 
-function mapper(cls) {
+function mapper(cls, name) {
 	cls.schema.properties._id = {
 		type: 'string',
 		enumerable: false,
 		indexed: true	//used in Collection to create Index
 	};
-	return store.defineMapper(cls.name, {
+	return store.defineMapper(name[0].toUpperCase()+name.substr(1), {
 		schema: cls.schema,
 		recordClass: cls
 	});
@@ -18,6 +18,7 @@ import * as models from './models/*'
 export function initStore(str) {
 	store = str;
 	for(let m in models)
-		mapper(models[m].default);
+	//We have to use file name as the function name is mangled
+		mapper(models[m].default, /([^/]*)\./.exec(m)[1]);
 }
 export var store;

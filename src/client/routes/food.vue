@@ -8,7 +8,8 @@
 			</div>
 			<div class="ui bottom attached relaxed divided cards">
 				<div v-for="(dish, dndx) in menu.dishes" :key="dndx" class="card">
-					<div class="image">
+					<div class="ui image">
+						<div v-if="dish.today" class="ui orange right ribbon label">Aujourd'hui</div>
 						<img class="middle aligned" v-if="dish.picture" :src="'picture/'+dish._id"></i>
 					</div>
 					<div class="content">

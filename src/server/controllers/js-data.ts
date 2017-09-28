@@ -6,11 +6,14 @@ export default function jsData(app, sockets, store) {
 		if(!/^before/.test(event)) {
 			event = /^(?:after)?(.*)$/.exec(event)[1].toLowerCase();
 			switch(event) {
-				case 'update' :
+				case 'update':
 					sockets.emit('js-data', event, collection, id, data);
 					break;
-				default:
+				case 'destroy':
+				case 'create':
 					sockets.emit('js-data', event, collection, id, data, ...args);
+					break;
+				default:
 					break;
 			}
 		}
