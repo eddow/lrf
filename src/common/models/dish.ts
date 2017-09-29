@@ -6,7 +6,7 @@ import {
 	Items
 } from 'ts-json-schema-decorator'
 import {Record} from 'js-data'
-import {Translated} from '../aux'
+import {Translated} from '../auxs'
 
 export const Languages = {
 	ro: 'Roumain',
