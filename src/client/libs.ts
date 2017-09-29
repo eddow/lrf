@@ -16,12 +16,12 @@ Vue.component('draggable', draggable);
 import * as Vuex from 'vuex'
 import * as VueAxios from 'vue-axios'
 import * as axios from 'axios'
- 
+
 Vue.use(Vuex);
 Vue.use(VueAxios, axios);
 
-import vueClip from 'vue-clip'
-Vue.use(vueClip);
+import vgl from 'vue-golden-layout'
+Vue.use(vgl);
 
 // https://github.com/fuse-box/fuse-box/issues/542
 //import 'vue-property-decorator' //This is not needed, I don't know why

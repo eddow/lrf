@@ -19,6 +19,7 @@
 						</div>
 						<div class="description">
 							{{dish.description.fr}}
+							<div class="right floated">{{(dish.grams||0).toFixed(0)}}gr</div>
 						</div>
 					</div>
 				</div>

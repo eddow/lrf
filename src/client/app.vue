@@ -7,6 +7,7 @@
 				<div v-if="isAuthenticated">
 					<router-link to="/dishes">Plats</router-link>
 					<router-link to="/menus">Menus</router-link>
+					<router-link to="/templates">Templates</router-link>
 					<s-button @click="logout">Log out</s-button>
 				</div>
 				<div v-else>

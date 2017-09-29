@@ -1,29 +1,23 @@
 <template>
-
 	<div class="ui stackable grid">
 		<div class="six wide column">
-			<s-table
+			<mgd-table
 				style="width: 100%;"
-				celled
-				:rows="dishes"
-				striped
-				selectable
-				:current="selected"
-				@row-click="select"
+				v-model="selected"
+				:new-empty="emptyDish"
+				:recordClass="Dish"
+				collection-name="Dish"
+				:filter="filter"
 			>
-				<div slot="header">
-					<s-button @click="addOne" icon="add circle" v-if="canAdd">Ajouter</s-button>
-					<s-button @click="saveOne" primary icon="save" v-if="hasChanged()">Sauver</s-button>
-					<s-button @click="cancelOne" secondary icon="remove circle" v-if="hasChanged()">Annuler</s-button>
-					<s-button @click="delOne" negative icon="trash" v-if="canDel">Supprimer</s-button>
-				</div>
 				<s-column header="Plat">
 					<template scope="row">
 						{{parts[row.model.part]}}
 					</template>
 				</s-column>
-				<s-column prop="title.fr" header="Titre" />
-			</s-table>
+				<s-column prop="title.fr">
+					<search-header slot="header" label="Titre" v-model="filters.title" />
+				</s-column>
+			</mgd-table>
 		</div>
 		<s-form class="ten wide column" :model="selected" label-width="120px">
 			<template scope="scope">
@@ -90,14 +84,12 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Dish, {Languages, Parts} from 'models/dish'
-import {observeDeeply, bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
 
-const dishes = bindCollection('Dish');
 @Component
 export default class Dishes extends Vue {
-	dishes: Dish[] = null
-	
+	Dish = Dish
+
 	languages: any = Languages
 	parts: any = Parts
 	selected: Dish = null
@@ -122,60 +114,20 @@ export default class Dishes extends Vue {
 		number = number || 0;
 		return number.toFixed(decs||0)
 	}
-  created() { dishes.on('all', this.filter); }
-	destroyed() { dishes.off('all', this.filter); }
-	@Watch('filters', {deep: true, immediate: true})
-	filter() {
-		this.dishes = dishes.getAll();
-		// ?
+	get filter() {
+		return this.filters.title ? x=> !!~x.title.fr.indexOf(this.filters.title) : ()=>true;
 	}
 	select(dish) {
 		this.selected = dish;
 	}
-	catch(err) {
-		if(err.errors) {
-			alertify.alert(err.errors.map(x=> `${x.path}(${x.actual}) : ${x.expected}`).join('<br />'));
-		} else alertify.alert('bug...');
-	}
-	get canAdd() {
-		return !this.selected || this.selected._id;
-	}
-	addOne() {
-		this.selected = /*observeDeeply(new Dish(*/{
+	emptyDish() {
+		return {
 			title: {fr: '', en: '', ro: ''},
 			description: {fr: '', en: '', ro: ''},
 			picture: '',
 			price: 0,
 			part: ''
-		}/*), Dish.schema)*/;
-		//this.selected.editing = true;
-	}
-	hasChanged() {
-		return this.selected && (!this.selected._id || this.selected.hasChanges());
-	}
-	saveOne() {
-		try {
-			var dish = this.selected;
-			if(!(dish instanceof Dish))
-				dish = observeDeeply(new Dish(dish), Dish.schema);
-			dish.save().catch(this.catch)/*.then(()=> this.$forceUpdate())*/;
-		} catch(err) { this.catch(err); }
-	}
-	get canDel() {
-		return this.selected && this.selected._id;
-	}
-	delOne() {
-		alertify.confirm(`Effacer "${this.selected.title.fr}" ?`, ()=> {
-			this.selected.destroy();
-		});
-	}
-	cancelOne() {
-		var dish = this.selected;
-		alertify.confirm(`Annuler les modifications sur ce plat ?`, ()=> {
-			if(dish._id) {
-				dish.revert();
-			} else this.selected = null
-		});
+		};
 	}
 	pictureChange(event) {
 		var dish = this.selected, content = event.target.files[0];

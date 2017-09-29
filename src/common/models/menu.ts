@@ -18,6 +18,7 @@ export const Categories = {
 
 @Model()
 export default class Menu extends Record {
-	@Property() identification: string	//either a category keyword, either a date
+	@Enum(...Object.keys(Categories))
+	@Required() identification: string
 	@Items(String) dishes: string[]
 }

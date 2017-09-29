@@ -62,6 +62,10 @@ Sparky.task("build", ()=> {
 			alertify: {
 				//source: "node_modules/alertify.js/dist/js/alertify.js",
 				exports: "alertify"
+			},
+			ace: {
+				//source: "node_modules/ace/build/lib",
+				exports: "ace"
 			}
 		})
 		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[client/routes/*.vue] ~[common/**/*.*]`);
