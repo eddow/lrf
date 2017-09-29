@@ -36,7 +36,7 @@ import Dish, {Languages} from 'models/dish'
 import Menu, {Categories} from 'models/menu'
 
 var menus = [];
-Vue.axios('/customer/menu').then(response=> {
+Vue.axios('/customer/today').then(response=> {
 	menus.push(...response.data);
 });
 

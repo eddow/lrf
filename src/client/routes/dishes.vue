@@ -9,7 +9,7 @@
 				collection-name="Dish"
 				:filter="filter"
 			>
-				<s-column header="Plat">
+				<s-column header="Service">
 					<template scope="row">
 						{{parts[row.model.part]}}
 					</template>
@@ -23,7 +23,7 @@
 			<template scope="scope">
 				<div class="ui stackable grid">
 					<div class="six wide column">
-						<s-field prop="part" label="Place" inline>
+						<s-field prop="part" label="Service" inline>
 							<template slot="input" scope="field">
 								<s-select :name="field.name" selection v-model="field.value">
 									<s-option
@@ -88,6 +88,10 @@ import * as alertify from 'alertify'
 
 @Component
 export default class Dishes extends Vue {
+	dbg(x) {
+		debugger;
+		return x;
+	}
 	Dish = Dish
 
 	languages: any = Languages

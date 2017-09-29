@@ -6,6 +6,8 @@
 		selectable
 		:current="selected"
 		@row-click="select"
+		class="screen"
+		body-height="500"
 	>
 		<div slot="header">
 			<s-button @click="addOne" icon="add circle" v-if="canAdd">Ajouter</s-button>

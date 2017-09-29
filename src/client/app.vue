@@ -68,7 +68,16 @@ export default class App extends Vue {
 			this.signalShoot();
 		});
 	}
-	
+	mounted() {
+		window.addEventListener('keyup', function(event) {
+				// If down arrow was pressed...
+				if('s'=== event.key && event.ctrlKey) {
+					event.preventDefault();
+				}
+        var donothing=true;
+      });
+
+	}
 	/*authenticate (provider) {
 		this.$store.dispatch('authenticate', { provider }).then(() => {
 			this.$router.push('profile')

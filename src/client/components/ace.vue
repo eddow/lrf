@@ -20,7 +20,7 @@ export default class Ace extends Vue {
 	}
 	mounted () {
 		const lang = this.lang || 'text'
-		const theme = this.theme || 'github'
+		const theme = this.theme || 'eclipse'
 
 		this.editor = ace.edit(this.$refs.editor)
 		this.editor.setValue(this.value, 1)
