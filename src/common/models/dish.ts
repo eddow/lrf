@@ -6,6 +6,7 @@ import {
 	Items
 } from 'ts-json-schema-decorator'
 import {Record} from 'js-data'
+import {Translated} from '../aux'
 
 export const Languages = {
 	ro: 'Roumain',
@@ -16,16 +17,11 @@ export const Languages = {
 export const Parts = {
 	entrance: 'Entrée',
 	main: 'Plat principal',
+	roast: 'Rôtisserie',
 	side: 'Accompagnement',
 	dessert: 'Dessert'
 }
 
-@Model()
-class Translated {
-	@MinLength() @Required() fr: string
-	@MinLength() @Required() en: string
-	@MinLength() @Required() ro: string
-}
 @Model()
 export default class Dish extends Record {
 	@Enum('', ...Object.keys(Parts))

@@ -16,7 +16,6 @@
 		</div>
 		<s-form class="twelve wide column screen" :model="selected">
 			<template scope="scope">
-				
 				<layout-golden style="height: 100%;" :showPopoutIcon="false">
 					<gl-row>
 						<gl-col>

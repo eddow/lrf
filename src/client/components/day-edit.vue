@@ -1,5 +1,5 @@
 <template>
-	<div class="ui four column grid">
+	<div class="ui five column grid">
 		<div v-for="(pdenom, pcode) in parts" :key="pcode" class="ui column">
 			<menu-edit @change="value=> change(value, pcode)" :dnd-group="pcode" :dishById="dishById" :dishes="partDishes(pcode)" />
 		</div>
