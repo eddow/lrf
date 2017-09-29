@@ -1,7 +1,7 @@
 <template>
 
 	<div class="ui stackable grid">
-		<div class="four wide column">
+		<div class="six wide column">
 			<s-table
 				style="width: 100%;"
 				celled
@@ -12,15 +12,20 @@
 				@row-click="select"
 			>
 				<div slot="header">
-					<s-button @click="addOne" icon="add circle" :disabled="!canAdd">Ajouter</s-button>
-					<s-button @click="saveOne" primary icon="save" :disabled="!hasChanged()">Sauver</s-button>
-					<s-button @click="cancelOne" secondary icon="remove circle" :disabled="!hasChanged()">Annuler</s-button>
-					<s-button @click="delOne" negative icon="trash" :disabled="!canDel">Supprimer</s-button>
+					<s-button @click="addOne" icon="add circle" v-if="canAdd">Ajouter</s-button>
+					<s-button @click="saveOne" primary icon="save" v-if="hasChanged()">Sauver</s-button>
+					<s-button @click="cancelOne" secondary icon="remove circle" v-if="hasChanged()">Annuler</s-button>
+					<s-button @click="delOne" negative icon="trash" v-if="canDel">Supprimer</s-button>
 				</div>
+				<s-column header="Plat">
+					<template scope="row">
+						{{parts[row.model.part]}}
+					</template>
+				</s-column>
 				<s-column prop="title.fr" header="Titre" />
 			</s-table>
 		</div>
-		<s-form class="twelve wide column" :model="selected" label-width="120px">
+		<s-form class="ten wide column" :model="selected" label-width="120px">
 			<template scope="scope">
 				<div class="ui stackable grid">
 					<div class="six wide column">
@@ -35,9 +40,13 @@
 								</s-select>
 							</template>
 						</s-field>
+						<s-field prop="grams" label="Grammage" inline 
+							:input="number"
+							:output="x=> fixed(x)"
+						/>
 						<s-field prop="price" label="Prix" inline 
 							:input="number"
-							:output="x=> ''+ x"
+							:output="x=> fixed(x, 2)"
 						/>
 						<div>
 							<input type="file" @change="pictureChange" accept="image/*" />
@@ -107,7 +116,11 @@ export default class Dishes extends Vue {
 	number(string) {
 		var rv = Number(string);
 		if(isNaN(rv)) throw new Error('bad number');
-		return rv;
+		return rv||0;
+	}
+	fixed(number, decs) {
+		number = number || 0;
+		return number.toFixed(decs||0)
 	}
   created() { dishes.on('all', this.filter); }
 	destroyed() { dishes.off('all', this.filter); }

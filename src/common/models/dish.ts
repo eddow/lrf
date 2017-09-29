@@ -8,9 +8,9 @@ import {
 import {Record} from 'js-data'
 
 export const Languages = {
+	ro: 'Roumain',
 	fr: 'Français',
-	en: 'Anglais',
-	ro: 'Roumain'
+	en: 'Anglais'
 };
 
 export const Parts = {
@@ -33,5 +33,6 @@ export default class Dish extends Record {
 	@Required() title: Translated
 	@Required() description: Translated
 	@Required() price: number
+	@Required() grams: number
 	@Required() picture: string
 }
