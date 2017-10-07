@@ -10,12 +10,6 @@ var test = Vue.use(VueAuthenticate, {
 import * as VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
-import * as components from './components/*.vue'
-for(let c in components) {
-	let component = components[c].default;
-	Vue.component(component.options.name, component);
-}
-
 import App from './app.vue'
 import routes from 'routes.device'
 import store from './store'

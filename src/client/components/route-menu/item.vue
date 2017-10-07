@@ -13,7 +13,7 @@
 	padding-bottom: 0;
 }
 </style>
-<script lang="ts">
+<script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 

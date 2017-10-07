@@ -1,7 +1,7 @@
 <template>
 	<div ref="editor" style="width: 100%; height: 100%;"></div>
 </template>
-<script lang="ts">
+<script lang="js">
 
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'

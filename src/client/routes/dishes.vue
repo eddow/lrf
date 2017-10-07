@@ -80,13 +80,16 @@
 	background-color: lightblue;
 }
 </style>
-<script lang="ts">
+<script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import Dish, {Languages, Parts} from 'models/dish'
 import * as alertify from 'alertify'
 
-@Component
+import MgdTable from 'components/mgd-table.vue'
+import SearchHeader from 'components/search-header.vue'
+
+@Component({components: {MgdTable, SearchHeader}})
 export default class Dishes extends Vue {
 	dbg(x) {
 		debugger;

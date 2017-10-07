@@ -19,3 +19,7 @@ export default [...common, {
 	component: Templates,
 	path: '/templates'
 }];
+
+import * as Vue from 'vue'
+import vgl from 'vue-golden-layout'
+Vue.use(vgl);

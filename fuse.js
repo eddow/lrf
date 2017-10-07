@@ -1,21 +1,35 @@
 const {
-	Sparky, FuseBox, UglifyJSPlugin, TypeScriptHelpers, CSSPlugin, EnvPlugin, VueComponentPlugin,
-	JSONPlugin, BabelPlugin, HotReloadPlugin, QuantumPlugin, ReplacePlugin
+	Sparky, FuseBox, UglifyJSPlugin, TypeScriptHelpers, EnvPlugin, VueComponentPlugin,
+	JSONPlugin, BabelPlugin, HotReloadPlugin, QuantumPlugin, 
+	SassPlugin, CSSPlugin, CSSResourcePlugin
 } = require('fuse-box');
 const {ConfigPlugin} = require('bundle-config/fuse-box');
 let producer;
 let production = false;
-
+function VuePlugin() {
+	return VueComponentPlugin({
+		style: [
+			SassPlugin({
+				importer: true
+			}),
+			CSSResourcePlugin(),
+			CSSPlugin({
+				group: 'components.css',
+				inject: 'components.css'
+			})
+		]
+	});
+}
 Sparky.task("build", ()=> {
 	const fuse = FuseBox.init({
 		homeDir: "src",
 		output: "dist/$name.js",
 		package: 'lrf',
+		useTypescriptCompiler : true,
 		plugins: [
 			TypeScriptHelpers(),
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
 			CSSPlugin(),
-			VueComponentPlugin(),
 			JSONPlugin(),
 			ConfigPlugin(),
 			production && UglifyJSPlugin()
@@ -46,8 +60,10 @@ Sparky.task("build", ()=> {
 		.watch("(client|common)/**")
 		.alias({
 			biz: '~/client/business',
+			components: '~/client/components',
 			'routes.device': '~/client/routes.desktop'
 		})
+		.plugin(VuePlugin())
     //.instructions('!> [client/index.ts] +[client/routes/*.vue] +[client/components/*.vue] +[common/**/*.*] - *.d.ts');
     .instructions('!> [client/index.ts] +[common/**/*.*] - *.d.ts');
 
@@ -59,8 +75,10 @@ Sparky.task("build", ()=> {
 		})
 		.alias({
 			biz: '~/client/business',
+			components: '~/client/components',
 			'routes.device': '~/client/routes.desktop'
 		})
+		.plugin(VuePlugin())
 		//.instructions(`+tslib +fuse-box-css ~client/index.ts ~[client/routes/*.vue] ~[common/**/*.*]`);
 		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[common/**/*.*]`);
 
@@ -69,8 +87,10 @@ Sparky.task("build", ()=> {
 		.watch("(client|common)/**")
 		.alias({
 			biz: '~/client/business',
+			components: '~/client/components',
 			'routes.device': '~/client/routes.mobile'
 		})
+		.plugin(VuePlugin())
     .instructions('!> [client/index.ts] +[common/**/*.*] - *.d.ts');
 
 	fuse.bundle("mobile/vendor").target('browser')
@@ -80,8 +100,10 @@ Sparky.task("build", ()=> {
 		})
 		.alias({
 			biz: '~/client/business',
+			components: '~/client/components',
 			'routes.device': '~/client/routes.mobile'
 		})
+		.plugin(VuePlugin())
 		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[common/**/*.*]`);
 
 	return fuse.run().then((fuseProducer)=> {

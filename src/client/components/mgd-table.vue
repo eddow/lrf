@@ -20,12 +20,11 @@
 </template>
 <style>
 </style>
-<script lang="ts">
+<script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
 import {observeDeeply, bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
-
 
 @Component
 export default class MgdTable extends Vue {

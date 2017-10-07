@@ -55,7 +55,7 @@ form.screen {
 	padding-top: calc( 100px + 1rem ) !important;
 }
 </style>
-<script lang="ts">
+<script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
 import Template from 'models/template'
@@ -64,7 +64,9 @@ import {dav} from 'common/libs/dot-gen'
 import * as jsonStringify from 'json-pretty'
 var generator = new dav();
 
-@Component
+import MgdTable from 'components/mgd-table.vue'
+
+@Component({components: {MgdTable}})
 export default class Templates extends Vue {
 	Template = Template
 	selected: Template = null

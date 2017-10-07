@@ -8,7 +8,7 @@
 		<slot />
 	</component>
 </template>
-<script lang="ts">
+<script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import item from './route-menu/item.vue'

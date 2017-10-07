@@ -19,7 +19,7 @@
     "dot": "^1.1.2",
     "express": "^4.15.5",
     "font-awesome": "^4.7.0",
-    "fuse-box": "^2.3.3",
+    "fuse-box": "file:.yalc/fuse-box",
     "js-data": "^3.0.1",
     "js-data-express": "^1.0.1",
     "js-data-http": "^3.0.0",
@@ -47,6 +47,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "bundle-config": "^1.1.5",
+    "node-sass": "^4.5.3",
     "stylus": "^0.54.5",
     "typescript": "^2.5.2",
     "vue": "^2.4.4",

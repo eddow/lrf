@@ -7,12 +7,13 @@
 </template>
 <style>
 </style>
-<script lang="ts">
+<script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
 import Dish, {Languages, Parts} from 'models/dish'
+import MenuEdit from 'components/menu-edit.vue'
 
-@Component
+@Component({components: {MenuEdit}})
 export default class DayEdit extends Vue {
 	parts = Parts
 	@Prop() dndGroup: string

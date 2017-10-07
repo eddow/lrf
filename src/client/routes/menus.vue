@@ -24,7 +24,7 @@
 	border-top: 1px solid black;
 }
 </style>
-<script lang="ts">
+<script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
 import Dish, {Languages, Parts} from 'models/dish'
@@ -35,7 +35,9 @@ import * as alertify from 'alertify'
 const menus = bindCollection('Menu');
 const dishes = bindCollection('Dish');
 
-@Component
+import DayEdit from 'components/day-edit.vue'
+
+@Component({components: {DayEdit}})
 export default class Menus extends Vue {
 	categories = Categories
 	parts = Parts
