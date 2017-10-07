@@ -2,31 +2,15 @@ import {HttpAdapter} from 'js-data-http'
 import * as config from 'config'
 import {store, initStore} from 'common/central'
 import {Record, DataStore} from 'js-data'
-import * as Vue from 'vue'
 import * as io from 'socket.io-client'
+export * from './data'
+import {observeDeeply} from './data'
 
 initStore(new DataStore({
 	mapperDefaults: {
 		idAttribute: '_id'
 	}
 }));
-
-export function observeDeeply(obj, schema?) {
-	//TODO: schema $refs
-	var list = (!schema || 'array'=== schema.type)? obj :
-		'object'=== schema.type? schema.properties :
-		null;
-	if(list) for(let i in list) {
-		if(obj[i] && 'object'=== typeof obj[i])
-			observeDeeply(obj[i], schema && (
-				'object'=== schema.type ? schema.properties[i] :
-				'array'=== schema.type ? schema.items :
-				null
-			));
-			Vue.util.defineReactive(obj, i, obj[i]);
-	}
-	return obj;
-}
 
 store.on('all', function(event, name, param) {
 	console.log('js-data', event);

@@ -1,5 +1,7 @@
 
-export function buyProducts(products, success, failure) {
+export function buyProducts(products, contact, success, failure) {
 	console.log(products);
-	success();
+	console.log(contact);
+	//success();
+	failure();
 }

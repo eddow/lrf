@@ -1,11 +1,23 @@
 import {join} from 'path'
+import {existsSync} from 'fs'
 import * as express from 'express';
 import auth from './controllers/auth'
 import picture from './controllers/picture'
 import customer from './controllers/customer'
-
+import * as mobileDetect from 'mobile-detect'
+function device(req) {
+	var md = new mobileDetect(req.headers['user-agent']);
+	return md.mobile() || md.phone() || md.tablet() ? 'mobile' : 'client';
+}
 export function statics(app, sockets) {
-	app.use(express.static('dist/client'));
+	//app.use(express.static('dist/client'));
+	app.use(function(req, res, next) {
+		var path = join(__dirname, '../dist', device(req)),
+			fname = req.url.substr(1);
+		if(1<fname.length && existsSync(join(path, fname)))
+			res.sendFile(fname, {root: path});
+		else next();
+	});
 	app.use(express.static('assets'));
 
 	app.get('/themes/*', (req, res)=> {
@@ -21,6 +33,6 @@ export function controllers(app, sockets, store) {
 	app.use('/customer', customer(store));
 	//SPA: in last resort, just send `index.html` as the path is a client-side path
 	app.use(function(req, res) {
-		res.sendFile('index.html', {root: join(__dirname, '../dist/client')});
+		res.sendFile('index.html', {root: join(__dirname, '../dist', device(req))});
 	});
 }

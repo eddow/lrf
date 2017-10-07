@@ -15,30 +15,36 @@ const getters = {
 
 // actions
 const actions = {
-  checkout ({ commit, state }, products) {
-    const savedCartItems = [...state.added]
-    commit(types.CHECKOUT_REQUEST)
+  checkout ({ commit, state }, infos) {
+    const savedCartItems = [...state.added];
+    commit(types.CHECKOUT_REQUEST);
     buyProducts(
-      products,
+			savedCartItems,
+      infos, 
       () => commit(types.CHECKOUT_SUCCESS),
       () => commit(types.CHECKOUT_FAILURE, { savedCartItems })
-    )
+    );
+  },
+  emptyCart ({ commit, state }) {
+    commit(types.CHECKOUT_REQUEST);
   }
 }
 
 // mutations
 const mutations = {
-  [types.ADD_TO_CART] (state, { id, quantity }) {
+  [types.ADD_TO_CART] (state, {product, quantity}) {
     state.lastCheckout = null
-    const record = state.added.find(p => p.id === id)
-    if (!record) {
-      state.added.push({
-        id,
-        quantity
-      })
-    } else {
-      record.quantity = quantity
-    }
+		const record = state.added.find(p => p.product === product);
+		if(false!== quantity) {
+			if (!record)
+				state.added.push({
+					product,
+					quantity
+				})
+			else
+				record.quantity = quantity;
+		} else if(record)
+			state.added.splice(state.added.findIndex(p => p.product === product), 1);
   },
 
   [types.CHECKOUT_REQUEST] (state) {

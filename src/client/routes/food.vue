@@ -1,11 +1,8 @@
 <template>
 	<div class="ui segments">
-		<s-modal v-model="chooseQtt" :header="commandItem && commandItem.title.fr">
-			<s-input class="right action">
-				<s-button slot="prepend" icon="minus" @click="if(1<commandNumber) --commandNumber" />
-				<s-button slot="append" icon="add" @click="++commandNumber" />
-				<input slot="input" v-model="commandNumber" min="1" type="number" />
-			</s-input>
+		<s-modal v-model="chooseQtt" :header="commandItem && commandItem.title.fr" class="commandNumber">
+			<quantity v-model="commandNumber" />
+			{{commandItem && commandItem.description.fr}}
 			<s-button class="fluid" positive v-command:ok="commandNumber">Ajouter!</s-button>
 			<s-button class="fluid" v-command:cancel>Annuler</s-button>
 		</s-modal>
@@ -57,6 +54,9 @@
 .card.dimmed .dimmer {
 	cursor: pointer;
 }
+.commandNumber {
+	max-width: 400px;
+}
 </style>
 <script lang="js">
 import * as Vue from 'vue'
@@ -64,25 +64,22 @@ import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import Dish, {Languages} from 'models/dish'
 import Menu, {Categories} from 'models/menu'
+import {menus} from 'biz/daily'
+import quantity from 'components/quantity.vue'
 
-var menus = [];
-Vue.axios('/customer/today').then(response=> {
-	menus.push(...response.data);
-});
-
-@Component
+@Component({components: {quantity}})
 export default class Food extends Vue {
 	categories = Categories
 	menus = menus
 	commandItem: Dish = null
 	commandNumber: number = 0
-	@Action('addToCart') addToCart
 	chooseQtt
+	@Action addToCart
 	addClick(dish) {
 		this.commandItem = dish;
 		this.commandNumber = 1;
 		this.chooseQtt((ok, x)=> {
-			this.addToCart(this.commandItem, this.commandNumber);
+			this.addToCart({product: this.commandItem._id, quantity: this.commandNumber});
 		});
 	}
 }
