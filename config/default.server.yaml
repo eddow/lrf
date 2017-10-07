@@ -1,5 +1,13 @@
 mongo:
   debug: false
   uri: mongodb://localhost:27017/lrf
-path:
-  pictures: ./pictures
+mailer:
+  host: smtp.ethereal.email
+  port: 587
+  secure: false # true for 465, false for other ports
+  auth:
+      user: account.user
+      pass: account.pass
+emails:
+  sender: sender@somemail.com
+  seller: seller@somemail.com

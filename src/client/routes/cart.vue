@@ -1,7 +1,10 @@
 <template>
-	<div class="ui items">
+	<div v-if="dishes.length" class="ui items centered">
 		<s-modal v-model="commandConfirm" header="Confirmer" class="commandConfirm">
 			La commande sera confirmée par téléphone.
+			<s-input fluid class="large" v-model="contact.name" placeholder="Prénom">
+				<s-icon slot="prepend" icon="user outline" />
+			</s-input>
 			<s-input fluid class="large" v-model="contact.phone" placeholder="Téléphone">
 				<s-icon slot="prepend" icon="phone" />
 			</s-input>
@@ -30,9 +33,12 @@
 		<s-button icon="food" class="massive" positive @click="order" fluid red>Commander !</s-button>
 		<s-button icon="trash" negative @click="confirmEmptyCart" fluid red>Vider le panier</s-button>
 	</div>
+	<div v-else>
+		<h1 class="centered"><router-link to="/">Votre panier est vide. Cliquez ici pour découvrir le menu.</router-link></h1>
+	</div>
 </template>
 <style scoped>
-.ui.items {
+.centered {
 	max-width: 360px;
 	margin-left: auto;
 	margin-right: auto;
@@ -50,7 +56,7 @@ import Menu, {Categories} from 'models/menu'
 import * as alertify from 'alertify'
 import {dishes, status} from 'biz/daily'
 import quantity from 'components/quantity.vue'
-
+//TODO: Enter pour valider les entrées
 @Component({components: {quantity}})
 export default class Cart extends Vue {
 	@Getter cartProducts
@@ -88,6 +94,7 @@ export default class Cart extends Vue {
 	}
 	commandConfirm
 	contact = {
+		name: "",
 		phone: "",
 		email: ""
 	}

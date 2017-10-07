@@ -11,7 +11,6 @@ import {Translated} from '../auxs'
 @Model()
 export default class Template extends Record {
 	@Required() name: string
-	@Required() title: Translated
 	@Required() dot: string
 	@Required() css: string
 	toString() { return this.name; }

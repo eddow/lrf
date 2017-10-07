@@ -52,7 +52,6 @@ socket.on('js-data', function(event, collection, item, data, ...args) {
 			break;
 		case 'destroy':
 			store.remove(collection, item);
-			//if(record) record.destroy();//TODO: SILENT!
 			break;
 		case 'create':
 			store.add(collection, item);

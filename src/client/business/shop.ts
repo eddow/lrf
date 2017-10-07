@@ -1,7 +1,6 @@
-
+import * as axios from 'axios'
 export function buyProducts(products, contact, success, failure) {
 	console.log(products);
 	console.log(contact);
-	//success();
-	failure();
+	axios.post('/customer', {products, contact}).then(success, failure);
 }

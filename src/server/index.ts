@@ -7,7 +7,7 @@ import {Container} from 'js-data'
 import * as routes from './routes'
 import * as io from 'socket.io'
 import * as bodyParser from 'body-parser'
-console.log(__assign);	//we need to refer it for ts-json-schema; if not, it won't be defined globally
+import * as morgan from 'morgan'
 
 initStore(new Container({
 	mapperDefaults: {
@@ -16,8 +16,15 @@ initStore(new Container({
 }));
 // Create an instance of MongoDBAdapter : change this line to use another adapter
 store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': true });
-
+/*TODO:
+- traductions
+- heures d'ouverture
+- user
+- sécurité/API
+- gérer les caches (304)
+*/
 const app = express();
+app.use(morgan('tiny'));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 var server = require('http').createServer(app);

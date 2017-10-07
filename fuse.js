@@ -1,7 +1,7 @@
 const {
 	Sparky, FuseBox, UglifyJSPlugin, TypeScriptHelpers, EnvPlugin, VueComponentPlugin,
 	JSONPlugin, BabelPlugin, HotReloadPlugin, QuantumPlugin, 
-	SassPlugin, CSSPlugin, CSSResourcePlugin
+	SassPlugin, CSSPlugin, CSSResourcePlugin, RawPlugin
 } = require('fuse-box');
 const {ConfigPlugin} = require('bundle-config/fuse-box');
 let producer;
@@ -27,6 +27,7 @@ Sparky.task("build", ()=> {
 		package: 'lrf',
 		useTypescriptCompiler : true,
 		plugins: [
+			RawPlugin([".dot"]),
 			TypeScriptHelpers(),
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
 			CSSPlugin(),

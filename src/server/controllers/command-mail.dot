@@ -1,0 +1,10 @@
+Contact:
+{{? it.contact.name}}Nom: {{= it.contact.name}}{{?}}
+{{? it.contact.phone}}Téléphone: {{= it.contact.phone}}{{?}}
+{{? it.contact.email}}E-mail: {{= it.contact.email}}{{?}}
+
+
+Commande:{{~ it.products : product }}
+{{=product.quantity}} X {{=product.dish.title.fr}} ({{=product.dish.price}}lei){{~}}
+
+Total: {{=it.totalPrice}}lei

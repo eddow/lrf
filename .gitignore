@@ -7,3 +7,4 @@ package-lock.*
 *.lock
 semantic/*
 pictures
+.yalc/fuse-box

@@ -1,7 +1,6 @@
 import * as Vue from 'vue'
 
 export function observeDeeply(obj, schema?) {
-	//TODO: schema $refs
 	var list = (!schema || 'array'=== schema.type)? obj :
 		'object'=== schema.type? schema.properties :
 		null;

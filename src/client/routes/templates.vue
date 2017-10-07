@@ -65,8 +65,9 @@ import * as jsonStringify from 'json-pretty'
 var generator = new dav();
 
 import MgdTable from 'components/mgd-table.vue'
+import Ace from 'components/ace.vue'
 
-@Component({components: {MgdTable}})
+@Component({components: {MgdTable, Ace}})
 export default class Templates extends Vue {
 	Template = Template
 	selected: Template = null

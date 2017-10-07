@@ -6,7 +6,10 @@
 			<s-button class="fluid" positive v-command:ok="commandNumber">Ajouter!</s-button>
 			<s-button class="fluid" v-command:cancel>Annuler</s-button>
 		</s-modal>
-		<div v-for="(menu, mndx) in menus" :key="mndx" class="ui segment">
+		<div v-for="(menu, mndx) in menus" :key="mndx"
+			v-if="menu.dishes.length"
+			class="ui segment"
+		>
 			<div class="ui attached message">
 				<div class="header">
 					{{menu.title}}
@@ -21,12 +24,10 @@
 					<s-dimmer on="hover">
 						<div class="content" @click="addClick(dish)">
 							<div class="center">
-								<slot name="dimmer">
-									<h2 class="ui inverted icon header">
-										<!--icon v-if="icon" :icon="icon" /-->
-										Ajouter au panier
-									</h2>
-								</slot>
+								<h2 class="ui inverted icon header">
+									<!--icon v-if="icon" :icon="icon" /-->
+									Ajouter au panier
+								</h2>
 							</div>
 						</div>
 					</s-dimmer>
