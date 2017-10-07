@@ -28,3 +28,5 @@ Vue.use(vgl);
 //import 'vue-property-decorator' //This is not needed, I don't know why
 import './components/route-menu/item.vue'
 import 'json-pretty'
+import 'vuex-class'
+import 'biz/js-data'

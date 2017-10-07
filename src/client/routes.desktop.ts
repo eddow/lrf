@@ -1,14 +1,9 @@
-import Food from './routes/food.vue'
+import common from './routes.mobile'
 import Dishes from './routes/dishes.vue'
 import Menus from './routes/menus.vue'
 import Templates from './routes/templates.vue'
 
-export default [{
-	path: '/',
-	menu: 'Menu',
-	name: 'food',
-	component: Food
-}, {
+export default [...common, {
 	admin: true,
 	menu: 'Plats',
 	component: Dishes,

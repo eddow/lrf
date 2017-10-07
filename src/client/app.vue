@@ -1,5 +1,5 @@
 <template>
-	<div class="screen">
+	<div>
 		<nav role="navigation" id="nav_menu" class="ui top fixed small menu page grid">
 			<img src="/logo100.png" />
 			<div>Cart</div>

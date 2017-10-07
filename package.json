@@ -19,7 +19,7 @@
     "dot": "^1.1.2",
     "express": "^4.15.5",
     "font-awesome": "^4.7.0",
-    "fuse-box": "^2.2.31",
+    "fuse-box": "^2.3.3",
     "js-data": "^3.0.1",
     "js-data-express": "^1.0.1",
     "js-data-http": "^3.0.0",
@@ -40,6 +40,7 @@
     "vue-router": "^2.7.0",
     "vuedraggable": "^2.14.1",
     "vuex": "^2.4.0",
+    "vuex-class": "^0.2.0",
     "vuex-persistedstate": "^2.0.0",
     "walk": "^2.3.9"
   },
@@ -49,6 +50,7 @@
     "stylus": "^0.54.5",
     "typescript": "^2.5.2",
     "vue": "^2.4.4",
+    "vue-hot-reload-api": "^2.1.1",
     "vue-template-compiler": "^2.4.4",
     "vue-template-es2015-compiler": "^1.5.3"
   }

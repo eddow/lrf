@@ -1,4 +1,3 @@
-import {observeDeeply} from 'biz/js-data'
 import './libs'
 
 import * as Vue from 'vue'
@@ -11,9 +10,6 @@ var test = Vue.use(VueAuthenticate, {
 import * as VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
-import access from 'biz/access'
-Vue.prototype.$access = observeDeeply(access);
-
 import * as components from './components/*.vue'
 for(let c in components) {
 	let component = components[c].default;
@@ -21,7 +17,7 @@ for(let c in components) {
 }
 
 import App from './app.vue'
-import routes from './routes'
+import routes from 'routes.device'
 import store from './store'
 var router = new VueRouter({
 	mode: window.history && window.history.pushState?'history':'hash',

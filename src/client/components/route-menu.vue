@@ -1,7 +1,7 @@
 <template>
 	<component :is="tag" class="ui menu">
 		<item v-for="(route, ndx) in routes" :key="ndx"
-			v-if="$access.can(route.admin)"
+			v-if="access(route)"
 			:route="route"
 			:class="{active: isActive(route)}" :root="root"
 		/>
@@ -23,6 +23,10 @@ export default class RouteMenu extends Vue {
 			route.path :
 			`${this.root}/${route.path}`
 		));
+	}
+	access(route) {
+		//return $access.can(route.admin);
+		return true;
 	}
 }
 </script>

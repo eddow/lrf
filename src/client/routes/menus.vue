@@ -4,7 +4,7 @@
 	</div>
 	<div v-else class="ui segments">
 		<div class="segment ui five column grid">
-			<div v-for="(pdenom, pcode) in parts" :key="ccode" class="ui column">
+			<div v-for="(pdenom, pcode) in parts" :key="pcode" class="ui column">
 				<h1 class="ui header">{{pdenom}}</h1>
 			</div>
 		</div>

@@ -1,6 +1,6 @@
 const {
-	Sparky, FuseBox, UglifyJSPlugin, TypeScriptHelpers, CSSPlugin, EnvPlugin, VuePlugin,
-	JSONPlugin, BabelPlugin, HotReloadPlugin, QuantumPlugin
+	Sparky, FuseBox, UglifyJSPlugin, TypeScriptHelpers, CSSPlugin, EnvPlugin, VueComponentPlugin,
+	JSONPlugin, BabelPlugin, HotReloadPlugin, QuantumPlugin, ReplacePlugin
 } = require('fuse-box');
 const {ConfigPlugin} = require('bundle-config/fuse-box');
 let producer;
@@ -15,7 +15,7 @@ Sparky.task("build", ()=> {
 			TypeScriptHelpers(),
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
 			CSSPlugin(),
-			VuePlugin(),
+			VueComponentPlugin(),
 			JSONPlugin(),
 			ConfigPlugin(),
 			production && UglifyJSPlugin()
@@ -37,39 +37,53 @@ Sparky.task("build", ()=> {
 
 	fuse.bundle("server/app").target('server')
 		.watch("(server|common)/**")
-		//.sourceMaps(true)
 		.instructions("> [server/index.ts] +[common/**/*.*] -*.d.ts")
 		.completed(proc=> {
 			proc.require();
 		});
 
-	const app = fuse.bundle("client/app").target('browser')
+	fuse.bundle("client/app").target('browser')
 		.watch("(client|common)/**")
-		.alias('biz', '~/client/business')
-		//.sourceMaps(true)
-		//.plugin(HotReloadPlugin({port: 4445}))
-    .instructions('!> [client/index.ts] +[client/routes/*.vue] +[client/components/*.vue] +[common/**/*.*] - *.d.ts');
-	//if (!production) app.hmr();
-
-	const vendor = fuse.bundle("client/vendor").target('browser')
-		.alias('biz', '~/client/business')
-		//.instructions(`~ client/*.ts +tslib`);
-		.shim({
-			jquery: {
-				//source: "node_modules/jquery/dist/jquery.js",
-				exports: "$"
-			},
-			alertify: {
-				//source: "node_modules/alertify.js/dist/js/alertify.js",
-				exports: "alertify"
-			},
-			ace: {
-				//source: "node_modules/ace/build/lib",
-				exports: "ace"
-			}
+		.alias({
+			biz: '~/client/business',
+			'routes.device': '~/client/routes.desktop'
 		})
-		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[client/routes/*.vue] ~[common/**/*.*]`);
-	//if (!production) vendor.hmr();
+    //.instructions('!> [client/index.ts] +[client/routes/*.vue] +[client/components/*.vue] +[common/**/*.*] - *.d.ts');
+    .instructions('!> [client/index.ts] +[common/**/*.*] - *.d.ts');
+
+	fuse.bundle("client/vendor").target('browser')
+		.shim({
+			jquery: {exports: "$"},
+			alertify: {exports: "alertify"},
+			ace: {exports: "ace"}
+		})
+		.alias({
+			biz: '~/client/business',
+			'routes.device': '~/client/routes.desktop'
+		})
+		//.instructions(`+tslib +fuse-box-css ~client/index.ts ~[client/routes/*.vue] ~[common/**/*.*]`);
+		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[common/**/*.*]`);
+
+	
+	fuse.bundle("mobile/app").target('browser')
+		.watch("(client|common)/**")
+		.alias({
+			biz: '~/client/business',
+			'routes.device': '~/client/routes.mobile'
+		})
+    .instructions('!> [client/index.ts] +[common/**/*.*] - *.d.ts');
+
+	fuse.bundle("mobile/vendor").target('browser')
+		.shim({
+			jquery: {exports: "$"},
+			alertify: {exports: "alertify"}
+		})
+		.alias({
+			biz: '~/client/business',
+			'routes.device': '~/client/routes.mobile'
+		})
+		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[common/**/*.*]`);
+
 	return fuse.run().then((fuseProducer)=> {
 		producer = fuseProducer;
 	});
@@ -88,7 +102,7 @@ Sparky.task("clean", ()=> {
 });
 
 // copy and replace HTML
-Sparky.task("make-html", ()=> {
+Sparky.task("make-desktop-html", ()=> {
 	return Sparky.src("src/index.html")
 		.file("*", file=> {
 			const vendor = producer.bundles.get("client/vendor"),
@@ -96,13 +110,30 @@ Sparky.task("make-html", ()=> {
 			// get generated bundle names
 			file.template({
 				title: 'La Rôtisserie Française',
+				desktop: true,
 				//context.output.lastGeneratedFileName returns the .js.map file name
 				vendor: vendor.context.output.lastPrimaryOutput.filename,
 				app: app.context.output.lastPrimaryOutput.filename
 			});
 		})
-		.dest("dist/client/$name")
+		.dest("dist/client/$name");
 });
+Sparky.task("make-mobile-html", ()=> {
+	return Sparky.src("src/index.html")
+		.file("*", file=> {
+			const vendor = producer.bundles.get("mobile/vendor"),
+				app = producer.bundles.get("mobile/app");
+			// get generated bundle names
+			file.template({
+				title: 'La Rôtisserie Française',
+				mobile: true,
+				vendor: vendor.context.output.lastPrimaryOutput.filename,
+				app: app.context.output.lastPrimaryOutput.filename
+			});
+		})
+		.dest("dist/mobile/$name");
+});
+Sparky.task("make-html", ["make-desktop-html", "make-mobile-html"], ()=> {})
 
 Sparky.task("set-production-env", ()=> production = true);
 Sparky.task("dist", ["clean", "set-production-env", "build", "make-html"], ()=> {})
