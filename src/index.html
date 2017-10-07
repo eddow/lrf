@@ -13,7 +13,10 @@
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/alertifyjs-alertify.js/1.0.11/js/alertify.js" integrity="sha256-kyXdnraRCSuhlP7VxnOMy3yJHKgoGSbMhr1A1Kzz3vE=" crossorigin="anonymous"></script>
-
+		{{#mobile}}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js" integrity="sha256-WRc/eG3R84AverJv0zmqxAmdwQxstUpqkiE+avJ3WSo=" crossorigin="anonymous"></script>
+		{{/mobile}}
+		
 		{{#desktop}}
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js" integrity="sha256-198+Grx89n2ofVwo1LWnNTXxIQZIPZJURv+K73cJ93U=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/snippets/dot.js" integrity="sha256-pxwnisy0xcwMPfpQmsI9ijIRcqOlFTeWI3XkT3YFj0I=" crossorigin="anonymous"></script>

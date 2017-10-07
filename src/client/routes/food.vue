@@ -1,10 +1,12 @@
 <template>
 	<div class="ui segments">
 		<s-modal v-model="chooseQtt" :header="commandItem && commandItem.title.fr" class="commandNumber">
-			<quantity v-model="commandNumber" />
-			{{commandItem && commandItem.description.fr}}
-			<s-button class="fluid" positive v-command:ok="commandNumber">Ajouter!</s-button>
-			<s-button class="fluid" v-command:cancel>Annuler</s-button>
+			<form onsubmit="return false">
+				<quantity v-model="commandNumber" />
+				{{commandItem && commandItem.description.fr}}
+				<s-button class="fluid" positive v-command:ok="commandNumber" native-type="submit">Ajouter!</s-button>
+				<s-button class="fluid" v-command:cancel>Annuler</s-button>
+			</form>
 		</s-modal>
 		<div v-for="(menu, mndx) in menus" :key="mndx"
 			v-if="menu.dishes.length"
@@ -80,7 +82,7 @@ export default class Food extends Vue {
 		this.commandItem = dish;
 		this.commandNumber = 1;
 		this.chooseQtt((ok, x)=> {
-			this.addToCart({product: this.commandItem._id, quantity: this.commandNumber});
+			this.addToCart({product: this.commandItem._id, quantity: this.commandNumber, add: true});
 		});
 	}
 }

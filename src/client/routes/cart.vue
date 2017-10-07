@@ -1,20 +1,22 @@
 <template>
 	<div v-if="dishes.length" class="ui items centered">
 		<s-modal v-model="commandConfirm" header="Confirmer" class="commandConfirm">
-			La commande sera confirmée par téléphone.
-			<s-input fluid class="large" v-model="contact.name" placeholder="Prénom">
-				<s-icon slot="prepend" icon="user outline" />
-			</s-input>
-			<s-input fluid class="large" v-model="contact.phone" placeholder="Téléphone">
-				<s-icon slot="prepend" icon="phone" />
-			</s-input>
-			<div class="ui negative message" v-if="phoneAlert">
-				Le numéro de téléphone doit être spécifé et complet
-			</div>
-			<s-input fluid class="large" v-model="contact.email" placeholder="E-mail">
-				<s-icon slot="prepend" icon="mail" />
-			</s-input>
-			<s-button class="fluid" positive @click="checkContact">Confirmer!</s-button>
+			<form onsubmit="return false">
+				La commande sera confirmée par téléphone.
+				<s-input fluid class="large" v-model="contact.name" placeholder="Prénom">
+					<s-icon slot="prepend" icon="user outline" />
+				</s-input>
+				<s-input fluid class="large" v-model="contact.phone" placeholder="Téléphone">
+					<s-icon slot="prepend" icon="phone" />
+				</s-input>
+				<div class="ui negative message" v-if="phoneAlert">
+					Le numéro de téléphone doit être spécifé et complet
+				</div>
+				<s-input fluid class="large" v-model="contact.email" placeholder="E-mail">
+					<s-icon slot="prepend" icon="mail" />
+				</s-input>
+				<s-button class="fluid" positive @click="checkContact" native-type="submit">Confirmer!</s-button>
+			</form>
 		</s-modal>
 		<div v-for="dish in dishes" :key="dish.product._id" class="ui item">
 			<div class="content">
@@ -24,8 +26,8 @@
 				</div>
 				<div class="header right floated">= {{dish.product.price*dish.quantity}}lei</div>
 				<div>
-					<quantity v-model="dish.quantity" @input="value=> persist(dish.product._id, value)" />
 					<s-button negative icon="trash" @click="remove(dish.product)" />
+					<quantity v-model="dish.quantity" @input="value=> persist(dish.product._id, value)" />
 				</div>
 			</div>
 		</div>
@@ -56,7 +58,6 @@ import Menu, {Categories} from 'models/menu'
 import * as alertify from 'alertify'
 import {dishes, status} from 'biz/daily'
 import quantity from 'components/quantity.vue'
-//TODO: Enter pour valider les entrées
 @Component({components: {quantity}})
 export default class Cart extends Vue {
 	@Getter cartProducts
@@ -100,7 +101,8 @@ export default class Cart extends Vue {
 	}
 	phoneAlert: boolean = false
 	checkContact() {
-		this.phoneAlert = 10> this.contact.phone.match(/\d/g).length;
+		var figures = this.contact.phone.match(/\d/g);
+		this.phoneAlert = !figures || 10> figures.length;
 		if(!this.phoneAlert) this.commandConfirm('ok');
 	}
 	order() {
