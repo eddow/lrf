@@ -2,8 +2,7 @@
 	<div class="ui segments">
 		<s-modal v-model="chooseQtt" :header="commandItem && commandItem.title[$lang]" class="commandNumber">
 			<form onsubmit="return false">
-				<quantity v-model="commandNumber" />
-				{{commandItem && commandItem.description[$lang]}}
+				<quantity v-model="commandNumber" fluid />
 				<s-button class="fluid" positive v-command:ok="commandNumber" native-type="submit">{{'Ajouter'|translate}} !</s-button>
 				<s-button class="fluid" v-command:cancel>{{'Annuler'|translate}}</s-button>
 			</form>
