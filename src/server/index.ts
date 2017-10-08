@@ -20,7 +20,6 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - heures d'ouverture
 - user
 - sécurité/API
-- gérer les caches (304)
 */
 
 const app = express();
@@ -34,9 +33,4 @@ import jsData from './controllers/js-data'
 jsData(app, io.sockets, store);
 routes.controllers(app, io.sockets, store);
 console.log(`Listening on port ${config.server.port}`);
-var listener = server.listen(config.server.port);
-export default {
-	close() {
-		listener.close();
-	}
-};
+export default server.listen(config.server.port);

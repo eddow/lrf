@@ -52,7 +52,7 @@
 							<div class="field ui segments">
 								<s-input class="ui segment labeled" v-model="scope.model.title[lcode]">
 									<label slot="prepend" class="ui label">
-										{{ldenom}}
+										{{ldenom.self}}
 									</label>
 								</s-input>
 								<textarea class="ui input segment" rows="4" v-model="scope.model.description[lcode]" />

@@ -11,25 +11,30 @@
 						<s-option><router-link :to="{name: 'menus'}">Menus</router-link></s-option>
 						<s-option><router-link :to="{name: 'templates'}">Templates</router-link></s-option>
 					</s-select>
-					<s-button @click="logout">Log out</s-button>
-				</div>
-				<div v-else>
-					<!--s-button @click="login">Log in</s-button-->
-					<!--s-button @click="register">Register</s-button-->
 				</div>
 			</span>
 			<div class="right menu">
-				<span>
-					<s-select v-model="$lang">
-						<s-button slot="bar" class="icon"><s-flag :country="languages[$lang].flag" /></s-button>
-						<s-option
-							v-for="(desc, val) in languages" :key="val"
-							:value="val"
-						>
-							<s-flag :country="desc.flag" /> {{desc.self}}
-						</s-option>
-					</select>
-				</span>
+				<div>
+					<div v-if="isAuthenticated">
+						<!--s-button @click="logout">Log out</s-button-->
+						<s-button icon="+large user circle+red remove" @click="logout" />
+					</div>
+					<div v-else>
+						<s-button icon="+large user circle+green checkmark" @click="login" />
+						<!--s-button @click="register">Register</s-button-->
+					</div>
+					<div>
+						<s-select v-model="$lang">
+							<s-button slot="bar" class="icon"><s-flag :country="languages[$lang].flag" /></s-button>
+							<s-option
+								v-for="(desc, val) in languages" :key="val"
+								:value="val"
+							>
+								<s-flag :country="desc.flag" /> {{desc.self}}
+							</s-option>
+						</select>
+					</div>
+				</div>
 			</div>
 		</nav>
 		<section id="content_section">
@@ -40,6 +45,9 @@
 <style>
 #nav_menu {
 	height: 102px;
+	max-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
 }
 #content_section {
 	padding-top: 102px;
@@ -104,7 +112,7 @@ export default class App extends Vue {
 	}
 	logout() {
 		this.$store.dispatch('logout').then(() => {
-			this.$router.push('/')
+			this.$router.push({name: 'food'})
 		}).catch(reason=> {
 			this.signalShoot();
 		});

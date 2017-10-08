@@ -1,25 +1,24 @@
 import common from './routes.mobile'
-import Dishes from './routes/dishes.vue'
-import Menus from './routes/menus.vue'
-import Templates from './routes/templates.vue'
 
 export default common;
-common[0].children.push( {
+
+import MenuContainer from './routes/container.vue'
+common[0].children.push({
 	admin: true,
 	menu: 'Plats',
-	component: Dishes,
+	component: ()=> import('./routes/dishes.vue'),
 	path: 'dishes',
 	name: 'dishes'
 }, {
 	admin: true,
 	menu: 'Menus',
-	component: Menus,
+	component: ()=> import('./routes/menus.vue'),
 	path: 'menus',
 	name: 'menus'
 }, {
 	admin: true,
 	menu: 'Templates',
-	component: Templates,
+	component: ()=> import('./routes/templates.vue'),
 	path: 'templates',
 	name: 'templates'
 });
