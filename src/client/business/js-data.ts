@@ -27,7 +27,9 @@ Record.prototype.save = function(opts?) {
 	return RecordSave.call(this, {changesOnly: true, ...(opts||{})});
 }
 
-const httpAdapter = new HttpAdapter(config.http);
+const httpAdapter = new HttpAdapter({
+	basePath: window.location.origin+'/api'
+});
 store.registerAdapter('http', httpAdapter, { 'default': true });
 
 var cachedCollections = {};
