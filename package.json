@@ -45,6 +45,7 @@
     "vuedraggable": "^2.14.1",
     "vuex": "^2.4.0",
     "vuex-class": "^0.2.0",
+    "vuex-i18n": "^1.7.0",
     "vuex-persistedstate": "^2.0.0",
     "walk": "^2.3.9"
   },

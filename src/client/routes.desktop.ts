@@ -3,22 +3,26 @@ import Dishes from './routes/dishes.vue'
 import Menus from './routes/menus.vue'
 import Templates from './routes/templates.vue'
 
-export default [...common, {
+export default common;
+common[0].children.push( {
 	admin: true,
 	menu: 'Plats',
 	component: Dishes,
-	path: '/dishes'
+	path: 'dishes',
+	name: 'dishes'
 }, {
 	admin: true,
 	menu: 'Menus',
 	component: Menus,
-	path: '/menus'
+	path: 'menus',
+	name: 'menus'
 }, {
 	admin: true,
 	menu: 'Templates',
 	component: Templates,
-	path: '/templates'
-}];
+	path: 'templates',
+	name: 'templates'
+});
 
 import * as Vue from 'vue'
 import vgl from 'vue-golden-layout'

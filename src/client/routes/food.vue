@@ -1,11 +1,11 @@
 <template>
 	<div class="ui segments">
-		<s-modal v-model="chooseQtt" :header="commandItem && commandItem.title.fr" class="commandNumber">
+		<s-modal v-model="chooseQtt" :header="commandItem && commandItem.title[$lang]" class="commandNumber">
 			<form onsubmit="return false">
 				<quantity v-model="commandNumber" />
-				{{commandItem && commandItem.description.fr}}
-				<s-button class="fluid" positive v-command:ok="commandNumber" native-type="submit">Ajouter!</s-button>
-				<s-button class="fluid" v-command:cancel>Annuler</s-button>
+				{{commandItem && commandItem.description[$lang]}}
+				<s-button class="fluid" positive v-command:ok="commandNumber" native-type="submit">{{'Ajouter'|translate}} !</s-button>
+				<s-button class="fluid" v-command:cancel>{{'Annuler'|translate}}</s-button>
 			</form>
 		</s-modal>
 		<div v-for="(menu, mndx) in menus" :key="mndx"
@@ -14,7 +14,7 @@
 		>
 			<div class="ui attached message">
 				<div class="header">
-					{{menu.title}}
+					{{menu.title|translate}}
 				</div>
 			</div>
 			<div class="ui bottom attached relaxed divided cards">
@@ -27,24 +27,24 @@
 						<div class="content" @click="addClick(dish)">
 							<div class="center">
 								<h2 class="ui inverted icon header">
-									<!--icon v-if="icon" :icon="icon" /-->
-									Ajouter au panier
+									<s-icon icon="add to cart" />
+									{{'Ajouter au panier'|translate}}
 								</h2>
 							</div>
 						</div>
 					</s-dimmer>
 
 					<div class="ui image">
-						<div v-if="dish.today" class="ui orange right ribbon label">Aujourd'hui</div>
+						<div v-if="dish.today" class="ui orange right ribbon label">{{'Aujourd\'hui'|translate}}</div>
 						<img class="middle aligned" v-if="dish.picture" :src="'picture/'+dish._id"></i>
 					</div>
 					<div class="content">
 						<div class="header">
-							{{dish.title.fr}}
+							{{dish.title[$lang]}}
 							<div class="right floated">{{dish.price.toFixed(2)}} lei</div>
 						</div>
 						<div class="description">
-							{{dish.description.fr}}
+							{{dish.description[$lang]}}
 							<div class="right floated">{{(dish.grams||0).toFixed(0)}}gr</div>
 						</div>
 					</div>

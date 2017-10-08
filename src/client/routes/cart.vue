@@ -1,27 +1,27 @@
 <template>
 	<div v-if="dishes.length" class="ui items centered">
-		<s-modal v-model="commandConfirm" header="Confirmer" class="commandConfirm">
+		<s-modal v-model="commandConfirm" :header="$t('Confirmer')" class="commandConfirm">
 			<form onsubmit="return false">
-				La commande sera confirmée par téléphone.
-				<s-input fluid class="large" v-model="contact.name" placeholder="Prénom">
+				{{'La commande sera confirmée par téléphone.'|translate}}
+				<s-input fluid class="large" v-model="contact.name" :placeholder="$t('Prénom')">
 					<s-icon slot="prepend" icon="user outline" />
 				</s-input>
-				<s-input fluid class="large" v-model="contact.phone" placeholder="Téléphone">
+				<s-input fluid class="large" v-model="contact.phone" :placeholder="$t('Téléphone')">
 					<s-icon slot="prepend" icon="phone" />
 				</s-input>
 				<div class="ui negative message" v-if="phoneAlert">
-					Le numéro de téléphone doit être spécifé et complet
+					{{'Le numéro de téléphone doit être spécifé et complet'|translate}}
 				</div>
 				<s-input fluid class="large" v-model="contact.email" placeholder="E-mail">
 					<s-icon slot="prepend" icon="mail" />
 				</s-input>
-				<s-button class="fluid" positive @click="checkContact" native-type="submit">Confirmer!</s-button>
+				<s-button class="fluid" positive @click="checkContact" native-type="submit">{{'Confirmer'|translate}} !</s-button>
 			</form>
 		</s-modal>
 		<div v-for="dish in dishes" :key="dish.product._id" class="ui item">
 			<div class="content">
 				<div div class="description">
-					{{dish.product.title.fr}}
+					{{dish.product.title[$lang]}}
 					<span class="right floated">{{dish.product.price}}lei<span>
 				</div>
 				<div class="header right floated">= {{dish.product.price*dish.quantity}}lei</div>
@@ -32,11 +32,11 @@
 			</div>
 		</div>
 		<div class="ui header right floated">Total = {{totalPrice}}lei</div>
-		<s-button icon="food" class="massive" positive @click="order" fluid red>Commander !</s-button>
-		<s-button icon="trash" negative @click="confirmEmptyCart" fluid red>Vider le panier</s-button>
+		<s-button icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
+		<s-button icon="trash" negative @click="confirmEmptyCart" fluid red>{{'Vider le panier'|translate}}</s-button>
 	</div>
 	<div v-else>
-		<h1 class="centered"><router-link to="/">Votre panier est vide. Cliquez ici pour découvrir le menu.</router-link></h1>
+		<h1 class="centered"><router-link to="/">{{'Votre panier est vide. Cliquez ici pour découvrir le menu.'|translate}}</router-link></h1>
 	</div>
 </template>
 <style scoped>
@@ -86,10 +86,10 @@ export default class Cart extends Vue {
 		this.addToCart({product, quantity: Number(quantity)});
 	}
 	confirmEmptyCart() {
-		alertify.confirm("Supprimer le contenu du panier ?", this.emptyCart);
+		alertify.confirm(this.$t('Supprimer le contenu du panier')+' ?', this.emptyCart);
 	}
 	remove(dish) {
-		alertify.confirm(`Supprimer "${dish.title.fr}" ?`, ()=> {
+		alertify.confirm(this.$t('Enlever')+` "${dish.title[this.$lang]}" ?`, ()=> {
 			this.addToCart({product: dish._id, quantity: false})
 		});
 	}

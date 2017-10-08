@@ -1,11 +1,38 @@
 <template>
 	<div>
-		<nav role="navigation" id="nav_menu" class="ui top fixed small menu page grid">
-			<router-link to="/"><img src="/logo100.png" /></router-link>
-			<span>
-				<s-button positive icon="cart" @click="$router.push('cart')">{{cartQuantity}}</s-button>
+		<nav role="navigation" id="nav_menu" class="ui top attached fixed small menu page grid">
+			<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
+			<span class="ui item">
+				<s-button positive icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
+				
+				<div v-if="isAuthenticated">
+					<s-select :text="false" action="hide">
+						<s-button slot="bar" icon="wrench" />
+						<s-option><router-link :to="{name: 'dishes'}">Plats</router-link></s-option>
+						<s-option><router-link :to="{name: 'menus'}">Menus</router-link></s-option>
+						<s-option><router-link :to="{name: 'templates'}">Templates</router-link></s-option>
+					</s-select>
+					<s-button @click="logout">Log out</s-button>
+				</div>
+				<div v-else>
+					<s-button @click="login">Log in</s-button>
+					<!--s-button @click="register">Register</s-button-->
+				</div>
 			</span>
-			<span class="user">
+			<div class="right menu">
+				<span>
+					<s-select v-model="$lang">
+						<s-flag slot="bar" :country="languages[$lang].flag" />
+						<s-option
+							v-for="(desc, val) in languages" :key="val"
+							:value="val"
+						>
+							<s-flag :country="desc.flag" /> {{desc.self}}
+						</s-option>
+					</select>
+				</span>
+			</div>
+			<!--span class="user">
 				<span v-if="isAuthenticated">
 					<router-link to="/dishes">Plats</router-link>
 					<router-link to="/menus">Menus</router-link>
@@ -14,9 +41,8 @@
 				</span>
 				<span v-else>
 					<s-button @click="login">Log in</s-button>
-					<!--s-button @click="register">Register</s-button-->
 				</span>
-			</span>
+			</span-->
 		</nav>
 		<section id="content_section">
 			<router-view></router-view>
@@ -25,10 +51,10 @@
 </template>
 <style>
 #nav_menu {
-	height: 100px;
+	height: 102px;
 }
 #content_section {
-	padding-top: 100px;
+	padding-top: 102px;
 }
 </style>
 <script lang="js">
@@ -36,9 +62,27 @@ import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Provide} from 'vue-property-decorator'
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as $ from 'jquery'
+import {languages} from '../common/auxs'
+
+var vuexi18n = '';
+Object.defineProperty(Vue.prototype, '$lang', {
+	get() {
+		if(!this.$route.params.lang)
+			return this.$lang = 'ro';
+		var rv = this.$route.params.lang;
+		if(vuexi18n!== rv)
+			Vue.i18n.set(rv);
+		return rv;
+	},
+	set(value) {
+		Vue.i18n.set(value);
+		this.$router.push('/'+value+this.$route.path.substr(3));
+	}
+})
 
 @Component
 export default class App extends Vue {
+	languages = languages
 	@Getter cartQuantity
 	shoot = 1
 	signalShoot() { this.shoot = 3-this.shoot; }

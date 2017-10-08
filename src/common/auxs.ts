@@ -6,6 +6,21 @@ import {
 	Items
 } from 'ts-json-schema-decorator'
 
+export const languages = {
+	ro: {
+		self: 'Românesc',
+		flag: 'ro'
+	},
+	fr: {
+		self: 'Français',
+		flag: 'fr'
+	},
+	en: {
+		self: 'English',
+		flag: 'gb'
+	}
+};
+
 @Model()
 export class Translated {
 	@MinLength() @Required() fr: string

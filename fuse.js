@@ -28,10 +28,10 @@ Sparky.task("build", ()=> {
 		useTypescriptCompiler : true,
 		plugins: [
 			RawPlugin([".dot"]),
+			JSONPlugin(),
 			TypeScriptHelpers(),
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
 			CSSPlugin(),
-			JSONPlugin(),
 			ConfigPlugin(),
 			production && UglifyJSPlugin()
 			/*production && QuantumPlugin({

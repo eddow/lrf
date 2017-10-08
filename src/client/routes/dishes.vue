@@ -30,7 +30,7 @@
 										v-for="(txt, val) in parts" :key="val"
 										:value="val"
 										:text="txt"
-									>
+									/>
 								</s-select>
 							</template>
 						</s-field>
