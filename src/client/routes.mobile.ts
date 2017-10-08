@@ -1,9 +1,6 @@
 import Food from './routes/food.vue'
 import Cart from './routes/cart.vue'
-
-const MenuContainer = {
-  template: `<router-view></router-view>`
-}
+import MenuContainer from './routes/container.vue'
 
 export default [{
 	path: '/:lang',

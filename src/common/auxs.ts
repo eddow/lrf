@@ -6,7 +6,7 @@ import {
 	Items
 } from 'ts-json-schema-decorator'
 
-export const languages = {
+export const Languages = {
 	ro: {
 		self: 'Românesc',
 		flag: 'ro'
@@ -21,6 +21,14 @@ export const languages = {
 	}
 };
 
+export const Categories = {
+	all: 'Général',
+	mon: 'Lundi',
+	tue: 'Mardi',
+	wed: 'Mercredi',
+	thu: 'Jeudi',
+	fri: 'Vendredi'
+}
 @Model()
 export class Translated {
 	@MinLength() @Required() fr: string

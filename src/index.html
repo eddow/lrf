@@ -4,15 +4,19 @@
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />		
 		<base href="/" />
-    <title>{{title}}</title>
-		<style>
-		</style>
-  </head>
-  <body>
-		<app></app>
+		<title>{{title}}</title>
 
 		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/alertifyjs-alertify.js/1.0.11/js/alertify.js" integrity="sha256-kyXdnraRCSuhlP7VxnOMy3yJHKgoGSbMhr1A1Kzz3vE=" crossorigin="anonymous"></script>
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css" integrity="sha256-/Z28yXtfBv/6/alw+yZuODgTbKZm86IKbPE/5kjO/xY=" crossorigin="anonymous" />
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js" integrity="sha256-Bhi6GMQ/72uYZcJXCJ2LToOIcN3+Cx47AZnq/Bw1f7A=" crossorigin="anonymous"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue.runtime.min.js" integrity="sha256-/pNN/+W1ai8pEx3dXUN2fX3oEJy5PoqpA80L2MEXxZc=" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/alertifyjs-alertify.js/1.0.11/css/alertify.css" integrity="sha256-TJTk20oGqQkDR9rkIaZSbZvBQzF3lqnkh4cRaFO6NrU=" crossorigin="anonymous" />
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js" integrity="sha256-0AbuA3ySKKYec199lOYKxEcX6NdOl8CeRhquNfddzfs=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/5.2.3/ajv.min.js" integrity="sha256-DufFrW+fgBHQeR3HxFgazMIjTrIh6JuXNodVYKQmvV0=" crossorigin="anonymous"></script>
 		{{#mobile}}
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js" integrity="sha256-WRc/eG3R84AverJv0zmqxAmdwQxstUpqkiE+avJ3WSo=" crossorigin="anonymous"></script>
 		{{/mobile}}
@@ -24,8 +28,11 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/mode-json.js" integrity="sha256-2uxQ8LwrB7pnap3/fARtL62DCtAec16fl29B0+ZqQrA=" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/snippets/html.js" integrity="sha256-RL0nTp7s58S5P7LkMJT4BnwGQgRl2lZM300xKbLIEzY=" crossorigin="anonymous"></script>
 		{{/desktop}}
-		
     <script type="text/javascript" src="/{{vendor}}"></script>
+  </head>
+  <body>
+		<app></app>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/alertifyjs-alertify.js/1.0.11/js/alertify.js" integrity="sha256-kyXdnraRCSuhlP7VxnOMy3yJHKgoGSbMhr1A1Kzz3vE=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/{{app}}"></script>
   </body>
 </html>

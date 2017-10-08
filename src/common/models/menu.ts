@@ -6,15 +6,9 @@ import {
 	Items
 } from 'ts-json-schema-decorator'
 import {Record} from 'js-data'
+import {Categories} from '../auxs'
 
-export const Categories = {
-	all: 'Général',
-	mon: 'Lundi',
-	tue: 'Mardi',
-	wed: 'Mercredi',
-	thu: 'Jeudi',
-	fri: 'Vendredi'
-}
+export {Categories}
 
 @Model()
 export default class Menu extends Record {

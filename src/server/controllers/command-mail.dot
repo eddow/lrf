@@ -1,4 +1,5 @@
 Contact:
+Langue: {{= it.contact.language}}
 {{? it.contact.name}}Nom: {{= it.contact.name}}{{?}}
 {{? it.contact.phone}}Téléphone: {{= it.contact.phone}}{{?}}
 {{? it.contact.email}}E-mail: {{= it.contact.email}}{{?}}

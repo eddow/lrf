@@ -36,7 +36,12 @@ export default function customer(store) {
 				dish: dishes.find(d=> d._id === p.product),
 				quantity: p.quantity
 			})), totalPrice = products.reduce((sum, p)=> sum+p.quantity*p.dish.price, 0);
-			
+			var contact = req.body.contact;
+			contact.language = {
+				fr: 'Français',
+				ro: 'Roumain',
+				en: 'Anglais'
+			}[contact.language];
 			transporter.sendMail({
         from: emails.from,
         to: emails.seller,

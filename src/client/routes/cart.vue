@@ -6,13 +6,13 @@
 				<s-input fluid class="large" v-model="contact.name" :placeholder="$t('Prénom')">
 					<s-icon slot="prepend" icon="user outline" />
 				</s-input>
-				<s-input fluid class="large" v-model="contact.phone" :placeholder="$t('Téléphone')">
+				<s-input fluid class="large" v-model="contact.phone" :placeholder="$t('Téléphone')" type="tel">
 					<s-icon slot="prepend" icon="phone" />
 				</s-input>
 				<div class="ui negative message" v-if="phoneAlert">
 					{{'Le numéro de téléphone doit être spécifé et complet'|translate}}
 				</div>
-				<s-input fluid class="large" v-model="contact.email" placeholder="E-mail">
+				<s-input fluid class="large" v-model="contact.email" placeholder="E-mail" type="email">
 					<s-icon slot="prepend" icon="mail" />
 				</s-input>
 				<s-button class="fluid" positive @click="checkContact" native-type="submit">{{'Confirmer'|translate}} !</s-button>
@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="ui header right floated">Total = {{totalPrice}}lei</div>
+		<div class="ui header right floated">{{'Total'|translate}} = {{totalPrice}}lei</div>
 		<s-button icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
 		<s-button icon="trash" negative @click="confirmEmptyCart" fluid red>{{'Vider le panier'|translate}}</s-button>
 	</div>
@@ -53,8 +53,6 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
-import Dish, {Languages} from 'models/dish'
-import Menu, {Categories} from 'models/menu'
 import * as alertify from 'alertify'
 import {dishes, status} from 'biz/daily'
 import quantity from 'components/quantity.vue'
@@ -107,7 +105,7 @@ export default class Cart extends Vue {
 	}
 	order() {
 		this.commandConfirm(()=> {
-			this.checkout(this.contact);
+			this.checkout({language: this.$lang, ...this.contact});
 		});
 	}
 }

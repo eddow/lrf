@@ -33,9 +33,33 @@ Sparky.task("build", ()=> {
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
 			CSSPlugin(),
 			ConfigPlugin(),
-			production && UglifyJSPlugin()
+			production && UglifyJSPlugin({
+				compress: {
+					//passes: 2,
+					/*dead_code: true,
+					unsafe: true,
+					comparisons: true,
+					evaluate : true,
+					booleans: true,
+					loops: true,
+					unused: true,
+					toplevel: true,
+					if_return: true,
+					join_vars: true,
+					collapse_vars: true,
+					reduce_vars: true,
+					keep_fargs: false*/
+				},
+				mangle: {
+					properties: {
+
+					}
+				}
+			})
 			/*production && QuantumPlugin({
 				bakeApiIntoBundle : 'client/vendor',
+				//treeshake : true,
+				//uglify: true,
 				target: 'browser'
 			})*/
 		],
@@ -45,7 +69,17 @@ Sparky.task("build", ()=> {
 			models: "~/common/models",
 			common: "~/common",
 			bluebird: 'bluebird/js/release/bluebird.js',
-			vue: 'vue/dist/vue.js'
+			//vue: 'vue/dist/vue.js',
+			biz: '~/client/business',
+			components: '~/client/components'
+		},
+		shim: {
+			jquery: {exports: "$"},
+			alertify: {exports: "alertify"},
+			ace: {exports: "ace"},
+			vue: {exports: 'window.Vue'},
+			string: {exports: 'S'},
+			ajv: {exports: 'Ajv'}
 		},
 		debug: true, log: true
 	});
@@ -60,52 +94,35 @@ Sparky.task("build", ()=> {
 	fuse.bundle("client/app").target('browser')
 		.watch("(client|common)/**")
 		.alias({
-			biz: '~/client/business',
-			components: '~/client/components',
 			'routes.device': '~/client/routes.desktop'
 		})
 		.plugin(VuePlugin())
     //.instructions('!> [client/index.ts] +[client/routes/*.vue] +[client/components/*.vue] +[common/**/*.*] - *.d.ts');
-    .instructions('!> [client/index.ts] +[common/**/*.*] - *.d.ts');
+    .instructions('!> [client/index.ts] - *.d.ts');
 
 	fuse.bundle("client/vendor").target('browser')
-		.shim({
-			jquery: {exports: "$"},
-			alertify: {exports: "alertify"},
-			ace: {exports: "ace"}
-		})
 		.alias({
-			biz: '~/client/business',
-			components: '~/client/components',
 			'routes.device': '~/client/routes.desktop'
 		})
 		.plugin(VuePlugin())
 		//.instructions(`+tslib +fuse-box-css ~client/index.ts ~[client/routes/*.vue] ~[common/**/*.*]`);
-		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[common/**/*.*]`);
+		.instructions(`+tslib +fuse-box-css ~client/index.ts`);
 
 	
 	fuse.bundle("mobile/app").target('browser')
 		.watch("(client|common)/**")
 		.alias({
-			biz: '~/client/business',
-			components: '~/client/components',
 			'routes.device': '~/client/routes.mobile'
 		})
 		.plugin(VuePlugin())
-    .instructions('!> [client/index.ts] +[common/**/*.*] - *.d.ts');
+    .instructions('!> [client/index.ts] - *.d.ts');
 
 	fuse.bundle("mobile/vendor").target('browser')
-		.shim({
-			jquery: {exports: "$"},
-			alertify: {exports: "alertify"}
-		})
 		.alias({
-			biz: '~/client/business',
-			components: '~/client/components',
 			'routes.device': '~/client/routes.mobile'
 		})
 		.plugin(VuePlugin())
-		.instructions(`+tslib +fuse-box-css ~client/index.ts ~[common/**/*.*]`);
+		.instructions(`+tslib +fuse-box-css ~client/index.ts`);
 
 	return fuse.run().then((fuseProducer)=> {
 		producer = fuseProducer;

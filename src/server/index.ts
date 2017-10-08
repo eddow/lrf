@@ -17,12 +17,12 @@ initStore(new Container({
 // Create an instance of MongoDBAdapter : change this line to use another adapter
 store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': true });
 /*TODO:
-- traductions
 - heures d'ouverture
 - user
 - sécurité/API
 - gérer les caches (304)
 */
+
 const app = express();
 app.use(morgan('tiny'));
 app.use(bodyParser.json({limit: '5mb'}));

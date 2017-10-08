@@ -1,10 +1,9 @@
 <template>
 	<div>
-		<nav role="navigation" id="nav_menu" class="ui top attached fixed small menu page grid">
+		<nav role="navigation" id="nav_menu" class="ui top attached fixed small menu page">
 			<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
 			<span class="ui item">
-				<s-button positive icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
-				
+				<s-button :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
 				<div v-if="isAuthenticated">
 					<s-select :text="false" action="hide">
 						<s-button slot="bar" icon="wrench" />
@@ -15,14 +14,14 @@
 					<s-button @click="logout">Log out</s-button>
 				</div>
 				<div v-else>
-					<s-button @click="login">Log in</s-button>
+					<!--s-button @click="login">Log in</s-button-->
 					<!--s-button @click="register">Register</s-button-->
 				</div>
 			</span>
 			<div class="right menu">
 				<span>
 					<s-select v-model="$lang">
-						<s-flag slot="bar" :country="languages[$lang].flag" />
+						<s-button slot="bar" class="icon"><s-flag :country="languages[$lang].flag" /></s-button>
 						<s-option
 							v-for="(desc, val) in languages" :key="val"
 							:value="val"
@@ -32,17 +31,6 @@
 					</select>
 				</span>
 			</div>
-			<!--span class="user">
-				<span v-if="isAuthenticated">
-					<router-link to="/dishes">Plats</router-link>
-					<router-link to="/menus">Menus</router-link>
-					<router-link to="/templates">Templates</router-link>
-					<s-button @click="logout">Log out</s-button>
-				</span>
-				<span v-else>
-					<s-button @click="login">Log in</s-button>
-				</span>
-			</span-->
 		</nav>
 		<section id="content_section">
 			<router-view></router-view>
@@ -62,27 +50,32 @@ import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Provide} from 'vue-property-decorator'
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as $ from 'jquery'
-import {languages} from '../common/auxs'
+import {Languages} from '../common/auxs'
 
 var vuexi18n = '';
+function i18n(lng) {
+	if(vuexi18n !== lng) {
+		Vue.i18n.set(lng);
+		vuexi18n = lng;
+	}
+}
 Object.defineProperty(Vue.prototype, '$lang', {
 	get() {
 		if(!this.$route.params.lang)
 			return this.$lang = 'ro';
 		var rv = this.$route.params.lang;
-		if(vuexi18n!== rv)
-			Vue.i18n.set(rv);
+		i18n(rv);
 		return rv;
 	},
 	set(value) {
-		Vue.i18n.set(value);
+		i18n(value);
 		this.$router.push('/'+value+this.$route.path.substr(3));
 	}
 })
 
 @Component
 export default class App extends Vue {
-	languages = languages
+	languages = Languages
 	@Getter cartQuantity
 	shoot = 1
 	signalShoot() { this.shoot = 3-this.shoot; }

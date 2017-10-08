@@ -65,8 +65,7 @@
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
-import Dish, {Languages} from 'models/dish'
-import Menu, {Categories} from 'models/menu'
+import {Categories} from '../../common/auxs'
 import {menus} from 'biz/daily'
 import quantity from 'components/quantity.vue'
 
@@ -74,7 +73,7 @@ import quantity from 'components/quantity.vue'
 export default class Food extends Vue {
 	categories = Categories
 	menus = menus
-	commandItem: Dish = null
+	commandItem = null
 	commandNumber: number = 0
 	chooseQtt
 	@Action addToCart

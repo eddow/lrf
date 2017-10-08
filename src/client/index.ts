@@ -2,7 +2,7 @@ import './libs'
 
 import * as Vue from 'vue'
 import * as VueAuthenticate from 'vue-authenticate'
-
+console.log(__assign);
 var test = Vue.use(VueAuthenticate, {
   baseUrl: window.location.origin
 });
@@ -22,9 +22,9 @@ var router = new VueRouter({
 	mode: window.history && window.history.pushState?'history':'hash',
 	routes
 }),
-root = new Vue({
+root = new App({
 	router,
 	store,
-	el: 'app',
-	components: {App}
+	el: 'app'/*,
+	components: {App}*/
 });

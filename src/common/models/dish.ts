@@ -6,13 +6,9 @@ import {
 	Items
 } from 'ts-json-schema-decorator'
 import {Record} from 'js-data'
-import {Translated} from '../auxs'
+import {Translated, Languages} from '../auxs'
 
-export const Languages = {
-	ro: 'Roumain',
-	fr: 'Français',
-	en: 'Anglais'
-};
+export {Languages}
 
 export const Parts = {
 	entrance: 'Entrée',
