@@ -5,7 +5,12 @@ import * as VueAuthenticate from 'vue-authenticate'
 console.log(__assign);
 var test = Vue.use(VueAuthenticate, {
 	baseUrl: window.location.origin,
-	logoutUrl: '/auth/logout'
+	logoutUrl: '/auth/logout',
+  providers: {
+    github: {
+      clientId: '6147f5d39757630966f7'
+    }
+  }
 });
 
 import * as VueRouter from 'vue-router'
@@ -20,6 +25,11 @@ import {en, ro} from '../common/dictionaries'
 Vue.i18n.add('en', en);
 Vue.i18n.add('ro', ro);
 
+import {CookieStorage} from 'cookie-storage'
+Vue.prototype.cookies = new CookieStorage({
+  path: '/',
+  secure: true
+});
 import App from './app.vue'
 import routes from 'routes.device'
 var router = new VueRouter({

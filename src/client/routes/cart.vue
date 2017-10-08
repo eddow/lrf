@@ -3,6 +3,9 @@
 		<s-modal v-model="commandConfirm" :header="$t('Confirmer')" class="commandConfirm">
 			<form onsubmit="return false">
 				{{'La commande sera confirmée par téléphone.'|translate}}
+				<!--s-input fluid class="large" v-model="contact.time" :placeholder="$t('Heure de livraison')" type="time" :min="minTime">
+					<s-icon slot="prepend" icon="hourglass end" />
+				</s-input-->
 				<s-input fluid class="large" v-model="contact.name" :placeholder="$t('Prénom')">
 					<s-icon slot="prepend" icon="user outline" />
 				</s-input>
@@ -96,7 +99,13 @@ export default class Cart extends Vue {
 	contact = {
 		name: "",
 		phone: "",
-		email: ""
+		email: "",
+		time: ""
+	}
+	get minTime() {
+		var dt = new Date((new Date()).getTime()+65*60*1000),	//65 minutes
+			minutes = dt.getMinutes();
+		return dt.getHours()+':'+(10> minutes?'0': '')+minutes+':00';
 	}
 	phoneAlert: boolean = false
 	checkContact() {

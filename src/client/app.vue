@@ -2,6 +2,7 @@
 	<div>
 		<s-modal v-model="chooseLogin" :header="$t('Connexion')">
 			<form onsubmit="return false">
+				<s-button icon="github" @click="authenticate('github')" />
 				<s-input fluid class="large" v-model="loginDetail.email" placeholder="E-mail" type="email">
 					<s-icon slot="prepend" icon="mail" />
 				</s-input>
@@ -79,19 +80,21 @@ import * as $ from 'jquery'
 import {Languages} from '../common/auxs'
 import * as alertify from 'alertify'
 
-var vuexi18n = '';
-Vue.i18n.set('ro');
+//TODO: lang set/get goes through user if connected (but first, have users and user object)
+var vuexi18n = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.getItem('lang') || 'ro';
+Vue.i18n.set(vuexi18n);
 function i18n(lng) {
 	if(vuexi18n !== lng) {
 		Vue.i18n.set(lng);
+		Vue.prototype.cookies.setItem('lang', lng)
 		vuexi18n = lng;
 	}
 }
 Object.defineProperty(Vue.prototype, '$lang', {
 	get() {
-		if(this.$router.history.pending) return 'ro';	//the language is going to be specified soon
+		if(this.$router.history.pending) return vuexi18n;	//the language is going to be specified soon
 		if(!this.$route.params.lang)	//the language has not be specified : let's specify 'ro'
-			return this.$lang = 'ro';
+			return this.$lang = vuexi18n;
 		var rv = this.$route.params.lang;
 		i18n(rv);
 		return rv;
@@ -124,6 +127,12 @@ export default class App extends Vue {
 				email: '',
 				password: ''
 			};
+		})
+	}
+	authenticate(provider) {
+		this.$auth.authenticate(provider).then(function () {
+			this.chooseLogin('cancel');
+			// Execute application logic after successful social authentication
 		})
 	}
 	register() {
