@@ -53,6 +53,7 @@ import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as alertify from 'alertify'
 import {dishes, status} from 'biz/daily'
 import quantity from 'components/quantity.vue'
+
 @Component({components: {quantity}})
 export default class Cart extends Vue {
 	@Getter cartProducts

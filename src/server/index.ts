@@ -18,9 +18,10 @@ initStore(new Container({
 store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': true });
 /*TODO:
 - heures d'ouverture
-- user
+- user + session + https://github.com/robinvdvleuten/vuex-persistedstate for express-session storage
 - sécurité/API
 - relevé d'activité (via socket.io?)
+- favicon (fleur + rond)
 */
 
 const app = express();

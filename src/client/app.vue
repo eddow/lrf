@@ -1,5 +1,18 @@
 <template>
 	<div>
+		<s-modal v-model="chooseLogin" :header="$t('Connexion')">
+			<form onsubmit="return false">
+				<s-input fluid class="large" v-model="loginDetail.email" placeholder="E-mail" type="email">
+					<s-icon slot="prepend" icon="mail" />
+				</s-input>
+				<s-input fluid class="large" v-model="loginDetail.password" :placeholder="$t('Mot de passe')" type="password">
+					<s-icon slot="prepend" icon="privacy" />
+				</s-input>
+
+				<s-button class="fluid" positive v-command:ok native-type="submit">{{'Connecter'|translate}} !</s-button>
+				<s-button class="fluid" v-command:cancel>{{'Annuler'|translate}}</s-button>
+			</form>
+		</s-modal>
 		<nav role="navigation" id="nav_menu"class="ui top attached menu fixed">
 			<div class="ui top attached menu">
 				<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
@@ -18,10 +31,10 @@
 					<div>
 						<div v-if="isAuthenticated">
 							<!--s-button @click="logout">Log out</s-button-->
-							<s-button icon="+large user circle+red remove" @click="logout" />
+							<s-button icon="+large user+big green sun" @click="logout" />
 						</div>
 						<div v-else>
-							<s-button icon="+large user circle+green checkmark" @click="login" />
+							<s-button icon="+large user+big circle thin" @click="login" />
 							<!--s-button @click="register">Register</s-button-->
 						</div>
 						<div>
@@ -64,8 +77,10 @@ import {Component, Inject, Model, Prop, Watch, Provide} from 'vue-property-decor
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as $ from 'jquery'
 import {Languages} from '../common/auxs'
+import * as alertify from 'alertify'
 
 var vuexi18n = '';
+Vue.i18n.set('ro');
 function i18n(lng) {
 	if(vuexi18n !== lng) {
 		Vue.i18n.set(lng);
@@ -91,19 +106,25 @@ Object.defineProperty(Vue.prototype, '$lang', {
 export default class App extends Vue {
 	languages = Languages
 	@Getter cartQuantity
-	shoot = 1
-	signalShoot() { this.shoot = 3-this.shoot; }
+	loginDetail = {
+		email: '',
+		password: ''
+	}
+	chooseLogin
 	login() {
-		this.$store.dispatch('login', {
-			user: {
-				email: 'this.email',
-				password: 'this.password'
-			}
-		}).then(() => {
-			//this.$router.push('profile')
-		}).catch(reason=> {
-			this.signalShoot();
-		});
+		this.chooseLogin(()=> {
+			this.$store.dispatch('login', {
+				user: this.loginDetail
+			}).then(() => {
+				alertify.success(this.$t('Bienvenue !'));
+			}).catch(reason=> {
+				alertify.error(this.$t('Données de connexion invalides'));
+			});
+			this.loginDetail = {
+				email: '',
+				password: ''
+			};
+		})
 	}
 	register() {
 		this.$store.dispatch('register', {
@@ -111,16 +132,14 @@ export default class App extends Vue {
 				name:'name', email:'email@googl.com', password:'pwd'
 			}
 		}).then(() => {
-			this.$router.push('profile')
+			//this.$router.push({name: 'profile'})
 		}).catch(reason=> {
-			this.signalShoot();
 		});
 	}
 	logout() {
 		this.$store.dispatch('logout').then(() => {
 			this.$router.push({name: 'food'})
 		}).catch(reason=> {
-			this.signalShoot();
 		});
 	}
 	mounted() {
