@@ -14,7 +14,7 @@
 						{{parts[row.model.part]}}
 					</template>
 				</s-column>
-				<s-column prop="title[$lang]">
+				<s-column :prop="'title.'+$lang">
 					<search-header slot="header" label="Titre" v-model="filters.title" />
 				</s-column>
 			</mgd-table>
