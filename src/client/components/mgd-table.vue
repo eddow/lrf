@@ -63,7 +63,7 @@ export default class MgdTable extends Vue {
 			this.list.push(v);
 			this.select(v);
 		});
-		if(!rv) this.select(rv);
+		if(rv) this.select(rv);
 	}
 	hasChanged() {
 		return this.selected && (!this.selected._id || this.selected.hasChanges());
