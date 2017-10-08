@@ -82,7 +82,10 @@ export default class Cart extends Vue {
 		this.addToCart({product, quantity: Number(quantity)});
 	}
 	confirmEmptyCart() {
-		alertify.confirm(this.$t('Supprimer le contenu du panier')+' ?', this.emptyCart);
+		alertify.confirm(this.$t('Supprimer le contenu du panier')+' ?', ()=> {
+			this.emptyCart();
+			this.$router.push({name: 'food'});
+		});
 	}
 	remove(dish) {
 		alertify.confirm(this.$t('Enlever')+` "${dish.title[this.$lang]}" ?`, ()=> {

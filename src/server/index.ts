@@ -22,6 +22,7 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - sécurité/API
 - relevé d'activité (via socket.io?)
 - favicon (fleur + rond)
+- frais de port
 */
 
 const app = express();

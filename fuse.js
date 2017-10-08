@@ -33,35 +33,7 @@ Sparky.task("build", ()=> {
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
 			CSSPlugin(),
 			ConfigPlugin(),
-			production && UglifyJSPlugin({
-				compress: {
-					//passes: 2,
-					/*dead_code: true,
-					unsafe: true,
-					comparisons: true,
-					evaluate : true,
-					booleans: true,
-					loops: true,
-					unused: true,
-					toplevel: true,
-					if_return: true,
-					join_vars: true,
-					collapse_vars: true,
-					reduce_vars: true,
-					keep_fargs: false*/
-				},
-				mangle: {
-					properties: {
-
-					}
-				}
-			})
-			/*production && QuantumPlugin({
-				bakeApiIntoBundle : 'client/vendor',
-				//treeshake : true,
-				//uglify: true,
-				target: 'browser'
-			})*/
+			production && UglifyJSPlugin({/*Do not put arguments here : it breaks everything!*/})
 		],
 		hash: production,
 		cache: !production,

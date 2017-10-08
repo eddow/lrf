@@ -138,17 +138,17 @@ export default class App extends Vue {
 	}
 	logout() {
 		this.$store.dispatch('logout').then(() => {
-			this.$router.push({name: 'food'})
+			this.$router.push({name: 'food'});
 		}).catch(reason=> {
 		});
 	}
 	mounted() {
 		window.addEventListener('keyup', function(event) {
-				// If down arrow was pressed...
 				if('s'=== event.key && event.ctrlKey) {
 					event.preventDefault();
+					//debugger;
+					//TODO: save
 				}
-        var donothing=true;
       });
 
 	}
