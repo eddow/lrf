@@ -22,7 +22,6 @@
 					v-for="(dish, dndx) in menu.dishes" :key="dndx"
 					class="card dimmable"
 				>
-				
 					<s-dimmer on="hover">
 						<div class="content" @click="addClick(dish)">
 							<div class="center">
@@ -37,6 +36,7 @@
 					<div class="ui image">
 						<div v-if="dish.today" class="ui orange right ribbon label">{{'Aujourd\'hui'|translate}}</div>
 						<img class="middle aligned" v-if="dish.picture" :src="'picture/'+dish._id"></i>
+						<img class="middle aligned" v-else src="/logo290.png"></i>
 					</div>
 					<div class="content">
 						<div class="header">
