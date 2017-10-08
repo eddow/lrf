@@ -6,7 +6,7 @@
 				v-model="selected"
 				:new-empty="emptyTemplate"
 				:recordClass="Template"
-				collection-name="Template"
+				collection-name="template"
 			>
 				<s-column prop="name" header="Template" edit>
 					<template name="input" slot="field">

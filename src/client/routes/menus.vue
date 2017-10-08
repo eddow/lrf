@@ -32,8 +32,8 @@ import Menu, {Categories} from 'models/menu'
 import {observeDeeply, bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
 
-const menus = bindCollection('Menu');
-const dishes = bindCollection('Dish');
+const menus = bindCollection('menu');
+const dishes = bindCollection('dish');
 
 import DayEdit from 'components/day-edit.vue'
 

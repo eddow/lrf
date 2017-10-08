@@ -22,10 +22,22 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - sécurité/API
 - relevé d'activité (via socket.io?)
 - favicon (fleur + rond)
-- frais de port
+- ajouter les frais de port
+- trouver un thème semantic
 */
 
 const app = express();
+
+import * as session from 'express-session'
+import * as MongoStore from 'connect-mongo'
+
+app.use(session({
+	secret: config.secret,
+	store: new (MongoStore(session))({url: config.mongo.uri}),
+	resave: true,
+	saveUninitialized: true
+}));
+
 app.use(morgan('tiny'));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));

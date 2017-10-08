@@ -35,7 +35,7 @@ export default {
     },
 
     logout(context, payload) {
-      payload = payload || {}
+			payload = payload || {}
       return vueAuthInstance.logout(payload.requestOptions).then(function () {
 				refreshContext(context);
       })

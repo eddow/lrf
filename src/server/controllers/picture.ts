@@ -10,7 +10,7 @@ export default function picture(store) {
 
 	function download(req, res) {
 		var id = req.params.id;
-		store.find('Dish', id).then(dish=> {
+		store.find('dish', id).then(dish=> {
 			if(!dish.picture) {
 				return res.status(404).send();
 			}

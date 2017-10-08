@@ -6,7 +6,7 @@
 				v-model="selected"
 				:new-empty="emptyDish"
 				:recordClass="Dish"
-				collection-name="Dish"
+				collection-name="dish"
 				:filter="filter"
 			>
 				<s-column header="Service">
@@ -91,10 +91,6 @@ import SearchHeader from 'components/search-header.vue'
 
 @Component({components: {MgdTable, SearchHeader}})
 export default class Dishes extends Vue {
-	dbg(x) {
-		debugger;
-		return x;
-	}
 	Dish = Dish
 
 	languages: any = Languages

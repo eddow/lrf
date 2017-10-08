@@ -31,7 +31,7 @@ export default function customer(store) {
 	return customer;
 
 	function command(req, res) {
-		store.findAll('Dish').then(dishes=> {
+		store.findAll('dish').then(dishes=> {
 			var products = req.body.products.map(p=> ({
 				dish: dishes.find(d=> d._id === p.product),
 				quantity: p.quantity
@@ -66,8 +66,8 @@ export default function customer(store) {
 	function daily(req, res) {
 		var day = ['', 'mon', 'tue', 'wed', 'thu', 'fri'][(new Date).getDay()]
 		Promise.all([
-			store.findAll('Dish'),
-			store.findAll('Menu')
+			store.findAll('dish'),
+			store.findAll('menu')
 		]).then(proms=> {
 			function menuDishes(identification) {
 				var menu = menus.find(m=> m.identification === identification);
@@ -91,8 +91,8 @@ export default function customer(store) {
 	}
 	function weekly(req, res) {
 		Promise.all([
-			store.findAll('Dish'),
-			store.findAll('Menu')
+			store.findAll('dish'),
+			store.findAll('menu')
 		]).then(proms=> {
 			var [dishes, menus] = proms, dbid = {}, mbid = {};
 			for(let dish of dishes) {

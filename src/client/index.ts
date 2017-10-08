@@ -4,7 +4,8 @@ import * as Vue from 'vue'
 import * as VueAuthenticate from 'vue-authenticate'
 console.log(__assign);
 var test = Vue.use(VueAuthenticate, {
-  baseUrl: window.location.origin
+	baseUrl: window.location.origin,
+	logoutUrl: '/auth/logout'
 });
 
 import * as VueRouter from 'vue-router'
