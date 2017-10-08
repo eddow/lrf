@@ -20,6 +20,7 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - heures d'ouverture
 - user
 - sécurité/API
+- relevé d'activité (via socket.io?)
 */
 
 const app = express();

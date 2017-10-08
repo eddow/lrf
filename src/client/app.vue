@@ -1,38 +1,40 @@
 <template>
 	<div>
-		<nav role="navigation" id="nav_menu" class="ui top attached fixed small menu page">
-			<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
-			<span class="ui item">
-				<s-button :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
-				<div v-if="isAuthenticated">
-					<s-select :text="false" action="hide">
-						<s-button slot="bar" icon="wrench" />
-						<s-option><router-link :to="{name: 'dishes'}">Plats</router-link></s-option>
-						<s-option><router-link :to="{name: 'menus'}">Menus</router-link></s-option>
-						<s-option><router-link :to="{name: 'templates'}">Templates</router-link></s-option>
-					</s-select>
-				</div>
-			</span>
-			<div class="right menu">
-				<div>
+		<nav role="navigation" id="nav_menu"class="ui top attached menu fixed">
+			<div class="ui top attached menu">
+				<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
+				<span class="ui item">
+					<s-button :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
 					<div v-if="isAuthenticated">
-						<!--s-button @click="logout">Log out</s-button-->
-						<s-button icon="+large user circle+red remove" @click="logout" />
+						<s-select :text="false" action="hide" @change="name=> $router.push({name})">
+							<s-button slot="bar" icon="wrench" />
+							<s-option value="dishes">Plats</s-option>
+							<s-option value="menus">Menus</s-option>
+							<s-option value="templates">Templates</s-option>
+						</s-select>
 					</div>
-					<div v-else>
-						<s-button icon="+large user circle+green checkmark" @click="login" />
-						<!--s-button @click="register">Register</s-button-->
-					</div>
+				</span>
+				<div class="right menu">
 					<div>
-						<s-select v-model="$lang">
-							<s-button slot="bar" class="icon"><s-flag :country="languages[$lang].flag" /></s-button>
-							<s-option
-								v-for="(desc, val) in languages" :key="val"
-								:value="val"
-							>
-								<s-flag :country="desc.flag" /> {{desc.self}}
-							</s-option>
-						</select>
+						<div v-if="isAuthenticated">
+							<!--s-button @click="logout">Log out</s-button-->
+							<s-button icon="+large user circle+red remove" @click="logout" />
+						</div>
+						<div v-else>
+							<s-button icon="+large user circle+green checkmark" @click="login" />
+							<!--s-button @click="register">Register</s-button-->
+						</div>
+						<div>
+							<s-select v-model="$lang">
+								<s-button slot="bar" class="icon"><s-flag :country="languages[$lang].flag" /></s-button>
+								<s-option
+									v-for="(desc, val) in languages" :key="val"
+									:value="val"
+								>
+									<s-flag :country="desc.flag" /> {{desc.self}}
+								</s-option>
+							</select>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -42,12 +44,15 @@
 		</section>
 	</div>
 </template>
-<style>
+<style scoped>
 #nav_menu {
 	height: 102px;
+}
+div.ui.menu {
 	max-width: 400px;
 	margin-left: auto;
 	margin-right: auto;
+	border: 0 !important;
 }
 #content_section {
 	padding-top: 102px;
@@ -69,7 +74,8 @@ function i18n(lng) {
 }
 Object.defineProperty(Vue.prototype, '$lang', {
 	get() {
-		if(!this.$route.params.lang)
+		if(this.$router.history.pending) return 'ro';	//the language is going to be specified soon
+		if(!this.$route.params.lang)	//the language has not be specified : let's specify 'ro'
 			return this.$lang = 'ro';
 		var rv = this.$route.params.lang;
 		i18n(rv);
