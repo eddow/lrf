@@ -45,9 +45,6 @@
 	margin-left: auto;
 	margin-right: auto;
 }
-.commandConfirm {
-	max-width: 400px;
-}
 </style>
 <script lang="js">
 import * as Vue from 'vue'
