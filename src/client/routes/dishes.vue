@@ -14,7 +14,7 @@
 						{{parts[row.model.part]}}
 					</template>
 				</s-column>
-				<s-column prop="title.fr">
+				<s-column prop="title[$lang]">
 					<search-header slot="header" label="Titre" v-model="filters.title" />
 				</s-column>
 			</mgd-table>
@@ -122,7 +122,7 @@ export default class Dishes extends Vue {
 		return number.toFixed(decs||0)
 	}
 	get filter() {
-		return this.filters.title ? x=> !!~x.title.fr.indexOf(this.filters.title) : ()=>true;
+		return this.filters.title ? x=> !!~x.title[this.$lang].indexOf(this.filters.title) : ()=>true;
 	}
 	select(dish) {
 		this.selected = dish;

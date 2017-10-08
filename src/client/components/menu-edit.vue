@@ -6,8 +6,8 @@
 	>
 		<div class="item" v-for="dishId in dishClone" :key="dishId">			
 			<div v-if="dishById[dishId]" class="content">
-				<div class="header">{{dishById[dishId].title.fr}}</div>
-				<div class="description">{{dishById[dishId].description.fr}}</div>
+				<div class="header">{{dishById[dishId].title[$lang]}}</div>
+				<div class="description">{{dishById[dishId].description[$lang]}}</div>
 			</div>
 			<div v-else class="content">
 				<div class="ui negative message">Plat fantôme</div>
