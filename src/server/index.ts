@@ -69,5 +69,9 @@ routes.statics(app, io.sockets);
 import jsData from './controllers/js-data'
 jsData(app, io.sockets, store);
 routes.controllers(app, io.sockets, store);
-console.log(`Listening on port ${config.server.port}`);
-export default server.listen(config.server.port);
+const listener = server.listen(
+	process.env.PORT || config.server.port,
+	function() {
+		console.log('Listening on port ' + listener.address().port);
+	});
+export default listener;
