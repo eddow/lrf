@@ -1,5 +1,3 @@
-import './extensions/*'
-
 function mapper(cls, name) {
 	cls.schema.properties._id = {
 		type: 'string',

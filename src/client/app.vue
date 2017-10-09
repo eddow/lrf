@@ -30,7 +30,7 @@
 					</span>
 				</span>
 				<div class="right menu">
-					<s-button icon="big newspaper" @clik="genWeek" />
+					<s-button icon="big newspaper" @click="$router.push({name: 'week'})" />
 					<div>
 						<div v-if="isAuthenticated">
 							<!--s-button @click="logout">Log out</s-button-->
@@ -152,18 +152,9 @@ export default class App extends Vue {
 					//TODO: save
 				}
       });
-
 	}
-	/*authenticate (provider) {
-		this.$store.dispatch('authenticate', { provider }).then(() => {
-			this.$router.push('profile')
-		})
-	}*/
 	get isAuthenticated() {
 		return !!this.$store.state.auth.profile;
-	}
-	genWeek() {
-
 	}
 }
 </script>

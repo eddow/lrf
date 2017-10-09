@@ -6,6 +6,10 @@ import * as commandTpl from './command-mail.dot'
 import * as nodemailer from 'nodemailer'
 import {mailer, emails} from 'config'
 
+import {dav} from 'common/libs/dot-gen'
+import * as jsonStringify from 'json-pretty'
+var generator = new dav();
+
 var commandMail = dot.template(commandTpl, {
 	evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
 	interpolate: /\{\{=([\s\S]+?)\}\}/g,
@@ -26,7 +30,8 @@ var commandMail = dot.template(commandTpl, {
 export default function customer(store) {
 	const customer = new Router();
 	customer.route('/today').get(daily);
-	customer.route('/week').get(weekly);
+	//customer.route('/week').get(weekly);
+	customer.route('/week.html').get(weekHtml);
 	customer.route('/').post(command);
 	return customer;
 
@@ -89,8 +94,23 @@ export default function customer(store) {
 			res.status(200).send(rv);
 		});
 	}
-	function weekly(req, res) {
-		Promise.all([
+	//TODO: cache moi ça
+	async function weekHtml(req, res) {
+		try {
+			res.send(generator.generate(await template('Semaine'), await weekData()));
+		} catch(x) {
+			console.error(x);
+			res.status(500).send();
+		}
+	}
+	/*function weekly(req, res) {
+		weekData().then(rv=> res.status(200).send(rv));
+	}*/
+	function template(name) {
+		return store.findAll('template').then(tpls=> tpls.find(tpl=> tpl.name === name));
+	}
+	function weekData() {
+		return Promise.all([
 			store.findAll('dish'),
 			store.findAll('menu')
 		]).then(proms=> {
@@ -122,7 +142,7 @@ export default function customer(store) {
 						parts
 					});
 			}
-			res.status(200).send(rv);
+			return rv;
 		});
 	}
 }

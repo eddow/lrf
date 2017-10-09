@@ -10,8 +10,12 @@
 		
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css" integrity="sha256-/Z28yXtfBv/6/alw+yZuODgTbKZm86IKbPE/5kjO/xY=" crossorigin="anonymous" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js" integrity="sha256-Bhi6GMQ/72uYZcJXCJ2LToOIcN3+Cx47AZnq/Bw1f7A=" crossorigin="anonymous"></script>
-
+		{{#production}}
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue.runtime.min.js" integrity="sha256-/pNN/+W1ai8pEx3dXUN2fX3oEJy5PoqpA80L2MEXxZc=" crossorigin="anonymous"></script>
+		{{/production}}
+		{{#development}}
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.4/vue.runtime.js" integrity="sha256-ziwvDVTudpvF2/czjYkaHSbvqv98vDcfxljNoPUtIF8=" crossorigin="anonymous"></script>
+		{{/development}}
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/alertifyjs-alertify.js/1.0.11/css/alertify.css" integrity="sha256-TJTk20oGqQkDR9rkIaZSbZvBQzF3lqnkh4cRaFO6NrU=" crossorigin="anonymous" />
 		

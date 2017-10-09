@@ -13,5 +13,10 @@ export var routes = [{
 		menu: 'Panier',
 		name: 'cart',
 		component: ()=> import('./routes/cart.vue')
+	}, {
+		path: 'week',
+		menu: 'Semaine',
+		name: 'week',
+		component: ()=> import('./routes/week.vue')
 	}]
 }];

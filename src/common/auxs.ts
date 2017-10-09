@@ -22,7 +22,7 @@ export const Languages = {
 };
 
 export const Categories = {
-	all: 'Général',
+	all: 'Cette semaine',
 	mon: 'Lundi',
 	tue: 'Mardi',
 	wed: 'Mercredi',

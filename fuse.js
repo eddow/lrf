@@ -124,6 +124,8 @@ Sparky.task("make-desktop-html", ()=> {
 				title: 'La Rôtisserie Française',
 				desktop: true,
 				//context.output.lastGeneratedFileName returns the .js.map file name
+				production: production,
+				development: !production,
 				vendor: vendor.context.output.lastPrimaryOutput.filename,
 				app: app.context.output.lastPrimaryOutput.filename
 			});
@@ -139,6 +141,8 @@ Sparky.task("make-mobile-html", ()=> {
 			file.template({
 				title: 'La Rôtisserie Française',
 				mobile: true,
+				production: production,
+				development: !production,
 				vendor: vendor.context.output.lastPrimaryOutput.filename,
 				app: app.context.output.lastPrimaryOutput.filename
 			});

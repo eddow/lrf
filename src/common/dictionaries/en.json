@@ -24,5 +24,7 @@
 	"Téléphone": "Phone number",
 	"Supprimer le contenu du panier": "Erase the content of the cart",
 	"Enlever": "Remove",
-	"Total": "Total"
+	"Total": "Total",
+	"La commande a été transmise...": "The order was successfully sent...",
+	"Un problème est apparu. Repassez votre commande plus tard!": "An error occured. Please, try again later."
 }

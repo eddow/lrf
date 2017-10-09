@@ -22,7 +22,7 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - relevé d'activité (via socket.io?)
 - favicon (lys + rond)
 - ajouter les frais de port
-- `position:fixed` foire pour le menu
+- `position:fixed` foire pour le menu sur android/chrome
 - Menu langue vertical?
 - -> https
 */

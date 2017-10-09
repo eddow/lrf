@@ -1,5 +1,6 @@
 import {buyProducts} from 'biz/shop'
 import * as types from '../mutation-types'
+import * as alertify from 'alertify'
 
 // initial state
 // shape: [{ id, quantity }]
@@ -56,13 +57,15 @@ const mutations = {
   },
 
   [types.CHECKOUT_SUCCESS] (state) {
-    state.checkoutStatus = 'successful'
+    state.checkoutStatus = 'successful';
+		alertify.success(this.$t('La commande a été transmise...'));
   },
 
   [types.CHECKOUT_FAILURE] (state, { savedCartItems }) {
     // rollback to the cart saved before sending the request
-    state.added = savedCartItems
-    state.checkoutStatus = 'failed'
+    state.added = savedCartItems;
+    state.checkoutStatus = 'failed';
+		alertify.error(this.$t('Un problème est apparu. Repassez votre commande plus tard!'));
   }
 }
 

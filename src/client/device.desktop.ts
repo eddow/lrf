@@ -25,6 +25,7 @@ routes[0].children.push({
 
 import * as Vue from 'vue'
 Vue.prototype.$desktop = true;
+
 import vgl from 'vue-golden-layout'
 Vue.use(vgl);
 
