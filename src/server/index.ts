@@ -33,8 +33,8 @@ import * as https from 'https'
 var credentials = null;
 if(config.https)
 	credentials = {
-		key: config.https+'.key',
-		cert: config.https+'.cert'
+		key: readFileSync(config.https+'.key', 'utf8'),
+		cert: readFileSync(config.https+'.cert', 'utf8')
 	};
 //https://stackoverflow.com/questions/11744975/enabling-https-on-express-js
 const app = express();
