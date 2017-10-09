@@ -38,7 +38,8 @@ if(config.https)
 	};
 //https://stackoverflow.com/questions/11744975/enabling-https-on-express-js
 const app = express();
-
+if(credentials)
+console.log('Creating http'+(credentials?'s':'')+' server');
 var server = credentials ? https.createServer(credentials, app) : http.createServer(app);
 
 import * as session from 'express-session'
