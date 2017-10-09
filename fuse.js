@@ -5,7 +5,7 @@ const {
 } = require('fuse-box');
 const {ConfigPlugin} = require('bundle-config/fuse-box');
 let producer;
-let production = false;
+let production = 'prod'=== process.env.MODE;
 function VuePlugin() {
 	return VueComponentPlugin({
 		style: [
