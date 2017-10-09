@@ -99,7 +99,10 @@ export default function customer(store) {
 	//TODO: cache moi ça
 	async function weekHtml(req, res) {
 		try {
-			res.send(generator.generate(await template(req.params.tpl||'Semaine'), await weekData()));
+			var tpl = await template(req.params.tpl||'Semaine');
+			if(tpl)
+				res.send(generator.generate(tpl, await weekData()));
+			else res.status(404).send(req.params.tpl);
 		} catch(x) {
 			console.error(x);
 			res.status(500).send();
@@ -107,9 +110,12 @@ export default function customer(store) {
 	}
 	async function weekPdf(req, res) {
 		try {
-			var buffer = await pdfGen(generator.generate(await template(req.params.tpl||'Semaine'), await weekData()));
-			res.write(buffer,'binary');
-			res.end(null, 'binary');
+			var tpl = await template(req.params.tpl||'Semaine');
+			if(tpl) {
+				var buffer = await pdfGen(generator.generate(tpl, await weekData()));
+				res.write(buffer,'binary');
+				res.end(null, 'binary');
+			} else res.status(404).send(req.params.tpl);
 		} catch(x) {
 			console.error(x);
 			res.status(500).send();

@@ -29,10 +29,7 @@ export default class Week extends Vue {
 		filler.height($(window).height() - filler.position().top-12);
 	}
 	download() {
-
-	}
-	get htmlSrc() {
-		return location.origin+'/customer/week.html/Semaine';
+		window.open('/customer/week.pdf/Semaine', '_blank');
 	}
 }
 </script>
