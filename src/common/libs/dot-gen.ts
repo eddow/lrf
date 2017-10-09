@@ -1,20 +1,8 @@
 import * as dot from 'dot'
+import * as master from './main.dot.html'
 
 export class dav {
-	master: string = `
-<!DOCTYPE html>
-<html>
-	<head>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css" integrity="sha256-/Z28yXtfBv/6/alw+yZuODgTbKZm86IKbPE/5kjO/xY=" crossorigin="anonymous" />
-		{{~it.css: style}}
-			<style type="text/css">{{= style}}</style>
-		{{~}}
-	</head>
-	<body>
-		{{= it.content}}
-	</body>
-</html>
-`
+	master: string = master
 	css: string[] = []
 	wrapper: (data: any)=> string
 	constructor(options: any = {}) {

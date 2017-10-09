@@ -2,11 +2,12 @@ import {Router} from 'express'
 import Dish, {Languages, Parts} from 'models/dish'
 import Menu, {Categories} from 'models/menu'
 import * as dot from 'dot'
-import * as commandTpl from './command-mail.dot'
+import * as commandTpl from './command-mail.dot.txt'
 import * as nodemailer from 'nodemailer'
 import {mailer, emails} from 'config'
 
 import {dav} from 'common/libs/dot-gen'
+import pdfGen from 'common/libs/pdf-gen'
 import * as jsonStringify from 'json-pretty'
 var generator = new dav();
 
@@ -32,6 +33,7 @@ export default function customer(store) {
 	customer.route('/today').get(daily);
 	customer.route('/week').get(weekly);
 	customer.route('/week.html').get(weekHtml);
+	customer.route('/week.pdf').get(weekPdf);
 	customer.route('/').post(command);
 	return customer;
 
@@ -103,6 +105,16 @@ export default function customer(store) {
 			res.status(500).send();
 		}
 	}
+	async function weekPdf(req, res) {
+		try {
+			var buffer = await pdfGen(generator.generate(await template('Semaine'), await weekData()));
+			res.write(buffer,'binary');
+			res.end(null, 'binary');
+		} catch(x) {
+			console.error(x);
+			res.status(500).send();
+		}
+	}
 	async function weekly(req, res) {
 		res.status(200).send(await weekData());
 	}
@@ -117,7 +129,6 @@ export default function customer(store) {
 			var [dishes, menus] = proms, dbid = {}, mbid = {};
 			for(let dish of dishes) {
 				dbid[dish._id] = dish.toJSON();
-				//dbid[dish._id].picture = !!dbid[dish._id].picture;
 			}
 			for(let menu of menus) {
 				menu = mbid[menu.identification] = menu.toJSON();

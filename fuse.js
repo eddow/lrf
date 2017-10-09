@@ -27,7 +27,7 @@ Sparky.task("build", ()=> {
 		package: 'lrf',
 		useTypescriptCompiler : true,
 		plugins: [
-			RawPlugin([".dot"]),
+			RawPlugin([".dot.txt", ".dot.html"]),
 			JSONPlugin(),
 			TypeScriptHelpers(),
 			EnvPlugin({NODE_ENV: production ? "production" : "development"}),
