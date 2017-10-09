@@ -49,6 +49,7 @@ socket.on('js-data', function(event, collection, item, data, ...args) {
 			//We get the response from the server and commit server' changes to the local server
 			//We should take care with this: the user might have changed some data and the request might have come slowly.
 			// This is the place where we could have a "conflict" state in a value : changed differently on the server and locally
+			console.assert(record, 'update event on a record that the client knos about');
 			record.set(data);
 			record.commit();
 			break;

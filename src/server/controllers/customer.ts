@@ -30,7 +30,7 @@ var commandMail = dot.template(commandTpl, {
 export default function customer(store) {
 	const customer = new Router();
 	customer.route('/today').get(daily);
-	//customer.route('/week').get(weekly);
+	customer.route('/week').get(weekly);
 	customer.route('/week.html').get(weekHtml);
 	customer.route('/').post(command);
 	return customer;
@@ -103,9 +103,9 @@ export default function customer(store) {
 			res.status(500).send();
 		}
 	}
-	/*function weekly(req, res) {
-		weekData().then(rv=> res.status(200).send(rv));
-	}*/
+	async function weekly(req, res) {
+		res.status(200).send(await weekData());
+	}
 	function template(name) {
 		return store.findAll('template').then(tpls=> tpls.find(tpl=> tpl.name === name));
 	}
