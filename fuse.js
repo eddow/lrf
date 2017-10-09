@@ -66,7 +66,7 @@ Sparky.task("build", ()=> {
 	fuse.bundle("client/app").target('browser')
 		.watch("(client|common)/**")
 		.alias({
-			'routes.device': '~/client/routes.desktop'
+			'device.dependant': '~/client/device.desktop'
 		})
 		.plugin(VuePlugin())
     //.instructions('!> [client/index.ts] +[client/routes/*.vue] +[client/components/*.vue] +[common/**/*.*] - *.d.ts');
@@ -74,7 +74,7 @@ Sparky.task("build", ()=> {
 
 	fuse.bundle("client/vendor").target('browser')
 		.alias({
-			'routes.device': '~/client/routes.desktop'
+			'device.dependant': '~/client/device.desktop'
 		})
 		.plugin(VuePlugin())
 		//.instructions(`+tslib +fuse-box-css ~client/index.ts ~[client/routes/*.vue] ~[common/**/*.*]`);
@@ -84,14 +84,14 @@ Sparky.task("build", ()=> {
 	fuse.bundle("mobile/app").target('browser')
 		.watch("(client|common)/**")
 		.alias({
-			'routes.device': '~/client/routes.mobile'
+			'device.dependant': '~/client/device.mobile'
 		})
 		.plugin(VuePlugin())
     .instructions('!> [client/index.ts] - *.d.ts');
 
 	fuse.bundle("mobile/vendor").target('browser')
 		.alias({
-			'routes.device': '~/client/routes.mobile'
+			'device.dependant': '~/client/device.mobile'
 		})
 		.plugin(VuePlugin())
 		.instructions(`+tslib +fuse-box-css ~client/index.ts`);

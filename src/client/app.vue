@@ -2,7 +2,7 @@
 	<div>
 		<s-modal v-model="chooseLogin" :header="$t('Connexion')">
 			<form onsubmit="return false">
-				<s-button icon="github" @click="authenticate('github')" />
+				<!--s-button icon="github" @click="authenticate('github')" /-->
 				<s-input fluid class="large" v-model="loginDetail.email" placeholder="E-mail" type="email">
 					<s-icon slot="prepend" icon="mail" />
 				</s-input>
@@ -17,18 +17,20 @@
 		<nav role="navigation" id="nav_menu"class="ui top attached menu fixed">
 			<div class="ui top attached menu">
 				<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
+				<div style="width: 0;">Cluj&#8209;Napoca</div>
 				<span class="ui item">
 					<s-button :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
-					<div v-if="isAuthenticated">
+					<span v-if="isAuthenticated">
 						<s-select :text="false" action="hide" @change="name=> $router.push({name})">
-							<s-button slot="bar" icon="wrench" />
+							<s-button v-if="$desktop" slot="bar" icon="wrench" />
 							<s-option value="dishes">Plats</s-option>
 							<s-option value="menus">Menus</s-option>
 							<s-option value="templates">Templates</s-option>
 						</s-select>
-					</div>
+					</span>
 				</span>
 				<div class="right menu">
+					<s-button icon="big newspaper" @clik="genWeek" />
 					<div>
 						<div v-if="isAuthenticated">
 							<!--s-button @click="logout">Log out</s-button-->
@@ -81,27 +83,18 @@ import {Languages} from '../common/auxs'
 import * as alertify from 'alertify'
 
 //TODO: lang set/get goes through user if connected (but first, have users and user object)
-var vuexi18n = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.getItem('lang') || 'ro';
-Vue.i18n.set(vuexi18n);
-function i18n(lng) {
-	if(vuexi18n !== lng) {
-		Vue.i18n.set(lng);
-		Vue.prototype.cookies.setItem('lang', lng)
-		vuexi18n = lng;
-	}
-}
+var language = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.getItem('lang') || 'ro';
+Vue.i18n.set(language);
 Object.defineProperty(Vue.prototype, '$lang', {
 	get() {
-		if(this.$router.history.pending) return vuexi18n;	//the language is going to be specified soon
-		if(!this.$route.params.lang)	//the language has not be specified : let's specify 'ro'
-			return this.$lang = vuexi18n;
-		var rv = this.$route.params.lang;
-		i18n(rv);
-		return rv;
+		return language;
 	},
-	set(value) {
-		i18n(value);
-		this.$router.push('/'+value+this.$route.path.substr(3));
+	set(lng) {
+		if(language !== lng) {
+			Vue.i18n.set(lng);
+			Vue.prototype.cookies.setItem('lang', lng)
+			language = lng;
+		}
 	}
 })
 
@@ -168,6 +161,9 @@ export default class App extends Vue {
 	}*/
 	get isAuthenticated() {
 		return !!this.$store.state.auth.profile;
+	}
+	genWeek() {
+
 	}
 }
 </script>

@@ -23,6 +23,8 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - favicon (lys + rond)
 - ajouter les frais de port
 - `position:fixed` foire pour le menu
+- Menu langue vertical?
+- -> https
 */
 
 const app = express();

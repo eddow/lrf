@@ -1,4 +1,5 @@
 import './libs'
+import {routes} from 'device.dependant'
 
 import * as Vue from 'vue'
 import * as VueAuthenticate from 'vue-authenticate'
@@ -26,12 +27,8 @@ Vue.i18n.add('en', en);
 Vue.i18n.add('ro', ro);
 
 import {CookieStorage} from 'cookie-storage'
-Vue.prototype.cookies = new CookieStorage({
-  path: '/',
-  secure: true
-});
+Vue.prototype.cookies = new CookieStorage();
 import App from './app.vue'
-import routes from 'routes.device'
 var router = new VueRouter({
 	mode: window.history && window.history.pushState?'history':'hash',
 	routes

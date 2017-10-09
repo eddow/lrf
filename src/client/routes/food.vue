@@ -19,7 +19,7 @@
 			<div class="ui bottom attached relaxed divided cards">
 				<div
 					v-for="(dish, dndx) in menu.dishes" :key="dndx"
-					class="card dimmable"
+					class="ui centered card dimmable"
 				>
 					<s-dimmer on="hover">
 						<div class="content" @click="addClick(dish)">

@@ -1,9 +1,9 @@
-import common from './routes.mobile'
+import {routes} from './device.mobile'
 
-export default common;
+export {routes};
 
 import MenuContainer from './routes/container.vue'
-common[0].children.push({
+routes[0].children.push({
 	admin: true,
 	menu: 'Plats',
 	component: ()=> import('./routes/dishes.vue'),
@@ -24,5 +24,9 @@ common[0].children.push({
 });
 
 import * as Vue from 'vue'
+Vue.prototype.$desktop = true;
 import vgl from 'vue-golden-layout'
 Vue.use(vgl);
+
+import * as draggable from 'vuedraggable'
+Vue.component('draggable', draggable);
