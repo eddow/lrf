@@ -63,6 +63,9 @@
 <style scoped>
 #nav_menu {
 	height: 102px;
+	/*Magic for mobiles: usually, the header is potiionned at the end of the scroll - with this, the GPU kicks in */
+	transform: translateZ(0);
+	-webkit-transform: translateZ(0);
 }
 div.ui.menu {
 	max-width: 400px;
