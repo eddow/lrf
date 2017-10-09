@@ -142,7 +142,10 @@ export default function customer(store) {
 						parts
 					});
 			}
-			return rv;
+			return {
+				general: rv.shift(),
+				week: rv
+			};
 		});
 	}
 }
