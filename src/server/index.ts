@@ -8,6 +8,7 @@ import * as routes from './routes'
 import * as io from 'socket.io'
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
+import {readFileSync} from 'fs'
 
 initStore(new Container({
 	mapperDefaults: {
@@ -27,8 +28,18 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - -> https
 - cart/alertify ne marche pas
 */
-
+import * as http from 'http'
+import * as https from 'https'
+var credentials = null;
+if(config.https)
+	credentials = {
+		key: config.https+'.key',
+		cert: config.https+'.cert'
+	};
+//https://stackoverflow.com/questions/11744975/enabling-https-on-express-js
 const app = express();
+
+var server = credentials ? https.createServer(credentials, app) : http.createServer(app);
 
 import * as session from 'express-session'
 import * as MongoStore from 'connect-mongo'
@@ -47,7 +58,7 @@ app.use(mongoSession);
 app.use(morgan('tiny'));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
-var server = require('http').createServer(app);
+
 var sharedsession = require("express-socket.io-session");
 var io = require('socket.io')(server);
 

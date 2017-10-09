@@ -31,7 +31,7 @@ export const Categories = {
 }
 @Model()
 export class Translated {
-	@MinLength() @Required() fr: string
-	@MinLength() @Required() en: string
-	@MinLength() @Required() ro: string
+	@Required() fr: string
+	@Required() en: string
+	@Required() ro: string
 }
