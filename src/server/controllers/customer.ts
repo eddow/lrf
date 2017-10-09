@@ -32,8 +32,8 @@ export default function customer(store) {
 	const customer = new Router();
 	customer.route('/today').get(daily);
 	customer.route('/week').get(weekly);
-	customer.route('/week.html').get(weekHtml);
-	customer.route('/week.pdf').get(weekPdf);
+	customer.route('/week.html/:tpl').get(weekHtml);
+	customer.route('/week.pdf/:tpl').get(weekPdf);
 	customer.route('/').post(command);
 	return customer;
 
@@ -99,7 +99,7 @@ export default function customer(store) {
 	//TODO: cache moi ça
 	async function weekHtml(req, res) {
 		try {
-			res.send(generator.generate(await template('Semaine'), await weekData()));
+			res.send(generator.generate(await template(req.params.tpl||'Semaine'), await weekData()));
 		} catch(x) {
 			console.error(x);
 			res.status(500).send();
@@ -107,7 +107,7 @@ export default function customer(store) {
 	}
 	async function weekPdf(req, res) {
 		try {
-			var buffer = await pdfGen(generator.generate(await template('Semaine'), await weekData()));
+			var buffer = await pdfGen(generator.generate(await template(req.params.tpl||'Semaine'), await weekData()));
 			res.write(buffer,'binary');
 			res.end(null, 'binary');
 		} catch(x) {

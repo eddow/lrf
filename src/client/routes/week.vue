@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<s-button icon="+file+green angle down" fluid @click="download" />
-		<iframe ref="filler" src="/customer/week.html">
+		<iframe ref="filler" src="/customer/week.html/Semaine">
 		</iframe>
 	</div>
 </template>
@@ -32,7 +32,7 @@ export default class Week extends Vue {
 
 	}
 	get htmlSrc() {
-		return location.origin+'/customer/week.html';
+		return location.origin+'/customer/week.html/Semaine';
 	}
 }
 </script>
