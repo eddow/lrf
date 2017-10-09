@@ -8,7 +8,7 @@ auth.route('/register').post(register);
 
 function login(req, res) {
 	var user = req.body;
-	if('qwe'=== user.email && 'qwe'=== user.password) {
+	if('qwe'=== user.email) {
 		var token = {
 			admin: true,
 			access_token: 'eyJpZCI6MSwiZW1haWwiOiJqb2huLmRvZUBkb21haW4uY29tIiwibmFtZSI6IkpvaG4gRG9lIiwiYWxnIjoiSFMyNTYifQ.eyJpZCI6MSwiZW1haWwiOiJqb2huLmRvZUBkb21haW4uY29tIiwibmFtZSI6IkpvaG4gRG9lIn0.CyXHbjCBjA4uLuOwefCGbFw1ulQtF-QfS9-X0fFUCGE'

@@ -22,8 +22,7 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - relevé d'activité (via socket.io?)
 - favicon (lys + rond)
 - ajouter les frais de port
-- trouver un thème semantic ?
-- spécifier l'heure de livraison
+- `position:fixed` foire pour le menu
 */
 
 const app = express();
