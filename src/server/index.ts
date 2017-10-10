@@ -26,7 +26,7 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - `position:fixed` foire pour le menu sur android/chrome
 - Menu langue vertical?
 - -> https
-- cart/alertify ne marche pas
+- panier filtré par produits disponibles : le nombre apparrait dans l'icône qd-mm
 */
 import * as http from 'http'
 import * as https from 'https'

@@ -23,8 +23,6 @@ io.connect(location.origin);
 import store from './store'
 import * as vuexI18n from 'vuex-i18n'
 Vue.use(vuexI18n.plugin, store);
-import * as vuexI18n from 'vuex-i18n'
-Vue.use(vuexI18n.plugin, store);
 import {en, ro} from '../common/dictionaries'
 Vue.i18n.add('en', en);
 Vue.i18n.add('ro', ro);

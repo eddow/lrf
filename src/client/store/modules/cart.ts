@@ -1,6 +1,8 @@
 import {buyProducts} from 'biz/shop'
 import * as types from '../mutation-types'
 import * as alertify from 'alertify'
+import {post} from 'axios'
+import * as Vue from 'vue'
 
 // initial state
 // shape: [{ id, quantity }]
@@ -18,12 +20,13 @@ const getters = {
 const actions = {
   checkout ({ commit, state }, infos) {
     const savedCartItems = [...state.added];
-    commit(types.CHECKOUT_REQUEST);
-    buyProducts(
-			savedCartItems,
-      infos, 
+		commit(types.CHECKOUT_REQUEST);
+		post('/customer', {
+			products: savedCartItems,
+			contact: infos
+		}).then(
       () => commit(types.CHECKOUT_SUCCESS),
-      () => commit(types.CHECKOUT_FAILURE, { savedCartItems })
+      () => commit(types.CHECKOUT_FAILURE, {savedCartItems})
     );
   },
   emptyCart ({ commit, state }) {
@@ -58,14 +61,14 @@ const mutations = {
 
   [types.CHECKOUT_SUCCESS] (state) {
     state.checkoutStatus = 'successful';
-		alertify.success(this.$t('La commande a été transmise...'));
+		alertify.success(Vue.prototype.$t('La commande a été transmise...'));
   },
 
   [types.CHECKOUT_FAILURE] (state, { savedCartItems }) {
     // rollback to the cart saved before sending the request
     state.added = savedCartItems;
     state.checkoutStatus = 'failed';
-		alertify.error(this.$t('Un problème est apparu. Repassez votre commande plus tard!'));
+		alertify.error(Vue.prototype.$t('Un problème est apparu. Repassez votre commande plus tard!'));
   }
 }
 

@@ -1089,7 +1089,7 @@ var _v = function (exports) {
         __decorate([
             vue_property_decorator_1.Prop({ required: true }),
             __metadata('design:type', String)
-        ], Flag.prototype, 'Country', void 0);
+        ], Flag.prototype, 'country', void 0);
         Flag = __decorate([vue_property_decorator_1.Component], Flag);
         return Flag;
     }(Vue);
@@ -1101,7 +1101,7 @@ _p.render = function render() {
     var _c = _vm._self._c || _h;
     return _c('i', {
         class: [
-            _vm.Country,
+            _vm.country,
             'flag'
         ]
     });
