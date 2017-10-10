@@ -9,7 +9,7 @@ function device(req) {
 	var md = new mobileDetect(req.headers['user-agent']);
 	return md.mobile() || md.phone() || md.tablet() ? 'mobile' : 'client';
 }
-export function statics(app, sockets) {
+export function statics(app, io) {
 	//app.use(express.static('dist/client'));
 	app.use(function(req, res, next) {
 		var path = join(__dirname, '../dist', device(req)),
@@ -27,7 +27,7 @@ export function statics(app, sockets) {
 	});
 }
 
-export function controllers(app, sockets, store) {
+export function controllers(app, io, store) {
 	app.use('/auth', auth);
 	app.use('/picture', picture(store));
 	app.use('/customer', customer(store));

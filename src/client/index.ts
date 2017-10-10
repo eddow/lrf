@@ -17,6 +17,9 @@ var test = Vue.use(VueAuthenticate, {
 import * as VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
+import * as io from 'socket.io-client'
+io.connect(location.origin);
+
 import store from './store'
 import * as vuexI18n from 'vuex-i18n'
 Vue.use(vuexI18n.plugin, store);

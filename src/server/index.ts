@@ -38,7 +38,6 @@ if(config.https)
 	};
 //https://stackoverflow.com/questions/11744975/enabling-https-on-express-js
 const app = express();
-if(credentials)
 console.log('Creating http'+(credentials?'s':'')+' server');
 var server = credentials ? https.createServer(credentials, app) : http.createServer(app);
 
@@ -60,7 +59,7 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 
-var sharedsession = require("express-socket.io-session");
+import * as sharedsession from 'express-socket.io-session'
 var io = require('socket.io')(server);
 
 io.use(sharedsession(mongoSession, {
@@ -78,10 +77,10 @@ io.on('connection', function(socket){
 	});
 });
 
-routes.statics(app, io.sockets);
+routes.statics(app, io);
 import jsData from './controllers/js-data'
-jsData(app, io.sockets, store);
-routes.controllers(app, io.sockets, store);
+jsData(app, io, store);
+routes.controllers(app, io, store);
 const listener = server.listen(
 	process.env.PORT || config.server.port,
 	function() {

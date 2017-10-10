@@ -1,8 +1,9 @@
 import {Router} from 'js-data-express';
 import {models} from 'common/central'
+import {events as authEvents} from './auth'
 
-export default function jsData(app, sockets, store) {
-	/*mount(app, store, '/api', {
+export default function jsData(app, io, store) {
+		/*mount(app, store, '/api', {
 		request(req, res, next) {
 			console.log('api request');
 			next();
@@ -31,6 +32,21 @@ export default function jsData(app, sockets, store) {
 				res.sendStatus(403);
 		}
 	};
+
+	io.of('/js-data').on('connection', function(socket) {
+		authEvents.on('logout', session=> {
+			if(socket.handshake.session === session)
+				socket.leave(Object.keys(socket.rooms));
+		});
+		socket.on('watch', collection=> {
+			const user = socket.handshake.session.user;
+			if (user && user.admin) {
+				socket.join(collection);
+			}
+		});
+		socket.on('unwatch', collection=> socket.leave(collection));
+	});
+
 	for(let model of models)	
 		app.use('/api/'+model, new Router(store.defineMapper(model), config).router)
 
@@ -39,11 +55,11 @@ export default function jsData(app, sockets, store) {
 			event = /^(?:after)?(.*)$/.exec(event)[1].toLowerCase();
 			switch(event) {
 				case 'update':
-					sockets.emit('js-data', event, collection, id, data);
+					io.of('/js-data').to(collection).emit(event, collection, id, data);
 					break;
 				case 'destroy':
 				case 'create':
-					sockets.emit('js-data', event, collection, id, data, ...args);
+					io.of('/js-data').to(collection).emit(event, collection, id, data, ...args);
 					break;
 				default:
 					break;

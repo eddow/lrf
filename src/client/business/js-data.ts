@@ -32,35 +32,29 @@ const httpAdapter = new HttpAdapter({
 });
 store.registerAdapter('http', httpAdapter, { 'default': true });
 
+const socket = io('/js-data');
+
 var cachedCollections = {};
 export function bindCollection(name) {
 	if(!cachedCollections[name]) {
 		cachedCollections[name] = store.getCollection(name);
 		store.findAll(name);
 	}
+	socket.emit('watch', name);	//'watch' can silently fail (not enough rights, ...) so we have to watch each time as the first might have failed
 	return cachedCollections[name];
 }
 
-export const socket = io.connect(location.origin);
-socket.on('js-data', function(event, collection, item, data, ...args) {
-	switch(event) {
-		case 'update':
-			var record = store.getCollection(collection).get(item);
-			//We get the response from the server and commit server' changes to the local server
-			//We should take care with this: the user might have changed some data and the request might have come slowly.
-			// This is the place where we could have a "conflict" state in a value : changed differently on the server and locally
-			console.assert(record, 'update event on a record that the client knows about');
-			record.set(data);
-			record.commit();
-			break;
-		case 'destroy':
-			store.remove(collection, item);
-			break;
-		case 'create':
-			store.add(collection, item);
-			break;
-		default:
-			console.log('socket:', event, collection, item, data, ...args);
-			break;
-	}
+socket.on('update', function(event, collection, item, data) {
+	var record = store.getCollection(collection).get(item);
+	//We get the response from the server and commit server' changes to the local server
+	//We should take care with this: the user might have changed some data and the request might have come slowly.
+	// This is the place where we could have a "conflict" state in a value : changed differently on the server and locally
+	record.set(data);
+	record.commit();
+});
+socket.on('destroy', function(event, collection, item) {
+	store.remove(collection, item);
+});
+socket.on('create', function(event, collection, item) {
+	store.add(collection, item);
 });
