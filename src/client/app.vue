@@ -98,8 +98,10 @@ Object.defineProperty(Vue.prototype, '$lang', {
 			Vue.prototype.cookies.setItem('lang', lng)
 			language = lng;
 		}
-	}
+	},
+	configurable: true
 })
+Vue.util.defineReactive(Vue.prototype, '$lang', language);
 
 @Component
 export default class App extends Vue {

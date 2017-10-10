@@ -5,7 +5,6 @@ import * as config from 'config'
 import {store, initStore} from 'common/central'
 import {Container} from 'js-data'
 import * as routes from './routes'
-import * as io from 'socket.io'
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
 import {readFileSync} from 'fs'
@@ -61,20 +60,13 @@ app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 
 import * as sharedsession from 'express-socket.io-session'
 var io = require('socket.io')(server);
-
-io.use(sharedsession(mongoSession, {
+//TODO: this lines goes in js-data.ts -> needs mongoSession
+io.of('/js-data').use(sharedsession(mongoSession, {
 	autoSave:true
 }));
 
 io.on('connection', function(socket){
   console.log('connection');
-	socket.on('language', function(lng) {
-		//https://www.npmjs.com/package/express-socket.io-session
-		/*
-        socket.handshake.session.language = lng;
-        socket.handshake.session.save();
-		*/
-	});
 });
 
 routes.statics(app, io);

@@ -25,7 +25,6 @@ export default function jsData(app, io, store) {
 	*/
 		request: (req, res, next) => {
 			const user = req.session.user
-			console.log(req.session);
 			if (user && user.admin)
 				next() ;
 			else

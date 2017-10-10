@@ -92,7 +92,7 @@ import SearchHeader from 'components/search-header.vue'
 @Component({components: {MgdTable, SearchHeader}})
 export default class Dishes extends Vue {
 	Dish = Dish
-
+	
 	languages: any = Languages
 	parts: any = Parts
 	selected: Dish = null
