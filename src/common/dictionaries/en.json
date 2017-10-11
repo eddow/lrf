@@ -27,5 +27,6 @@
 	"Total": "Total",
 	"La commande a été transmise...": "The order was successfully sent...",
 	"Un problème est apparu. Repassez votre commande plus tard!": "An error occured. Please, try again later.",
-	"Heures d'ouverture": "Opening hours"
+	"Heures d'ouverture": "Opening hours",
+	"Fermé": "Closed"
 }

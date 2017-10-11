@@ -21,17 +21,17 @@
 				<span class="ui item">
 					<div>
 						<s-button fluid :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
-						<s-button v-if="isClosed" class="closedSign" @click="timeTable">Closed</s-button>
+						<s-button v-if="isClosed" class="closedSign" @click="timeTable">{{'Fermé'|translate}}</s-button>
 					</div>
 					<div v-if="isAuthenticated">
-						<s-select :text="false" action="hide" @change="name=> $router.push({name})">
-							<s-button v-if="$desktop" slot="bar" icon="wrench" />
+						<s-select v-if="$desktop" :text="false" action="hide" @change="name=> $router.push({name})">
+							<s-button slot="bar" icon="wrench" />
 							<s-option value="dishes">Plats</s-option>
 							<s-option value="menus">Menus</s-option>
 							<s-option value="templates">Templates</s-option>
 						</s-select>
-						<s-button v-if="isClosed" @click="setClosed(false)">Ouvrir</s-button>
-						<s-button v-else @click="setClosed(true)">Fermer</s-button>
+						<s-button v-if="isClosed" @click="setClosed(false)" icon="unlock" />
+						<s-button v-else @click="setClosed(true)" icon="lock" />
 					</div>
 				</span>
 				<div class="right menu">
@@ -98,7 +98,7 @@ import open from 'biz/opening'
 import {hours} from 'config'
 
 //TODO: lang set/get goes through user if connected (but first, have users and user object)
-var language = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.getItem('lang') || 'ro';
+var language = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.lang || 'ro';
 Vue.i18n.set(language);
 Object.defineProperty(Vue.prototype, '$lang', {
 	get() {
@@ -107,7 +107,7 @@ Object.defineProperty(Vue.prototype, '$lang', {
 	set(lng) {
 		if(language !== lng) {
 			Vue.i18n.set(lng);
-			Vue.prototype.cookies.setItem('lang', lng)
+			Vue.prototype.cookies.lang = lng;
 			language = lng;
 		}
 	},

@@ -104,12 +104,7 @@ export default class Cart extends Vue {
 		});
 	}
 	commandConfirm
-	contact = {
-		name: "",
-		phone: "",
-		email: "",
-		time: ""
-	}
+	contact = null
 	get minTime() {
 		var dt = new Date((new Date()).getTime()+65*60*1000),	//65 minutes
 			minutes = dt.getMinutes();
@@ -121,9 +116,17 @@ export default class Cart extends Vue {
 		this.phoneAlert = !figures || 10> figures.length;
 		if(!this.phoneAlert) this.commandConfirm('ok');
 	}
+	created() {
+		this.contact = this.cookies.orderContact || {
+			name: "",
+			phone: "",
+			email: ""
+		};
+	}
 	order() {
 		this.commandConfirm(()=> {
 			this.checkout({language: this.$lang, ...this.contact});
+			this.cookies.orderContact = this.contact;
 		});
 	}
 }

@@ -26,7 +26,33 @@ Vue.i18n.add('ro', ro);
 Vue.i18n.add('fr', fr);
 
 import {CookieStorage} from 'cookie-storage'
-Vue.prototype.cookies = new CookieStorage();
+var cookies = new CookieStorage();
+Vue.prototype.cookies = new Proxy({}, {
+	has(target, prop) {
+		return !!cookies.getItem(prop);
+	},
+	get(target, prop) {
+		var cookie = cookies.getItem(prop);
+		try {
+			return cookie?JSON.parse(cookie):undefined;
+		} catch(x) {
+			console.error('cookie parse error: ', x)
+			return;
+		}
+	},
+	set(target, prop, value) {
+		return cookies.setItem(prop, JSON.stringify(value));
+	},
+	deleteProperty(target, prop) {
+		return cookies.removeItem(prop);
+	},
+	ownKeys(target) {
+		var i, rv = [];
+		for(i=0; i<cookies.length; ++i)
+			rv.push(cookies.key(i));
+		return rv;
+	}
+});
 import App from './app.vue'
 var router = new VueRouter({
 	mode: window.history && window.history.pushState?'history':'hash',
