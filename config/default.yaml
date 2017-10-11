@@ -4,3 +4,4 @@ server:
 hours:
   open: "08:00"
   close: "14:00"
+  tz: 0
