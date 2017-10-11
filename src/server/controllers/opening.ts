@@ -2,7 +2,7 @@ export var isOpened = false;
 import * as sharedsession from 'express-socket.io-session'
 import {hours} from 'config'
 import * as schedule from 'node-schedule'
-//TODO: horaire automatique
+
 export default function opening(app, io, session) {
 	function hours2cron(h) {
 		var hm = h.split(':');

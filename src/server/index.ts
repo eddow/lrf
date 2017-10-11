@@ -17,10 +17,9 @@ initStore(new Container({
 // Create an instance of MongoDBAdapter : change this line to use another adapter
 store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': true });
 /*TODO:
-- automatiser heures d'ouverture
+- split code to load admin screens only when accessing them
 - user mgt (name, admin, token) + https://github.com/robinvdvleuten/vuex-persistedstate for express-session storage
 - relevé d'activité (via socket.io?)
-- favicon (lys + rond)
 - `position:fixed` foire pour le menu sur android/chrome
 - Menu langue vertical?
 - -> https
