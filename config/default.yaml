@@ -1,6 +1,5 @@
 server:
   port: 8864
-  name: localhost
 hours:
   open: "08:00"
   close: "14:00"
