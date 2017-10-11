@@ -1,5 +1,3 @@
-server:
-  port: 8864
 hours:
   open: "08:00"
   close: "14:00"

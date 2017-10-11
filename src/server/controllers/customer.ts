@@ -8,6 +8,7 @@ import {mailer, emails} from 'config'
 
 import {dav} from 'common/libs/dot-gen'
 import pdfGen from 'common/libs/pdf-gen'
+import shipping from 'common/libs/shipping'
 import * as jsonStringify from 'json-pretty'
 var generator = new dav();
 
@@ -56,7 +57,9 @@ export default function customer(store) {
         text: commandMail({
 					contact: req.body.contact,
 					products: products,
-					totalPrice
+					totalPrice,
+					shipping: shipping(totalPrice),
+					toPay: shipping(totalPrice)+totalPrice
 				})
 			}, (error, info) => {
 				if (error) {

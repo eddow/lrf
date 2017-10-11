@@ -11,7 +11,9 @@ mailer:
 emails:
   sender: sender@somemail.com
   seller: seller@somemail.com
-secret: Over-ride me, whith whatever, lalala!
+secret: Override me, whith whatever, lalala!
+server:
+  port: 8864
 super-user:
   mail: admin@lrf.ro
   pwd: admin

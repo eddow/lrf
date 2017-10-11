@@ -9,3 +9,5 @@ Commande:{{~ it.products : product }}
 {{=product.quantity}} X {{=product.dish.title.fr}} ({{=product.dish.price}}lei){{~}}
 
 Total: {{=it.totalPrice}}lei
+Port: {{=it.shipping}}lei
+À payer: {{=it.toPay}}lei
