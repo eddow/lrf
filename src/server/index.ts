@@ -25,7 +25,7 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - `position:fixed` foire pour le menu sur android/chrome
 - Menu langue vertical?
 - -> https
-- panier filtré par produits disponibles : le nombre apparrait dans l'icône qd-mm
+- retenir les infos (téléphone, ...) sur la machine
 */
 import * as http from 'http'
 import * as https from 'https'
@@ -58,20 +58,21 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 
-import * as sharedsession from 'express-socket.io-session'
+//import * as sharedsession from 'express-socket.io-session'
 var io = require('socket.io')(server);
-//TODO: this lines goes in js-data.ts -> needs mongoSession
-io.of('/js-data').use(sharedsession(mongoSession, {
+/*io.of('/').use(sharedsession(mongoSession, {
 	autoSave:true
-}));
+}));*/
 
-io.on('connection', function(socket){
+/*io.on('connection', function(socket){
   console.log('connection');
-});
+});*/
 
 routes.statics(app, io);
 import jsData from './controllers/js-data'
-jsData(app, io, store);
+jsData(app, io, mongoSession, store);
+import opening from './controllers/opening'
+opening(app, io, mongoSession);
 routes.controllers(app, io, store);
 const listener = server.listen(
 	process.env.PORT || config.server.port,

@@ -118,7 +118,7 @@ export default class Dishes extends Vue {
 		return number.toFixed(decs||0)
 	}
 	get filter() {
-		return this.filters.title ? x=> !!~x.title[this.$lang].indexOf(this.filters.title) : ()=>true;
+		return this.filters.title ? x=> !!~x.title[this.$lang].toLowerCase().indexOf(this.filters.title.toLowerCase()) : ()=>true;
 	}
 	select(dish) {
 		this.selected = dish;

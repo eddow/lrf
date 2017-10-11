@@ -35,7 +35,8 @@
 			</div>
 		</div>
 		<div class="ui header right floated">{{'Total'|translate}} = {{totalPrice}}lei</div>
-		<s-button icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
+		<s-button v-if="isClosed" class="huge closedSign" fluid @click="()=>{}">{{timeTable}}</s-button>
+		<s-button v-else icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
 		<s-button icon="trash" negative @click="confirmEmptyCart" fluid red>{{'Vider le panier'|translate}}</s-button>
 	</div>
 	<div v-else>
@@ -48,6 +49,11 @@
 	margin-left: auto;
 	margin-right: auto;
 }
+.closedSign {
+	padding: 5px;
+	border: 3px double red;
+	border-radius: 5px;
+}
 </style>
 <script lang="js">
 import * as Vue from 'vue'
@@ -56,6 +62,8 @@ import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as alertify from 'alertify'
 import {dishes, status} from 'biz/daily'
 import quantity from 'components/quantity.vue'
+import open from 'biz/opening'
+import {hours} from 'config'
 
 @Component({components: {quantity}})
 export default class Cart extends Vue {
@@ -66,20 +74,20 @@ export default class Cart extends Vue {
 	get dishes() {
 		if(status.loaded) {
 			this.cachedDishes.length = 0;
-			this.cachedDishes.push(...this.cartProducts
-				.filter(p=> !!dishes[p.product])
-				.map(p=> ({
-					product: dishes[p.product],
-					quantity: p.quantity
-				}))
-			);
+			this.cachedDishes.push(...this.cartProducts);
 		}
 		return this.cachedDishes;
+	}
+	get isClosed() {
+		return !open.opened;
 	}
 	get totalPrice() {
 		return this.dishes.reduce((sum, dish)=> sum + dish.product.price*dish.quantity, 0);
 	}
 	
+	get timeTable() {
+		return this.$t('Heures d\'ouverture')+`: ${hours.open}-${hours.close}`;
+	}
 	@Action addToCart
 	persist(product, quantity) { 
 		this.addToCart({product, quantity: Number(quantity)});

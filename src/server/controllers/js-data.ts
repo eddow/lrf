@@ -1,38 +1,30 @@
 import {Router} from 'js-data-express';
 import {models} from 'common/central'
 import {events as authEvents} from './auth'
+import * as sharedsession from 'express-socket.io-session'
 
-export default function jsData(app, io, store) {
+export default function jsData(app, io, session, store) {
 		/*mount(app, store, '/api', {
 		request(req, res, next) {
 			console.log('api request');
 			next();
 		}
 	});*/
-	const config = {
-		/* http://www.js-data.io/docs/js-data-express
-  // find, findAll, create, createMany, etc.
-  'destroy': {
-    request: (req, res, next) => {
-      const userIsAdmin = req.session.isAdmin
-
-      if (userIsAdmin) {
-        next() 
-      } else {
-        res.sendStatus(401)
-      }
-	}
-	*/
+	const jsdns = io.of('/js-data');
+	jsdns.use(sharedsession(session, {
+		autoSave:true
+	}));
+	const rqConfig = {
 		request: (req, res, next) => {
 			const user = req.session.user
 			if (user && user.admin)
-				next() ;
+				next();
 			else
 				res.sendStatus(403);
 		}
 	};
 
-	io.of('/js-data').on('connection', function(socket) {
+	jsdns.on('connection', function(socket) {
 		authEvents.on('logout', session=> {
 			if(socket.handshake.session === session)
 				socket.leave(Object.keys(socket.rooms));
@@ -47,18 +39,18 @@ export default function jsData(app, io, store) {
 	});
 
 	for(let model of models)	
-		app.use('/api/'+model, new Router(store.defineMapper(model), config).router)
+		app.use('/api/'+model, new Router(store.defineMapper(model), rqConfig).router)
 
 	store.on('all', function(event, collection, id, data, ...args) {
 		if(!/^before/.test(event)) {
 			event = /^(?:after)?(.*)$/.exec(event)[1].toLowerCase();
 			switch(event) {
 				case 'update':
-					io.of('/js-data').to(collection).emit(event, collection, id, data);
+					jsdns.to(collection).emit(event, collection, id, data);
 					break;
 				case 'destroy':
 				case 'create':
-					io.of('/js-data').to(collection).emit(event, collection, id, data, ...args);
+					jsdns.to(collection).emit(event, collection, id, data, ...args);
 					break;
 				default:
 					break;

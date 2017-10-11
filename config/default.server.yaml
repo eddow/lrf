@@ -12,3 +12,6 @@ emails:
   sender: sender@somemail.com
   seller: seller@somemail.com
 secret: Over-ride me, whith whatever, lalala!
+super-user:
+  mail: admin@lrf.ro
+  pwd: admin

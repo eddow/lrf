@@ -17,15 +17,13 @@ var test = Vue.use(VueAuthenticate, {
 import * as VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
-import * as io from 'socket.io-client'
-io.connect(location.origin);
-
 import store from './store'
 import * as vuexI18n from 'vuex-i18n'
 Vue.use(vuexI18n.plugin, store);
-import {en, ro} from '../common/dictionaries'
+import {en, ro, fr} from '../common/dictionaries'
 Vue.i18n.add('en', en);
 Vue.i18n.add('ro', ro);
+Vue.i18n.add('fr', fr);
 
 import {CookieStorage} from 'cookie-storage'
 Vue.prototype.cookies = new CookieStorage();

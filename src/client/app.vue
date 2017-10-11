@@ -19,15 +19,20 @@
 				<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
 				<div style="width: 0;">Cluj&#8209;Napoca</div>
 				<span class="ui item">
-					<s-button :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
-					<span v-if="isAuthenticated">
+					<div>
+						<s-button fluid :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
+						<s-button v-if="isClosed" class="closedSign" @click="timeTable">Closed</s-button>
+					</div>
+					<div v-if="isAuthenticated">
 						<s-select :text="false" action="hide" @change="name=> $router.push({name})">
 							<s-button v-if="$desktop" slot="bar" icon="wrench" />
 							<s-option value="dishes">Plats</s-option>
 							<s-option value="menus">Menus</s-option>
 							<s-option value="templates">Templates</s-option>
 						</s-select>
-					</span>
+						<s-button v-if="isClosed" @click="setClosed(false)">Ouvrir</s-button>
+						<s-button v-else @click="setClosed(true)">Fermer</s-button>
+					</div>
 				</span>
 				<div class="right menu">
 					<s-button icon="big newspaper" @click="$router.push({name: 'week'})" />
@@ -76,6 +81,11 @@ div.ui.menu {
 #content_section {
 	padding-top: 102px;
 }
+.closedSign {
+	padding: 2px;
+	border: 3px double red;
+	border-radius: 5px;
+}
 </style>
 <script lang="js">
 import * as Vue from 'vue'
@@ -84,6 +94,8 @@ import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as $ from 'jquery'
 import {Languages} from '../common/auxs'
 import * as alertify from 'alertify'
+import open from 'biz/opening'
+import {hours} from 'config'
 
 //TODO: lang set/get goes through user if connected (but first, have users and user object)
 var language = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.getItem('lang') || 'ro';
@@ -107,6 +119,18 @@ Vue.util.defineReactive(Vue.prototype, '$lang', language);
 export default class App extends Vue {
 	languages = Languages
 	@Getter cartQuantity
+	get isClosed() {
+		return !open.opened;
+	}
+	set isClosed(value) {
+		open.set(!value);
+	}
+	setClosed(closed) {
+		alertify.confirm(closed?"Fermer ?":"Ouvrir ?", ()=> this.isClosed = closed);
+	}
+	timeTable() {
+		alertify.alert(this.$t('Heures d\'ouverture')+`: ${hours.open}-${hours.close}`);
+	}
 	loginDetail = {
 		email: '',
 		password: ''
