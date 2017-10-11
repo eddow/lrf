@@ -44,7 +44,7 @@ export function bindCollection(name) {
 	return cachedCollections[name];
 }
 
-socket.on('update', function(event, collection, item, data) {
+socket.on('update', function(collection, item, data) {
 	var record = store.getCollection(collection).get(item);
 	//We get the response from the server and commit server' changes to the local server
 	//We should take care with this: the user might have changed some data and the request might have come slowly.
@@ -52,9 +52,9 @@ socket.on('update', function(event, collection, item, data) {
 	record.set(data);
 	record.commit();
 });
-socket.on('destroy', function(event, collection, item) {
+socket.on('destroy', function(collection, item) {
 	store.remove(collection, item);
 });
-socket.on('create', function(event, collection, item) {
+socket.on('create', function(collection, item) {
 	store.add(collection, item);
 });
