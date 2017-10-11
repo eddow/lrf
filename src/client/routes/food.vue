@@ -40,7 +40,7 @@
 					<div class="content">
 						<div class="header">
 							{{dish.title[$lang]}}
-							<div class="right floated">{{dish.price.toFixed(2)}} lei</div>
+							<div class="right floated">{{$lei(dish.price)}}</div>
 						</div>
 						<div class="description">
 							{{dish.description[$lang]}}

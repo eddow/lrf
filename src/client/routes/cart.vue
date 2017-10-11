@@ -25,16 +25,22 @@
 			<div class="content">
 				<div div class="description">
 					{{dish.product.title[$lang]}}
-					<span class="right floated">{{dish.product.price}}lei<span>
+					<span class="right floated">{{$lei(dish.product.price)}}<span>
 				</div>
-				<div class="header right floated">= {{dish.product.price*dish.quantity}}lei</div>
 				<div>
 					<s-button negative icon="trash" @click="remove(dish.product)" />
 					<quantity v-model="dish.quantity" @input="value=> persist(dish.product._id, value)" />
 				</div>
+				<div class="header right floated">= {{$lei(dish.product.price*dish.quantity)}}</div>
 			</div>
 		</div>
-		<div class="ui header right floated">{{'Total'|translate}} = {{totalPrice}}lei</div>
+		<div class="ui header right floated">
+			<table>
+				<tr><th>{{'Total'|translate}}:</th><td>{{$lei(totalPrice)}}</td></tr>
+				<tr><th>{{'Livraison'|translate}}:</th><td>{{$lei(shipping)}}</td></tr>
+				<tr><th>{{'À payer'|translate}}:</th><td>{{$lei(totalPrice+shipping)}}</td></tr>
+			</table>
+		</div>
 		<s-button v-if="isClosed" class="huge closedSign" fluid @click="()=>{}">{{timeTable}}</s-button>
 		<s-button v-else icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
 		<s-button icon="trash" negative @click="confirmEmptyCart" fluid red>{{'Vider le panier'|translate}}</s-button>
@@ -64,6 +70,7 @@ import {dishes, status} from 'biz/daily'
 import quantity from 'components/quantity.vue'
 import open from 'biz/opening'
 import {hours} from 'config'
+import shipping from 'common/libs/shipping'
 
 @Component({components: {quantity}})
 export default class Cart extends Vue {
@@ -83,6 +90,9 @@ export default class Cart extends Vue {
 	}
 	get totalPrice() {
 		return this.dishes.reduce((sum, dish)=> sum + dish.product.price*dish.quantity, 0);
+	}
+	get shipping() {
+		return shipping(this.totalPrice);
 	}
 	
 	get timeTable() {

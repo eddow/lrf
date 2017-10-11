@@ -4,3 +4,6 @@ hours:
   open: "08:00"
   close: "14:00"
   tz: 0
+shipping:
+  cost: 5
+  under: 50
