@@ -1,5 +1,5 @@
 <template>
-	<div class="ui segments">
+	<div class="ui segments food">
 		<s-modal v-model="chooseQtt" :header="commandItem && commandItem.title[$lang]" class="commandNumber">
 			<form onsubmit="return false">
 				<quantity v-model="commandNumber" fluid />
@@ -58,6 +58,11 @@
 }
 .commandNumber {
 	max-width: 400px;
+}
+.ui.food {
+	max-width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
 }
 </style>
 <script lang="js">
