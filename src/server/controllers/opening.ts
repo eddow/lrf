@@ -6,7 +6,7 @@ import * as schedule from 'node-schedule'
 export default function opening(app, io, session) {
 	function hours2cron(h) {
 		var hm = h.split(':');
-		return hm[1]+' '+hm[0]+' * * *';
+		return hm[1]+' '+(Number(hm[0])+hours.tz)+' * * *';
 	}
 	schedule.scheduleJob(hours2cron(hours.open), function() { setOpened(true); });
 	schedule.scheduleJob(hours2cron(hours.close), function() {setOpened(false); });
