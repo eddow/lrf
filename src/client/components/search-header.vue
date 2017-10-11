@@ -1,7 +1,7 @@
 <template>
 	<label>
 		{{label}}
-		<s-input fluid transparent @input="input" :value="value">
+		<s-input fluid transparent @input="input" :value="value" type="search">
 			<s-icon slot="prepend" icon="search" />
 		</s-input>
 	</label>

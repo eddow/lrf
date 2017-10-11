@@ -18,6 +18,9 @@
 				<s-input fluid class="large" v-model="contact.email" placeholder="E-mail" type="email">
 					<s-icon slot="prepend" icon="mail" />
 				</s-input>
+				<s-input fluid class="large" v-model="contact.address" :placeholder="$t('Addresse de livraison')">
+					<s-icon slot="prepend" icon="marker" />
+				</s-input>
 				<s-button class="fluid" positive @click="checkContact" native-type="submit">{{'Confirmer'|translate}} !</s-button>
 			</form>
 		</s-modal>
@@ -127,16 +130,18 @@ export default class Cart extends Vue {
 		if(!this.phoneAlert) this.commandConfirm('ok');
 	}
 	created() {
-		this.contact = this.cookies.orderContact || {
+		var cookie = this.cookies.getItem('orderContact');
+		this.contact = cookie ? JSON.parse(cookie) : {
 			name: "",
 			phone: "",
-			email: ""
+			email: "",
+			address: ""
 		};
 	}
 	order() {
 		this.commandConfirm(()=> {
 			this.checkout({language: this.$lang, ...this.contact});
-			this.cookies.orderContact = this.contact;
+			this.cookies.setItem('orderContact', JSON.stringify(this.contact));
 		});
 	}
 }

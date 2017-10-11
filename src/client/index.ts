@@ -26,9 +26,9 @@ Vue.i18n.add('ro', ro);
 Vue.i18n.add('fr', fr);
 
 import {CookieStorage} from 'cookie-storage'
-var cookies = new CookieStorage();
 __assign(Vue.prototype, {
-	cookies: new Proxy({}, {
+	cookies: new CookieStorage(),
+	/*cookies: new Proxy({}, {
 		has(target, prop) {
 			return !!cookies.getItem(prop);
 		},
@@ -53,7 +53,7 @@ __assign(Vue.prototype, {
 				rv.push(cookies.key(i));
 			return rv;
 		}
-	}),
+	}),*/
 	$lei(number) {
 		return number.toFixed(2)+' le'+(1<=number && 2>number?'u':'i');
 	}
@@ -66,6 +66,5 @@ var router = new VueRouter({
 root = new App({
 	router,
 	store,
-	el: 'app'/*,
-	components: {App}*/
+	el: 'app'
 });

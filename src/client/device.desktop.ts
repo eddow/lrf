@@ -1,4 +1,4 @@
-import {routes} from './device.mobile'
+import {routes} from './device.common'
 
 export {routes};
 

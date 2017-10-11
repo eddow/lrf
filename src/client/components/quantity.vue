@@ -1,12 +1,11 @@
 <template>
-	<s-input class="right action" :class="{fluid}">
-		<s-button slot="prepend" icon="minus" @click="if(1<value) input(value-1)" />
-		<s-button slot="append" icon="add" @click="input(value+1)" />
+	<s-input :class="{fluid, 'right action': $mobile}">
+		<s-button v-if="$mobile" slot="prepend" icon="minus" @click="if(1<value) input(value-1)" />
+		<s-button v-if="$mobile" slot="append" icon="add" @click="input(value+1)" />
 		<input slot="input"
 			:value="value"
 			min="1"
-			type="tel"
-			pattern="[1-9][0-9]*"
+			type="number"
 			@input="evt=> input(Number(evt.target.value))"
 		/>
 	</s-input>

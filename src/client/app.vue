@@ -98,7 +98,8 @@ import open from 'biz/opening'
 import {hours} from 'config'
 
 //TODO: lang set/get goes through user if connected (but first, have users and user object)
-var language = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.lang || 'ro';
+var language = /*Vue.$store.state.auth.profile?*/Vue.prototype.cookies.getItem('lang') || 'ro';
+if(!Languages[language]) language = 'ro';
 Vue.i18n.set(language);
 Object.defineProperty(Vue.prototype, '$lang', {
 	get() {
@@ -107,7 +108,7 @@ Object.defineProperty(Vue.prototype, '$lang', {
 	set(lng) {
 		if(language !== lng) {
 			Vue.i18n.set(lng);
-			Vue.prototype.cookies.lang = lng;
+			Vue.prototype.cookies.setItem('lang', lng);
 			language = lng;
 		}
 	},
