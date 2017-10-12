@@ -5,18 +5,19 @@ export var routes = [{
 	component: MenuContainer,
 	children: [{
 		path: '',
-		menu: 'Menu du jour',
 		name: 'food',
 		component: ()=> import('./routes/food.vue')
 	}, {
 		path: 'cart',
-		menu: 'Panier',
 		name: 'cart',
 		component: ()=> import('./routes/cart.vue')
 	}, {
 		path: 'week',
-		menu: 'Semaine',
 		name: 'week',
 		component: ()=> import('./routes/week.vue')
+	}, {
+		path: 'contact',
+		name: 'contact',
+		component: ()=> import('./routes/contact.vue')
 	}]
 }];
