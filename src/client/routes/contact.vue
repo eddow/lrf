@@ -40,13 +40,13 @@
 			</div>
 			<div class="content">
 				<a class="header">François Marie De Mey</a>
+				<img class="right floated" src="/contact/emw.png" />
 				<div class="meta">
 					SC E Med Ware SRL
 				</div>
 				<div class="description">
 					Conception web
 				</div>
-				<img class="right floated" src="/contact/emw.png" />
 			</div>
 			<div class="extra content">
 				+40+753.755.882

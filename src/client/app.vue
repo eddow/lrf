@@ -20,7 +20,7 @@
 				<div style="width: 0;">Cluj&#8209;Napoca</div>
 				<span class="ui item">
 					<div>
-						<s-button fluid :positive="0<cartQuantity" icon="cart" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
+						<s-button fluid :positive="0<cartQuantity" icon="shopping basket" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
 						<s-button v-if="isClosed" class="closedSign" @click="timeTable">{{'Fermé'|translate}}</s-button>
 					</div>
 					<div v-if="isAuthenticated">
@@ -35,7 +35,14 @@
 					</div>
 				</span>
 				<div class="right menu">
-					<s-button icon="big newspaper" @click="$router.push({name: 'week'})" />
+					<div>
+						<div>
+							<s-button icon="newspaper" @click="$router.push({name: 'week'})" />
+						</div>
+						<div>
+							<s-button icon="users" :positive="inGroup" :disabled="isClosed" @click="groupCommand" />
+						</div>
+					</div>
 					<div>
 						<div v-if="isAuthenticated">
 							<!--s-button @click="logout">Log out</s-button-->
@@ -83,7 +90,7 @@ div.ui.menu {
 #content_section {
 	padding-top: 102px;
 }
-.closedSign {
+.menu .closedSign {
 	padding: 2px;
 	border: 3px double red;
 	border-radius: 5px;
@@ -92,6 +99,11 @@ div.ui.menu {
 <style>
 .langMenu .menu.left {
 	flex-direction: column;
+}
+.menu .closedSign {
+	padding: 2px;
+	border: 3px double red;
+	border-radius: 5px;
 }
 </style>
 <script lang="js">
@@ -127,6 +139,7 @@ Vue.util.defineReactive(Vue.prototype, '$lang', language);
 export default class App extends Vue {
 	languages = Languages
 	@Getter cartQuantity
+	@Getter inGroup
 	get isClosed() {
 		return !open.opened;
 	}
@@ -192,6 +205,13 @@ export default class App extends Vue {
 	}
 	get isAuthenticated() {
 		return !!this.$store.state.auth.profile;
+	}
+	groupCommand() {
+		alertify.prompt(
+			'Donnez un nom reconnaissable au groupe (firme, association, ...)',
+			name=> {
+				console.log(name);
+			});
 	}
 }
 </script>

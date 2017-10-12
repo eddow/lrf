@@ -24,9 +24,9 @@
 					<s-dimmer on="hover">
 						<div class="content" @click="addClick(dish)">
 							<div class="center">
-								<h2 class="ui inverted icon header">
-									<s-icon icon="add to cart" />
-									{{'Ajouter au panier'|translate}}
+								<h2 class="ui inverted header">
+									<s-icon icon="+big shopping basket+large green add" />
+									<p>{{'Ajouter au panier'|translate}}</p>
 								</h2>
 							</div>
 						</div>
@@ -56,8 +56,10 @@
 .card.dimmed .dimmer {
 	cursor: pointer;
 }
-.commandNumber {
-	max-width: 400px;
+.ui.modal.commandNumber {
+	/*max-width: 400px;
+	margin-left: auto !important;
+	margin-right: auto !important;*/
 }
 .ui.food {
 	max-width: 1000px;
