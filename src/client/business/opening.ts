@@ -1,7 +1,7 @@
 import * as io from 'socket.io-client'
 import {observeDeeply} from './data'
 const open: any = {opened: true};
-export default open;/*
+export default open;
 observeDeeply(open);
 open.set = set;
 const socket = io('/opening');
@@ -11,4 +11,4 @@ socket.on('opening', function(opened) {
 function set(opened) {
 	if(undefined=== opened) opened = !open.opened;
 	socket.emit('opening', opened);
-}*/
+}
