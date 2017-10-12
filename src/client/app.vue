@@ -14,8 +14,8 @@
 				<s-button class="fluid" v-command:cancel>{{'Annuler'|translate}}</s-button>
 			</form>
 		</s-modal>
-		<nav role="navigation" id="nav_menu"class="ui top attached menu fixed">
-			<div class="ui top attached menu">
+		<section id="nav_menu" class="">
+			<nav role="navigation" class="ui top attached menu">
 				<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
 				<div style="width: 0;">Cluj&#8209;Napoca</div>
 				<span class="ui item">
@@ -46,7 +46,7 @@
 							<!--s-button @click="register">Register</s-button-->
 						</div>
 						<div>
-							<s-select v-model="$lang">
+							<s-select v-model="$lang" class="langMenu">
 								<s-button slot="bar" class="icon"><s-flag :country="languages[$lang].flag" /></s-button>
 								<s-option
 									v-for="(desc, val) in languages" :key="val"
@@ -58,8 +58,8 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</nav>
+			</nav>
+		</section>
 		<section id="content_section">
 			<router-view></router-view>
 		</section>
@@ -68,9 +68,11 @@
 <style scoped>
 #nav_menu {
 	height: 102px;
-	/*Magic for mobiles: usually, the header is potiionned at the end of the scroll - with this, the GPU kicks in */
-	transform: translateZ(0);
-	-webkit-transform: translateZ(0);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 999;
 }
 div.ui.menu {
 	max-width: 400px;
@@ -85,6 +87,11 @@ div.ui.menu {
 	padding: 2px;
 	border: 3px double red;
 	border-radius: 5px;
+}
+</style>
+<style>
+.langMenu .menu.left {
+	flex-direction: column;
 }
 </style>
 <script lang="js">
