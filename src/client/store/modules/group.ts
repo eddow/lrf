@@ -1,5 +1,5 @@
 import * as alertify from 'alertify'
-import {post, put} from 'axios'
+import {get, post, put} from 'axios'
 import * as Vue from 'vue'
 
 // initial state
@@ -10,13 +10,17 @@ const state = {
 
 // getters
 const getters = {
-  inGroup: state => !!state.group
+	commandGroup: state => !!state.group && state.group.name,
+	groupLink: state => !!state.group && location.origin+'?group='+state.group.id
 }
 
 // actions
 const actions = {
   joinGroup({commit, state}, group) {
-		commit('joinGroup', group);
+		get('/group/'+group).then(
+			response=> commit('joinGroup', response.data),
+			err=> alertify.error(err)
+		);
   },
   createGroup({commit, state}, name) {
 		put('/group', {
@@ -35,6 +39,9 @@ const actions = {
       () => commit('groupCheckoutSuccess'),
       () => commit('groupCheckoutFailure', {savedGroup})
     );
+	},
+	leaveGroup({commit}) {
+		commit('groupCheckout');
 	}
 }
 

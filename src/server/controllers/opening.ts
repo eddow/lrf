@@ -3,7 +3,7 @@ import * as sharedsession from 'express-socket.io-session'
 import {hours} from 'config'
 import * as schedule from 'node-schedule'
 
-export default function opening(app, io, session) {
+export default function opening(io, session) {
 	function hours2cron(h) {
 		var hm = h.split(':');
 		return hm[1]+' '+(Number(hm[0])+hours.tz)+' * * *';

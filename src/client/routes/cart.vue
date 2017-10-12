@@ -88,9 +88,7 @@ export default class Cart extends Vue {
 		}
 		return this.cachedDishes;
 	}
-	get isClosed() {
-		return !open.opened;
-	}
+	get isClosed() { return !open.opened; }
 	get totalPrice() {
 		return this.dishes.reduce((sum, dish)=> sum + dish.product.price*dish.quantity, 0);
 	}

@@ -18,5 +18,6 @@ class Command extends Record {
 @Model()
 export default class GroupCommand extends Record {
 	@Required() @MinLength() name: string
+	@Property() creationTime: number
 	@Items(Command) commands: Command[]
 }

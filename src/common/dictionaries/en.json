@@ -31,5 +31,9 @@
 	"La commande a été transmise...": "The order was successfully sent...",
 	"Un problème est apparu. Veuillez ré-essayer plus tard.": "An error occured. Please, try again later.",
 	"Heures d'ouverture": "Opening hours",
-	"Fermé": "Closed"
+	"Fermé": "Closed",
+	"Commandes en élaboration": "Orders in the making",
+	"Commandes effectuées": "Orders passed",
+	"Supprimer le groupe": "Erase the group",
+	"Sortir du groupe": "Leave the group"
 }

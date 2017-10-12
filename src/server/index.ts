@@ -63,12 +63,7 @@ var io = require('socket.io')(server);
   console.log('connection');
 });*/
 
-routes.statics(app, io);
-import jsData from './controllers/js-data'
-jsData(app, io, mongoSession, store);
-import opening from './controllers/opening'
-opening(app, io, mongoSession);
-routes.controllers(app, io, store);
+routes.controllers(app, io, store, mongoSession);
 const listener = server.listen(
 	process.env.PORT || config.server.port,
 	function() {

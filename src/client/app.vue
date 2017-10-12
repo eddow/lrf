@@ -17,7 +17,10 @@
 		<section id="nav_menu" class="">
 			<nav role="navigation" class="ui top attached menu">
 				<router-link :to="{name: 'food'}"><img src="/logo100.png" /></router-link>
-				<div style="width: 0;">Cluj&#8209;Napoca</div>
+				<div style="width: 0;">
+					<b v-if="unsecableGroupName">{{unsecableGroupName}}</b>
+					<span v-else>Cluj&#8209;Napoca</span>
+				</div>
 				<span class="ui item">
 					<div>
 						<s-button fluid :positive="0<cartQuantity" icon="shopping basket" @click="$router.push({name: 'cart'})">{{cartQuantity}}</s-button>
@@ -138,8 +141,13 @@ Vue.util.defineReactive(Vue.prototype, '$lang', language);
 @Component
 export default class App extends Vue {
 	languages = Languages
+	@Getter commandGroup
+	get inGroup() { return !!this.commandGroup; }
+	get unsecableGroupName() {
+		return this.commandGroup && 
+			this.commandGroup.replace(/ /g, '&nbsp;').replace(/\-/g, '&#8209;');
+	}
 	@Getter cartQuantity
-	@Getter inGroup
 	get isClosed() {
 		return !open.opened;
 	}
@@ -190,9 +198,10 @@ export default class App extends Vue {
 	}
 	logout() {
 		this.$store.dispatch('logout').then(() => {
-			this.$router.push({name: 'food'});
-		}).catch(reason=> {
-		});
+				this.$router.push({name: 'food'});
+			},
+			reason=> {}
+		);
 	}
 	mounted() {
 		window.addEventListener('keyup', function(event) {
@@ -201,17 +210,32 @@ export default class App extends Vue {
 					//debugger;
 					//TODO: save
 				}
-      });
+			});
+	}
+	@Watch('$route.query', {immediate: true}) setquery(qry) {
+		if(qry && qry.group) {
+			this.joinGroup(qry.group);
+			var uri = window.location.toString();
+			window.history.replaceState(
+				{}, document.title,
+				uri.substring(0, uri.indexOf("?"))
+			);
+		}
 	}
 	get isAuthenticated() {
 		return !!this.$store.state.auth.profile;
 	}
+	@Getter commandGroup
+	@Action createGroup
+	@Action joinGroup
 	groupCommand() {
-		alertify.prompt(
-			'Donnez un nom reconnaissable au groupe (firme, association, ...)',
-			name=> {
-				console.log(name);
-			});
+		if(this.inGroup) this.$router.push({name: 'group'});
+		else
+			alertify.prompt(
+				'Donnez un nom reconnaissable au groupe (firme, association, ...)',
+				name=> {
+					if(name) this.createGroup(name);
+				});
 	}
 }
 </script>

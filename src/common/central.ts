@@ -20,7 +20,7 @@ export const models = Object.keys(modelDefs).map(m=>nameFromPath(m));
 export function initStore(str) {
 	store = str;
 	for(let m in modelDefs)
-	//We have to use file name as the function name is mangled
+	//We have to use file name as the function name is mangled when uglyfied
 		mapper(modelDefs[m].default, nameFromPath(m));
 }
 export var store;

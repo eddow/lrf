@@ -1,15 +1,11 @@
-import {Router} from 'js-data-express';
+import {Router as jsDataRouter} from 'js-data-express';
+import {Router as expressRouter} from 'express'
 import {models} from 'common/central'
 import {events as authEvents} from './auth'
 import * as sharedsession from 'express-socket.io-session'
 
-export default function jsData(app, io, session, store) {
-		/*mount(app, store, '/api', {
-		request(req, res, next) {
-			console.log('api request');
-			next();
-		}
-	});*/
+export default function jsData(io, session, store) {
+	const jsData = new expressRouter();
 	const jsdns = io.of('/js-data');
 	jsdns.use(sharedsession(session, {
 		autoSave:true
@@ -39,7 +35,7 @@ export default function jsData(app, io, session, store) {
 	});
 
 	for(let model of models)	
-		app.use('/api/'+model, new Router(store.defineMapper(model), rqConfig).router)
+		jsData.use('/'+model, new jsDataRouter(store.defineMapper(model), rqConfig).router)
 
 	store.on('all', function(event, collection, id, data, ...args) {
 		if(!/^before/.test(event)) {
@@ -57,4 +53,5 @@ export default function jsData(app, io, session, store) {
 			}
 		}
 	});
+	return jsData;
 }

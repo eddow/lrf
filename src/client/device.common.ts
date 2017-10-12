@@ -19,5 +19,9 @@ export var routes = [{
 		path: 'contact',
 		name: 'contact',
 		component: ()=> import('./routes/contact.vue')
+	}, {
+		path: 'group',
+		name: 'group',
+		component: ()=> import('./routes/group.vue')
 	}]
 }];

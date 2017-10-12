@@ -5,11 +5,15 @@ import auth from './controllers/auth'
 import picture from './controllers/picture'
 import customer from './controllers/customer'
 import * as mobileDetect from 'mobile-detect'
+import jsData from './controllers/js-data'
+import opening from './controllers/opening'
+import group from './controllers/group'
+
 function device(req) {
 	var md = new mobileDetect(req.headers['user-agent']);
 	return md.mobile() || md.phone() || md.tablet() ? 'mobile' : 'client';
 }
-export function statics(app, io) {
+export function controllers(app, io, store, session) {
 	//app.use(express.static('dist/client'));
 	app.use(function(req, res, next) {
 		var path = join(__dirname, '../dist', device(req)),
@@ -25,12 +29,13 @@ export function statics(app, io) {
 			root: join(__dirname, '../node_modules/semantic-ui/dist/themes/')
 		});
 	});
-}
 
-export function controllers(app, io, store) {
+	opening(io, session);
+	app.use('/api', jsData(io, session, store));
 	app.use('/auth', auth);
 	app.use('/picture', picture(store));
 	app.use('/customer', customer(store));
+	app.use('/group', group(store, io));
 	//SPA: in last resort, just send `index.html` as the path is a client-side path
 	app.use(function(req, res) {
 		res.sendFile('index.html', {root: join(__dirname, '../dist', device(req))});
