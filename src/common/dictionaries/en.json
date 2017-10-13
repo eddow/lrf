@@ -17,6 +17,7 @@
 	"Vider le panier": "Empty the cart",
 	"Commander": "Order",
 	"Confirmer": "Confirm",
+	"Attendez": "Wait",
 	"Le numéro de téléphone doit être spécifé et complet": "The phone number has to be specified and complete",
 	"La commande sera confirmée par téléphone.": "The command will be confirmed by phone.",
 	"Heure de livraison": "Delivery time",
@@ -35,5 +36,12 @@
 	"Commandes en élaboration": "Orders in the making",
 	"Commandes effectuées": "Orders passed",
 	"Supprimer le groupe": "Erase the group",
-	"Sortir du groupe": "Leave the group"
+	"Sortir": "Leave",
+	"Copier": "Copy",
+	"Vous devez spécifier un nom ou un pseudonyme": "Please specify a name or a nickname",
+	"Ce nom est déjà utilisé. Veuillez en utiliser un autre.": "This name is already used. Please, use another.",
+	"Commande de groupe": "Group command",
+	"Êtes-vous sûr de ne pas vouloir commander avec le groupe ?": "Are you sure you don't want to command with the group ?",
+	"Êtes-vous sûr de vouloir annuler toutes les commandes du groupe de manière irréversible ?":
+		"Are you really sure to cancel all the commands? This is irreversible."
 }

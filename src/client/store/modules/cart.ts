@@ -10,15 +10,26 @@ const state = {
 
 // actions
 const actions = {
-  checkout({commit, state}, infos) {
+  checkout({commit, state, rootState}, infos) {
     const savedCartItems = [...state.added];
 		commit('checkoutRequest');
 		post('/customer', {
 			products: savedCartItems,
-			contact: infos
+			contact: rootState.group.group?{
+				...infos,
+				group: rootState.group.group.id
+			}:infos
 		}).then(
-      () => commit('checkoutSuccess'),
-      () => commit('checkoutFailure', {savedCartItems})
+      () => {
+				alertify.success(Vue.prototype.$t('La commande a été transmise...'));
+			},
+      xhr => {
+				alertify.alert(Vue.prototype.$t(409=== xhr.response.status?
+					'Ce nom est déjà utilisé. Veuillez en utiliser un autre.':
+					'Un problème est apparu. Veuillez ré-essayer plus tard.'
+				));
+				commit('checkoutFailure', {savedCartItems})
+			}
     );
   },
   emptyCart({commit, state}) {
@@ -53,14 +64,9 @@ const mutations = {
     state.added = []
   },
 
-  checkoutSuccess(state) {
-		alertify.success(Vue.prototype.$t('La commande a été transmise...'));
-  },
-
   checkoutFailure(state, {savedCartItems}) {
     // rollback to the cart saved before sending the request
     state.added = savedCartItems;
-		alertify.error(Vue.prototype.$t('Un problème est apparu. Veuillez ré-essayer plus tard.'));
   }
 }
 

@@ -1,5 +1,5 @@
 import * as alertify from 'alertify'
-import {get, post, put} from 'axios'
+import {get, post, put, del} from 'axios'
 import * as Vue from 'vue'
 
 // initial state
@@ -30,11 +30,12 @@ const actions = {
       () => alertify.error(Vue.prototype.$t('Un problème est apparu. Veuillez ré-essayer plus tard.'))
     );
   },
-	groupCheckout({commit}) {
+	groupCheckout({commit, state}, infos) {
 		var savedGroup = state.group;
 		commit('groupCheckout');
 		post('/group', {
-			group: savedGroup
+			group: savedGroup.id,
+			contact: infos
 		}).then(
       () => commit('groupCheckoutSuccess'),
       () => commit('groupCheckoutFailure', {savedGroup})
@@ -42,6 +43,13 @@ const actions = {
 	},
 	leaveGroup({commit}) {
 		commit('groupCheckout');
+	},
+	deleteGroup({commit, state}) {
+		del('/group', {
+			group: state.group.id
+		}).then(
+      () => commit('groupCheckout')
+    );
 	}
 }
 

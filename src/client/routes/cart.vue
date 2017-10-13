@@ -1,28 +1,7 @@
 <template>
 	<div v-if="dishes.length" class="ui items centered">
 		<s-modal v-model="commandConfirm" :header="$t('Confirmer')" class="commandConfirm">
-			<form onsubmit="return false">
-				{{'La commande sera confirmée par téléphone.'|translate}}
-				<!--s-input fluid class="large" v-model="contact.time" :placeholder="$t('Heure de livraison')" type="time" :min="minTime">
-					<s-icon slot="prepend" icon="hourglass end" />
-				</s-input-->
-				<s-input fluid class="large" v-model="contact.name" :placeholder="$t('Prénom')">
-					<s-icon slot="prepend" icon="user outline" />
-				</s-input>
-				<s-input fluid class="large" v-model="contact.phone" :placeholder="$t('Téléphone')" type="tel">
-					<s-icon slot="prepend" icon="phone" />
-				</s-input>
-				<div class="ui negative message" v-if="phoneAlert">
-					{{'Le numéro de téléphone doit être spécifé et complet'|translate}}
-				</div>
-				<s-input fluid class="large" v-model="contact.email" placeholder="E-mail" type="email">
-					<s-icon slot="prepend" icon="mail" />
-				</s-input>
-				<s-input fluid class="large" v-model="contact.address" :placeholder="$t('Addresse de livraison')">
-					<s-icon slot="prepend" icon="marker" />
-				</s-input>
-				<s-button class="fluid" positive @click="checkContact" native-type="submit">{{'Confirmer'|translate}} !</s-button>
-			</form>
+			<contact :group="commandGroup" v-model="contact" :confirm="commandConfirm" />
 		</s-modal>
 		<div v-for="dish in dishes" :key="dish.product._id" class="ui item">
 			<div class="content">
@@ -71,11 +50,12 @@ import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as alertify from 'alertify'
 import {dishes, status} from 'biz/daily'
 import quantity from 'components/quantity.vue'
+import contact from 'components/contact.vue'
 import open from 'biz/opening'
 import {hours} from 'config'
 import shipping from 'common/libs/shipping'
 
-@Component({components: {quantity}})
+@Component({components: {quantity, contact}})
 export default class Cart extends Vue {
 	@Getter cartProducts
 	@Action emptyCart
@@ -121,25 +101,10 @@ export default class Cart extends Vue {
 			minutes = dt.getMinutes();
 		return dt.getHours()+':'+(10> minutes?'0': '')+minutes+':00';
 	}
-	phoneAlert: boolean = false
-	checkContact() {
-		var figures = this.contact.phone.match(/\d/g);
-		this.phoneAlert = !figures || 10> figures.length;
-		if(!this.phoneAlert) this.commandConfirm('ok');
-	}
-	created() {
-		var cookie = this.cookies.getItem('orderContact');
-		this.contact = cookie ? JSON.parse(cookie) : {
-			name: "",
-			phone: "",
-			email: "",
-			address: ""
-		};
-	}
+	@Getter commandGroup
 	order() {
 		this.commandConfirm(()=> {
 			this.checkout({language: this.$lang, ...this.contact});
-			this.cookies.setItem('orderContact', JSON.stringify(this.contact));
 		});
 	}
 }

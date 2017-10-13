@@ -10,5 +10,5 @@ socket.on('opening', function(opened) {
 });
 function set(opened) {
 	if(undefined=== opened) opened = !open.opened;
-	socket.emit('opening', opened);
+	var x = socket.emit('opening', opened);
 }

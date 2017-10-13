@@ -7,11 +7,11 @@ import {
 } from 'ts-json-schema-decorator'
 import {Record} from 'js-data'
 
-class CommandItem extends Record {
-	@Required() dish: string
-	@Required() number: number
+export class CommandItem extends Record {
+	@Required() product: string
+	@Required() quantity: number
 }
-class Command extends Record {
+export class Command extends Record {
 	@Required() @MinLength() nickname: string
 	@Items(CommandItem) items: CommandItem[]
 }

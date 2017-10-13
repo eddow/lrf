@@ -1,10 +1,13 @@
 <template>
 	<div class="centered">
+		<s-modal v-model="commandConfirm" :header="$t('Confirmer')" class="commandConfirm">
+			<contact v-model="contact" :confirm="commandConfirm" />
+		</s-modal>
 		<s-input fluid class="right command">
 			<input slot="input"ref="link" type="text" readonly :value="groupLink" @focus="selectLink"/>
-			<s-button slot="append" icon="clipboard" @click="copy" />
+			<s-button slot="append" icon="clipboard" @click="copy">{{'Copier'|translate}}</s-button>
+			<s-button slot="prepend" icon="close" negative @click="quitGroup">{{'Sortir'|translate}}</s-button>
 		</s-input>
-		<s-button icon="close" @click="quitGroup" fluid>{{'Sortir du groupe'|translate}}</s-button>
 		<div>{{'Commandes en élaboration'|translate}}: {{running}}</div>
 		<div>
 			{{'Commandes effectuées'|translate}}:
@@ -17,7 +20,7 @@
 </template>
 <style scoped>
 .centered {
-	max-width: 360px;
+	max-width: 720px;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -28,27 +31,41 @@
 }
 </style>
 <script lang="js">
+//TODO: supprimer le groupe
+//TODO: confirm on exit
+//TODO: pass the command
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
 import * as alertify from 'alertify'
 import open from 'biz/opening'
 import {hours} from 'config'
+import contact from 'components/contact.vue'
 
-@Component
+@Component({components: {contact}})
 export default class Group extends Vue {
 	get isClosed() { return !open.opened; }
 	@Getter groupLink
 	@Action leaveGroup
+	@Action deleteGroup
+	@Action groupCheckout
 	running: number = 0
 	effecteds: string[] = []
 	delGroup() {
+		alertify.confirm('Êtes-vous sûr de vouloir annuler toutes les commandes du groupe de manière irréversible ?',
+			this.deleteGroup());
 	}
+	contact = null
 	order() {
+		this.commandConfirm(()=> {
+			this.groupCheckout({language: this.$lang, ...this.contact});
+		});
 	}
 	quitGroup() {
-		this.leaveGroup();
-		this.$router.push({name: 'food'});
+		alertify.confirm('Êtes-vous sûr de ne pas vouloir commander avec le groupe ?', ()=> {
+			this.leaveGroup();
+			this.$router.push({name: 'food'});
+		});
 	}
 	selectLink() {
 		this.$refs.link.setSelectionRange(0, this.groupLink.length)

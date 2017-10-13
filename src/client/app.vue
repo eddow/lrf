@@ -75,31 +75,30 @@
 		</section>
 	</div>
 </template>
-<style scoped>
+<style>
+#nav_menu div.ui.menu {
+	max-width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 0 !important;
+}
+#nav_menu .menu .closedSign {
+	padding: 2px;
+	border: 3px double red;
+	border-radius: 5px;
+}
+
+#content_section {
+	padding-top: 102px;
+}
 #nav_menu {
 	height: 102px;
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
-	z-index: 999;
+	z-index: 1;
 }
-div.ui.menu {
-	max-width: 400px;
-	margin-left: auto;
-	margin-right: auto;
-	border: 0 !important;
-}
-#content_section {
-	padding-top: 102px;
-}
-.menu .closedSign {
-	padding: 2px;
-	border: 3px double red;
-	border-radius: 5px;
-}
-</style>
-<style>
 .langMenu .menu.left {
 	flex-direction: column;
 }

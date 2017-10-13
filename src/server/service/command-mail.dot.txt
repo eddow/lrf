@@ -6,6 +6,12 @@ Téléphone: {{= it.contact.phone}}
 {{?}}{{? it.contact.address}}Addresse de livraison: {{= it.contact.address}}
 {{?}}
 
+
+{{? it.commands }}Détails:{{~ it.commands : command}}
+{{= command.nickname}}:{{~ command.items : product }}
+{{= product.quantity}} X {{=product.dish.title.fr}}{{~}}
+{{~}}{{?}}
+
 Commande:{{~ it.products : product }}
 {{=product.quantity}} X {{=product.dish.title.fr}} ({{=product.dish.price}}lei){{~}}
 
