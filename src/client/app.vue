@@ -204,12 +204,14 @@ export default class App extends Vue {
 	}
 	mounted() {
 		window.addEventListener('keyup', function(event) {
-				if('s'=== event.key && event.ctrlKey) {
-					event.preventDefault();
-					//debugger;
-					//TODO: save
-				}
-			});
+			if('s'=== event.key && event.ctrlKey) {
+				event.preventDefault();
+				//debugger;
+				//TODO: save
+			}
+		});
+		if(this.commandGroup)
+			this.joinGroup();
 	}
 	@Watch('$route.query', {immediate: true}) setquery(qry) {
 		if(qry && qry.group) {

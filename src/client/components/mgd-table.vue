@@ -29,7 +29,7 @@ import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
 import {observeDeeply, bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
-//TODO: Visually mark unsaved lines
+
 @Component
 export default class MgdTable extends Vue {
 	@Prop({type: Function}) filter: (item: any)=> boolean

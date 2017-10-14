@@ -13,12 +13,9 @@ const actions = {
   checkout({commit, state, rootState}, infos) {
     const savedCartItems = [...state.added];
 		commit('checkoutRequest');
-		post('/customer', {
+		post(rootState.group.group?'/group/'+rootState.group.group.id:'/customer', {
 			products: savedCartItems,
-			contact: rootState.group.group?{
-				...infos,
-				group: rootState.group.group.id
-			}:infos
+			contact: infos
 		}).then(
       () => {
 				alertify.success(Vue.prototype.$t('La commande a été transmise...'));

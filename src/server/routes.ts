@@ -34,8 +34,8 @@ export function controllers(app, io, store, session) {
 	app.use('/api', jsData(io, session, store));
 	app.use('/auth', auth);
 	app.use('/picture', picture(store));
-	app.use('/customer', customer(store));
 	app.use('/group', group(store, io));
+	app.use('/customer', customer(store));
 	//SPA: in last resort, just send `index.html` as the path is a client-side path
 	app.use(function(req, res) {
 		res.sendFile('index.html', {root: join(__dirname, '../dist', device(req))});

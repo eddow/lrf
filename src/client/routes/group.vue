@@ -9,10 +9,10 @@
 			<s-button slot="append" icon="clipboard" @click="copy">{{'Copier'|translate}}</s-button>
 			<s-button slot="prepend" icon="close" negative @click="quitGroup">{{'Sortir'|translate}}</s-button>
 		</s-input>
-		<div>{{'Commandes en élaboration'|translate}}: {{running}}</div>
+		<!--div>{{'Connexions au groupe'|translate}}: {{nrConnected}}</div-->
 		<div>
 			{{'Commandes effectuées'|translate}}:
-			<ul><li v-for="(effected, index) in effecteds" :key="index">{{effected}}</li></ul>
+			<ul><li v-for="(command, index) in commands" :key="index">{{command}}</li></ul>
 		</div>
 		<s-button v-if="isClosed" class="huge closedSign" fluid @click="()=>{}">{{timeTable}}</s-button>
 		<s-button v-else icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
@@ -38,9 +38,6 @@
 }
 </style>
 <script lang="js">
-//TODO: supprimer le groupe
-//TODO: confirm on exit
-//TODO: pass the command
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch} from 'vue-property-decorator'
 import {State, Getter, Action, Mutation, namespace} from 'vuex-class'
@@ -54,11 +51,11 @@ export default class Group extends Vue {
 	get isClosed() { return !open.opened; }
 	@Getter groupLink
 	@Getter commandGroup
+	//@Getter nrConnected
+	@Getter commands
 	@Action leaveGroup
 	@Action deleteGroup
 	@Action groupCheckout
-	running: number = 0
-	effecteds: string[] = []
 	delGroup() {
 		alertify.confirm('Êtes-vous sûr de vouloir annuler toutes les commandes du groupe de manière irréversible ?',
 			this.deleteGroup());

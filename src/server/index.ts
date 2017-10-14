@@ -20,8 +20,11 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 /*TODO:
 - split code to load admin screens only when accessing them
 - user mgt (name, admin, token) + https://github.com/robinvdvleuten/vuex-persistedstate for express-session storage
-- relevé d'activité (via socket.io?)
+- relevé d'activité (via socket.io -> blup)
 - -> https
+- effacer une commande du groupe
+- filtrer les menus
+- delete obsolete groups
 */
 import * as http from 'http'
 import * as https from 'https'

@@ -1,7 +1,6 @@
 import {Router} from 'express'
 import Dish, {Languages, Parts} from 'models/dish'
 import Menu, {Categories} from 'models/menu'
-import GroupCommand, {Command} from 'models/groupCommand'
 import {sendCommand, generator} from '../service/generate'
 
 export default function customer(store) {
@@ -14,33 +13,12 @@ export default function customer(store) {
 	return customer;
 
 	async function command(req, res) {
-		var contact = req.body.contact;
-		if(contact.group) {
-			var groupCommand: GroupCommand = await store.find('groupCommand', contact.group);
-			if(!groupCommand) res.status(404).send('Group not found');
-			if(groupCommand.commands.find(c=> c.nickname === contact.name))
-				res.status(409).send();
-			else {
-				groupCommand.commands.push(new Command({
-					nickname: contact.name,
-					items: req.body.products
-				}));
-				groupCommand.save({changesOnly: true}).then(
-					()=> res.status(200).send(),
-					(x)=> {
-						console.error(x);
-						res.status(500).send();
-					}
-				);
-			}
-		} else {
-			try {
-				await sendCommand(store, req.body.contact, req.body.products);
-				res.status(200).send('ok');
-			} catch(error) {
-				res.status(500).send('bug');
-				console.log(error);
-			}
+		try {
+			await sendCommand(store, req.body.contact, req.body.products);
+			res.status(200).send('ok');
+		} catch(error) {
+			res.status(500).send('bug');
+			console.log(error);
 		}
 	}
 	function daily(req, res) {
