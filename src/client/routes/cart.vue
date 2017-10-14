@@ -28,7 +28,10 @@
 		<s-button icon="trash" negative @click="confirmEmptyCart" fluid red>{{'Vider le panier'|translate}}</s-button>
 	</div>
 	<div v-else>
-		<h1 class="centered"><router-link to="/">{{'Votre panier est vide. Cliquez ici pour découvrir le menu.'|translate}}</router-link></h1>
+		<router-link to="/">
+			<h1 class="centered">{{'Votre panier est vide.'|translate}}</h1>
+			<h2 class="centered">{{'Cliquez ici pour découvrir le menu.'|translate}}</h2>
+		</router-link>
 	</div>
 </template>
 <style scoped>

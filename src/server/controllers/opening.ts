@@ -1,4 +1,4 @@
-export var isOpened = false;
+export var isOpened = process.env.NODE_ENV !== 'production';	//In dev, it is opened by default when the server start
 import * as sharedsession from 'express-socket.io-session'
 import {hours} from 'config'
 import * as schedule from 'node-schedule'

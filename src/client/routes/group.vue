@@ -1,8 +1,9 @@
 <template>
-	<div class="centered">
+	<div v-if="commandGroup" class="centered">
 		<s-modal v-model="commandConfirm" :header="$t('Confirmer')" class="commandConfirm">
 			<contact v-model="contact" :confirm="commandConfirm" />
 		</s-modal>
+		<h1>{{commandGroup}}</h1>
 		<s-input fluid class="right command">
 			<input slot="input"ref="link" type="text" readonly :value="groupLink" @focus="selectLink"/>
 			<s-button slot="append" icon="clipboard" @click="copy">{{'Copier'|translate}}</s-button>
@@ -16,6 +17,12 @@
 		<s-button v-if="isClosed" class="huge closedSign" fluid @click="()=>{}">{{timeTable}}</s-button>
 		<s-button v-else icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
 		<s-button icon="trash" negative @click="delGroup" fluid red>{{'Supprimer le groupe'|translate}}</s-button>
+	</div>
+	<div v-else>
+		<router-link to="/">
+			<h1 class="centered">{{'Il n\'y a plus de groupe de commande.'|translate}}</h1>
+			<h2 class="centered">{{'Cliquez ici pour découvrir le menu.'|translate}}</h2>
+		</router-link>
 	</div>
 </template>
 <style scoped>
@@ -46,6 +53,7 @@ import contact from 'components/contact.vue'
 export default class Group extends Vue {
 	get isClosed() { return !open.opened; }
 	@Getter groupLink
+	@Getter commandGroup
 	@Action leaveGroup
 	@Action deleteGroup
 	@Action groupCheckout
