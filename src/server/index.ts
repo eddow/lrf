@@ -8,6 +8,7 @@ import * as routes from './routes'
 import * as bodyParser from 'body-parser'
 import * as morgan from 'morgan'
 import {readFileSync} from 'fs'
+import * as sharedsession from 'express-socket.io-session'
 
 initStore(new Container({
 	mapperDefaults: {
@@ -55,10 +56,11 @@ app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 
 //import * as sharedsession from 'express-socket.io-session'
 var io = require('socket.io')(server);
-/*io.of('/').use(sharedsession(mongoSession, {
+io.of('/').use(sharedsession(mongoSession, {
 	autoSave:true
-}));*/
+}));
 
+//TODO: give admin the number of connected
 /*io.on('connection', function(socket){
   console.log('connection');
 });*/

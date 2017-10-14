@@ -4,7 +4,7 @@ const open: any = {opened: true};
 export default open;
 observeDeeply(open);
 open.set = set;
-const socket = io('/opening');
+const socket = io('/');
 socket.on('opening', function(opened) {
 	open.opened = opened;
 });

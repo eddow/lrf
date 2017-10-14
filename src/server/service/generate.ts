@@ -5,7 +5,7 @@ import {dav} from 'common/libs/dot-gen'
 import pdfGen from 'common/libs/pdf-gen'
 import shipping from 'common/libs/shipping'
 import * as dot from 'dot';
-var generator = new dav();
+export const generator = new dav();
 
 var commandMail = dot.template(commandTpl, {
 	evaluate:    /\{\{([\s\S]+?(\}?)+)\}\}/g,
@@ -26,7 +26,7 @@ var commandMail = dot.template(commandTpl, {
 
 var transporter = nodemailer.createTransport(mailer);
 
-export default async function command(store, contact, products, commands = null) {
+export async function sendCommand(store, contact, products, commands = null) {
 	function populate(products) {
 		return products.map(p=> ({
 			dish: dishes.find(d=> d._id === p.product),
@@ -73,6 +73,7 @@ export default async function command(store, contact, products, commands = null)
 		if (error) throw error;
 		console.log('Command message sent: %s', info.messageId);
 		// Preview only available when sending through an Ethereal account
-		console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+		if(process.env.NODE_ENV !== 'production')
+			console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 	});
 }

@@ -6,7 +6,8 @@
 		selectable
 		:current="selected"
 		@row-click="select"
-		class="screen"
+		:row-class="rowClass"
+		class="mgd-table"
 		body-height="500"
 	>
 		<div slot="header">
@@ -19,13 +20,16 @@
 	</s-table>
 </template>
 <style>
+.mgd-table.ui.striped.table tbody .modified {
+	background-color: lightgoldenrodyellow;
+}
 </style>
 <script lang="js">
 import * as Vue from 'vue'
 import {Component, Inject, Model, Prop, Watch, Emit} from 'vue-property-decorator'
 import {observeDeeply, bindCollection} from 'biz/js-data'
 import * as alertify from 'alertify'
-
+//TODO: Visually mark unsaved lines
 @Component
 export default class MgdTable extends Vue {
 	@Prop({type: Function}) filter: (item: any)=> boolean
@@ -34,7 +38,9 @@ export default class MgdTable extends Vue {
 	@Prop({required: true}) collectionName: string
 
 	@Model('select') selected: any
-
+	rowClass(item) {
+		return {modified: item.hasChanges()}
+	}
 	collection	//uninitialized because unwatched
 	list: any[] = []
   created() {

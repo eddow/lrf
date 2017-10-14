@@ -2,8 +2,7 @@ import {Router} from 'express'
 import Dish, {Languages, Parts} from 'models/dish'
 import Menu, {Categories} from 'models/menu'
 import GroupCommand, {Command} from 'models/groupCommand'
-import sendCommand from '../service/command'
-
+import {sendCommand, generator} from '../service/generate'
 
 export default function customer(store) {
 	const customer = new Router();
