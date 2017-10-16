@@ -22,10 +22,8 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - user mgt (name, admin, token) + https://github.com/robinvdvleuten/vuex-persistedstate for express-session storage
 - relevé d'activité (via socket.io -> blup)
 - -> https
-- effacer une commande du groupe
 - summary de commande de groupe (template?)
 //- filtrer les menus
-- delete obsolete groups
 */
 import * as http from 'http'
 import * as https from 'https'

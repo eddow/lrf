@@ -2,7 +2,7 @@ import groupCommand from 'models/groupCommand'
 import {Router} from 'express'
 import {sendCommand} from '../service/generate'
 import GroupCommand, {Command, CommandItem} from 'models/groupCommand'
-
+import * as schedule from 'node-schedule'
 
 function clientCommand(dishes) {
 	return (c: Command)=> {
@@ -20,14 +20,13 @@ function clientCommand(dishes) {
 }
 
 export default function group(store, io) {
-	
+	schedule.scheduleJob('* 3 * * *', filterObsoletes);
 	const groupns = io.of('/group');
 	groupns.on('connection', function(socket) {
 		socket.on('join', async group=> {
 			var groupCommand: GroupCommand = await store.find('groupCommand', group);
 			if(groupCommand && !groupCommand.sent) {
 				socket.join(group);
-				console.log('emit commands');
 				var dishes = await store.findAll('dish');
 				socket.emit('commands', groupCommand.commands.map(clientCommand(dishes)));
 			}
@@ -104,7 +103,7 @@ export default function group(store, io) {
 	}
 	async function findGroup(req, res) {
 		var group = await store.find('groupCommand', req.params.id);
-		if(!group) res.status(404).send();
+		if(!group || group.sent) res.status(404).send();
 		else res.status(200).send({
 			name: group.name,
 			id: group._id
@@ -135,7 +134,7 @@ export default function group(store, io) {
 			await sendCommand(store, req.body.contact, null, group.commands);
 			//deleteGroup(group, res);
 			group.sent = true;
-			group.save();
+			group.save({changesOnly: true});
 			groupns.to(group._id).emit('ended');
 		} catch(error) {
 			res.status(500).send('bug');

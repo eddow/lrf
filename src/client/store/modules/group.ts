@@ -5,8 +5,6 @@ import * as io from 'socket.io-client'
 
 const socket = io('/group');
 
-//TODO: join on-load
-
 // initial state
 // shape: [{ id, quantity }]
 const state = {
