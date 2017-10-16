@@ -19,8 +19,10 @@
 		<div class="ui header right floated">
 			<table>
 				<tr><th>{{'Total'|translate}}:</th><td>{{$lei(totalPrice)}}</td></tr>
-				<tr><th>{{'Livraison'|translate}}:</th><td>{{$lei(shipping)}}</td></tr>
-				<tr><th>{{'À payer'|translate}}:</th><td>{{$lei(totalPrice+shipping)}}</td></tr>
+				<template v-if="!commandGroup">
+					<tr><th>{{'Livraison'|translate}}:</th><td>{{$lei(shipping)}}</td></tr>
+					<tr><th>{{'À payer'|translate}}:</th><td>{{$lei(totalPrice+shipping)}}</td></tr>
+				</template>
 			</table>
 		</div>
 		<s-button v-if="isClosed" class="huge closedSign" fluid @click="()=>{}">{{timeTable}}</s-button>

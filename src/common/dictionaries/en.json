@@ -43,7 +43,9 @@
 	"Vous devez spécifier un nom ou un pseudonyme": "Please specify a name or a nickname",
 	"Ce nom est déjà utilisé. Veuillez en utiliser un autre.": "This name is already used. Please, use another.",
 	"Commande de groupe": "Group command",
-	"Êtes-vous sûr de ne pas vouloir commander avec le groupe ?": "Are you sure you don't want to command with the group ?",
-	"Êtes-vous sûr de vouloir annuler toutes les commandes du groupe de manière irréversible ?":
-		"Are you really sure to cancel all the commands? This is irreversible."
+	"Êtes-vous sûr de ne pas vouloir commander avec le groupe?": "Are you sure you don't want to command with the group?",
+	"Êtes-vous sûr de vouloir annuler toutes les commandes du groupe de manière irréversible?":
+		"Are you really sure to irreversibly cancel all the commands ?",
+	"Êtes-vous sûr de vouloir annuler la commande de {nickname}?":
+		"Are you really sure to cancel the command of {nickname}?"
 }

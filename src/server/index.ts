@@ -23,7 +23,8 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - relevé d'activité (via socket.io -> blup)
 - -> https
 - effacer une commande du groupe
-- filtrer les menus
+- summary de commande de groupe (template?)
+//- filtrer les menus
 - delete obsolete groups
 */
 import * as http from 'http'

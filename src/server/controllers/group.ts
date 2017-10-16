@@ -1,32 +1,45 @@
 import groupCommand from 'models/groupCommand'
 import {Router} from 'express'
 import {sendCommand} from '../service/generate'
-import GroupCommand, {Command} from 'models/groupCommand'
+import GroupCommand, {Command, CommandItem} from 'models/groupCommand'
 
-//const rooms = {};
+
+function clientCommand(dishes) {
+	return (c: Command)=> {
+		var price = 0;
+		for(let item of c.items) {
+			let dish = dishes.find(d=> d._id == item.product);
+			if(!dish) throw new Error(`Inexistant dish in group command '${item.product}'`);
+			price += dish.price;
+		}
+		return {
+			nickname: c.nickname,
+			price
+		};
+	}
+}
 
 export default function group(store, io) {
 	
 	const groupns = io.of('/group');
 	groupns.on('connection', function(socket) {
 		socket.on('join', async group=> {
-			socket.join(group);
-			/*if(!rooms[group]) rooms[group] = 1;
-			else ++rooms[group];
-			groupns.to(group).emit('nr_connected', rooms[group]);*/
 			var groupCommand: GroupCommand = await store.find('groupCommand', group);
-			console.log('emit commands');
-			socket.emit('commands', groupCommand.commands.map(c=> c.nickname));
+			if(groupCommand && !groupCommand.sent) {
+				socket.join(group);
+				console.log('emit commands');
+				var dishes = await store.findAll('dish');
+				socket.emit('commands', groupCommand.commands.map(clientCommand(dishes)));
+			}
 		});
 		socket.on('leave', group=> {
 			socket.leave(group);
-			//groupns.to(group).emit('nr_connected', --rooms[group]);
 		});
 	});
 	
 	const group = new Router();
 	
-	group.put('/', createGroup).post('/', checkout).delete('/', abortGroup)
+	group.put('/', createGroup).post('/', checkout).delete('/:group/:nickname', deleteSth)
 		.get('/:id', findGroup).post('/:id', command);
 	return group;
 	
@@ -42,13 +55,13 @@ export default function group(store, io) {
 				items: req.body.products
 			}));
 			groupCommand.save({changesOnly: true}).then(
-				()=> {
+				async ()=> {
 					res.status(200).send();
-					groupns.to(groupCommand._id).emit('commands', groupCommand.commands.map(c=> c.nickname));
+					groupns.to(groupCommand._id).emit('commands', groupCommand.commands.map(clientCommand(await store.findAll('dish'))));
 				},
 				(x)=> {
 					console.error(x);
-					res.status(500).send();
+					res.status(500).send('bug');
 				}
 			);
 		}
@@ -61,18 +74,33 @@ export default function group(store, io) {
 		for(let obsolete of obsoletes)
 			obsolete.destroy();
 	}
-	async function deleteGroup(group, res) {
-		if(!group) return res.status(404).send();
-		groupns.to(group._id).emit('ended');
-		try { await group.destroy(); }
-		catch(x) {
-			console.log(x);
-			res.status(500).send();
+	async function deleteSth(req, res) {
+		var groupCommand = await store.find('groupCommand', req.params.group);
+		if(!groupCommand) return res.status(404).send();
+		if(req.params.nickname) {
+			var cndx = groupCommand.commands.findIndex(c=> c.nickname == req.params.nickname);
+			if(!~cndx) return res.status(404).send('nickname');
+			groupCommand.commands.splice(cndx, 1);
+			groupCommand.save({changesOnly: true}).then(
+				async ()=> {
+					res.status(200).send();
+					groupns.to(groupCommand._id).emit('commands', groupCommand.commands.map(clientCommand(await store.findAll('dish'))));
+				},
+				err=> {
+					console.error(err);
+					res.status(500).send('bug')
+				}
+			);
+		} else {
+			return res.status(400).send();
+			/*groupns.to(group._id).emit('ended');
+			try { await group.destroy(); }
+			catch(x) {
+				console.log(x);
+				res.status(500).send();
+			}
+			res.status(204).send();*/
 		}
-		res.status(204).send();
-	}
-	async function abortGroup(req, res) {
-		deleteGroup(await store.find('groupCommand', req.body.group), res);
 	}
 	async function findGroup(req, res) {
 		var group = await store.find('groupCommand', req.params.id);
@@ -96,7 +124,7 @@ export default function group(store, io) {
 			},
 			err=> {
 				console.log(err);
-				res.status(500).send('oops');
+				res.status(500).send('bug');
 			}
 		)
 	}
@@ -105,7 +133,10 @@ export default function group(store, io) {
 		
 		try {
 			await sendCommand(store, req.body.contact, null, group.commands);
-			deleteGroup(group, res);
+			//deleteGroup(group, res);
+			group.sent = true;
+			group.save();
+			groupns.to(group._id).emit('ended');
 		} catch(error) {
 			res.status(500).send('bug');
 			console.log(error);

@@ -40,7 +40,7 @@
 						>
 							<template slot="input" scope="field">
 								<s-input class="right labeled" type="number" v-model="field.value">
-									<div class="ui label" slot="append">Gr</span>
+									<div class="ui label" slot="append">gr</span>
 								</s-input>
 							</template>
 						</s-field>
@@ -50,7 +50,7 @@
 						>
 							<template slot="input" scope="field">
 								<s-input class="right labeled" type="number" v-model="field.value">
-									<div class="ui label" slot="append">Lei</span>
+									<div class="ui label" slot="append">lei</span>
 								</s-input>
 							</template>
 						</s-field>
@@ -60,7 +60,7 @@
 						>
 							<template slot="input" scope="field">
 								<s-input class="right labeled" type="number" v-model="field.value">
-									<div class="ui label" slot="append">Heures</span>
+									<div class="ui label" slot="append">heures</span>
 								</s-input>
 							</template>
 						</s-field>

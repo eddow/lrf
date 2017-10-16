@@ -9,14 +9,18 @@
 			<s-button slot="append" icon="clipboard" @click="copy">{{'Copier'|translate}}</s-button>
 			<s-button slot="prepend" icon="close" negative @click="quitGroup">{{'Sortir'|translate}}</s-button>
 		</s-input>
-		<!--div>{{'Connexions au groupe'|translate}}: {{nrConnected}}</div-->
-		<div>
-			{{'Commandes effectuées'|translate}}:
-			<ul><li v-for="(command, index) in commands" :key="index">{{command}}</li></ul>
-		</div>
+		<table>
+			<caption><h3>{{'Commandes effectuées'|translate}}</h3></caption>
+			<tr v-for="(command, index) in commands" :key="index">
+				<td>{{command.nickname}}</td>
+				<th>{{$lei(command.price)}}</th>
+				<td><s-button negative icon="remove circle" @click="delCommand(command.nickname)" />
+			</tr>
+			<tr><th>{{'Total'|translate}}:</th><td>{{$lei(totalPrice)}}</td></tr>
+		</table>
 		<s-button v-if="isClosed" class="huge closedSign" fluid @click="()=>{}">{{timeTable}}</s-button>
 		<s-button v-else icon="food" class="massive" positive @click="order" fluid red>{{'Commander'|translate}} !</s-button>
-		<s-button icon="trash" negative @click="delGroup" fluid red>{{'Supprimer le groupe'|translate}}</s-button>
+		<!--s-button icon="trash" negative @click="delGroup" fluid red>{{'Supprimer le groupe'|translate}}</s-button-->
 	</div>
 	<div v-else>
 		<router-link to="/">
@@ -30,6 +34,18 @@
 	max-width: 720px;
 	margin-left: auto;
 	margin-right: auto;
+}
+table {
+	width: 100%;
+}
+td {
+	text-align: right;
+}
+th:first-child {
+	text-align: right;
+}
+th {
+	text-align: left;
 }
 .closedSign {
 	padding: 5px;
@@ -51,15 +67,15 @@ export default class Group extends Vue {
 	get isClosed() { return !open.opened; }
 	@Getter groupLink
 	@Getter commandGroup
-	//@Getter nrConnected
 	@Getter commands
 	@Action leaveGroup
-	@Action deleteGroup
+	//@Action deleteGroup
+	@Action deleteCommand
 	@Action groupCheckout
-	delGroup() {
-		alertify.confirm('Êtes-vous sûr de vouloir annuler toutes les commandes du groupe de manière irréversible ?',
+	/*delGroup() {
+		alertify.confirm('Êtes-vous sûr de vouloir annuler toutes les commandes du groupe de manière irréversible?',
 			this.deleteGroup());
-	}
+	}*/
 	contact = null
 	order() {
 		this.commandConfirm(()=> {
@@ -67,7 +83,7 @@ export default class Group extends Vue {
 		});
 	}
 	quitGroup() {
-		alertify.confirm('Êtes-vous sûr de ne pas vouloir commander avec le groupe ?', ()=> {
+		alertify.confirm(this.$t('Êtes-vous sûr de ne pas vouloir commander avec le groupe?'), ()=> {
 			this.leaveGroup();
 			this.$router.push({name: 'food'});
 		});
@@ -82,6 +98,13 @@ export default class Group extends Vue {
 	copy() {
 		this.$refs.link.focus();
 		setTimeout(()=> document.execCommand("copy"));
+	}
+	get totalPrice() {
+		return this.commands.reduce((sum, command)=> sum+command.price, 0);
+	}
+	delCommand(nickname) {
+		alertify.confirm(this.$t('Êtes-vous sûr de vouloir annuler la commande de {nickname}?', {nickname}),
+			()=> this.deleteCommand(nickname));
 	}
 }
 </script>

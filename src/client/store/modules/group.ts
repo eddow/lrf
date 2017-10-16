@@ -1,5 +1,5 @@
 import * as alertify from 'alertify'
-import {get, post, put, del} from 'axios'
+import {get, post, put, delete as del} from 'axios'
 import * as Vue from 'vue'
 import * as io from 'socket.io-client'
 
@@ -13,7 +13,6 @@ const state = {
 	group: null,
 	socket: null,
 	events: {},
-	//nrConnected: 0,
 	commands: []
 };
 
@@ -21,7 +20,6 @@ const state = {
 const getters = {
 	commandGroup: state => !!state.group && state.group.name,
 	groupLink: state => !!state.group && location.origin+'?group='+state.group.id,
-	//nrConnected: state=> state.nrConnected,
 	commands: state=> state.commands
 };
 
@@ -55,18 +53,18 @@ const actions = {
 	leaveGroup({commit}) {
 		commit('groupCheckout');
 	},
-	deleteGroup({commit, state}) {
+	/*deleteGroup({commit, state}) {
 		del('/group', {
 			group: state.group.id
 		}).then(
       () => commit('groupCheckout')
     );
+	},*/
+	deleteCommand({commit, state}, nickname) {
+		del('/group/'+state.group.id+'/'+nickname);
 	}
 }
 const socketEvents = {
-	/*nr_connected(value) {
-		this.commit('connectionsChanged', value);
-	},*/
 	commands(value) {
 		this.commit('commandsChanged', value);
 	},
@@ -94,9 +92,6 @@ const mutations = {
 		socketOff(state.events);
 		state.group = null;
   },
-	/*connectionsChanged(state, nrConnection) {
-		state.nrConnected = nrConnection;
-	},*/
 	commandsChanged(state, commands) {
 		state.commands = commands;
 	},
