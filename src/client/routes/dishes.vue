@@ -37,11 +37,33 @@
 						<s-field prop="grams" label="Grammage" inline 
 							:input="number"
 							:output="x=> fixed(x)"
-						/>
+						>
+							<template slot="input" scope="field">
+								<s-input class="right labeled" type="number" v-model="field.value">
+									<div class="ui label" slot="append">Gr</span>
+								</s-input>
+							</template>
+						</s-field>
 						<s-field prop="price" label="Prix" inline 
 							:input="number"
 							:output="x=> fixed(x, 2)"
-						/>
+						>
+							<template slot="input" scope="field">
+								<s-input class="right labeled" type="number" v-model="field.value">
+									<div class="ui label" slot="append">Lei</span>
+								</s-input>
+							</template>
+						</s-field>
+						<s-field prop="timing" label="Préparation" inline 
+							:input="number"
+							:output="x=> fixed(x)"
+						>
+							<template slot="input" scope="field">
+								<s-input class="right labeled" type="number" v-model="field.value">
+									<div class="ui label" slot="append">Heures</span>
+								</s-input>
+							</template>
+						</s-field>
 						<div>
 							<input type="file" @change="pictureChange" accept="image/*" />
 							<img class="ui image" v-if="selected.picture" :src="selected.picture" />

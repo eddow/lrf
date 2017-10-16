@@ -1,5 +1,8 @@
 import * as io from 'socket.io-client'
 import {observeDeeply} from './data'
+import {put} from 'axios'
+import * as alertify from 'alertify'
+
 const open: any = {opened: true};
 export default open;
 observeDeeply(open);
@@ -10,5 +13,9 @@ socket.on('opening', function(opened) {
 });
 function set(opened) {
 	if(undefined=== opened) opened = !open.opened;
-	var x = socket.emit('opening', opened);
+	put('/open/', {
+		opened
+	}).then(()=> {}, response=> {
+		alertify.error('Il faut vous ré-identifier');
+	});
 }

@@ -26,6 +26,7 @@ export default class Dish extends Record {
 	@Required() description: Translated
 	@Required() price: number
 	@Required() grams: number
+	@Required() timing: number
 	@Required() picture: string
 
 	toString() { return this.title.fr; }

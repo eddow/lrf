@@ -30,7 +30,7 @@ export function controllers(app, io, store, session) {
 		});
 	});
 
-	opening(io, session);
+	app.use('/open', opening(io, session));
 	app.use('/api', jsData(io, session, store));
 	app.use('/auth', auth);
 	app.use('/picture', picture(store));
