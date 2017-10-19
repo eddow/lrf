@@ -20,10 +20,8 @@ export default function opening(io, session) {
 	opening.route('/').put(setOpened);
 	return opening;
 	function setOpened(req, res) {
-		debugger;
-		console.log('opening...');
-		const user = req.session.user;
-		if (!user || !user.admin)
+		const session = req.session;
+		if (!session || !session.user || !session.user.admin)
 			return res.status(401).send();
 		var opened = req.body.opened
 		if(isOpened !== opened) {

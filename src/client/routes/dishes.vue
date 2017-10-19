@@ -9,10 +9,21 @@
 				collection-name="dish"
 				:filter="filter"
 			>
-				<s-column header="Service">
+				<s-column>
 					<template scope="row">
 						{{parts[row.model.part]}}
 					</template>
+					<label slot="header">
+						Service
+						<s-select multiple fluid transparent v-model="filters.part" placeholder="Tous">
+							<s-option
+								v-for="(txt, val) in parts" :key="val"
+								:value="val"
+								:text="txt"
+							>
+							<s-icon slot="prepend" icon="search" />
+						</s-select>
+					</label>
 				</s-column>
 				<s-column :prop="'title.'+$lang">
 					<search-header slot="header" label="Titre" v-model="filters.title" />
@@ -119,7 +130,8 @@ export default class Dishes extends Vue {
 	parts: any = Parts
 	selected: Dish = null
 	filters: any = {
-		title: ''
+		title: '',
+		part: ''
 	}
 
 	get optUpload() {
@@ -140,7 +152,17 @@ export default class Dishes extends Vue {
 		return number.toFixed(decs||0)
 	}
 	get filter() {
-		return this.filters.title ? x=> !!~x.title[this.$lang].toLowerCase().indexOf(this.filters.title.toLowerCase()) : ()=>true;
+		var tests = [];
+		if(this.filters.title) 
+			tests.push(x=> !!~x.title[this.$lang].comparable().indexOf(this.filters.title.comparable()));
+		if(this.filters.part)
+			tests.push(x=> !!~this.filters.part.indexOf(x.part));
+		return x=> {
+			for(let test of tests)
+				if(!test(x))
+					return false;
+			return true;
+		};
 	}
 	select(dish) {
 		this.selected = dish;

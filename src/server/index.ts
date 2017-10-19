@@ -24,6 +24,8 @@ store.registerAdapter('mongodb', new MongoDBAdapter(config.mongo), { 'default': 
 - -> https
 - summary de commande de groupe (template?)
 //- filtrer les menus
+- filtres plats (service + comparable name)
+- log toutes les commandes
 */
 import * as http from 'http'
 import * as https from 'https'

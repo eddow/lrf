@@ -1,3 +1,15 @@
+
+const punctuation = /[\t\.\,\-\_\'\"\!\?\>\<\(\)\&]/g;
+__assign(String.prototype, {
+	/**
+	 * Lower-case and latinise a string,
+	 * so that "Qué passa" can be compared equal to "que-passa"
+	 */
+	comparable() {
+		return this.replace(punctuation, ' ').latinise().toLowerCase();
+	}
+});
+
 function mapper(cls, name) {
 	cls.schema.properties._id = {
 		type: 'string',
@@ -9,7 +21,6 @@ function mapper(cls, name) {
 		recordClass: cls
 	});
 }
-
 import * as modelDefs from './models/*'
 function nameFromPath(path) {
 	return /([^/]*)\./.exec(path)[1];
