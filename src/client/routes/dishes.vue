@@ -1,5 +1,15 @@
 <template>
 	<div class="ui stackable grid">
+		<s-modal v-model="proposePaste" header="Coller du menu textuel" class="dishes modal">
+			<form onsubmit="return false">
+				<!--s-button icon="github" @click="authenticate('github')" /-->
+				<textarea v-model="pasted" rows="4"></textarea>
+				<div class="ui fluid buttons">
+					<s-button v-command:cancel>{{'Annuler'|translate}}</s-button>
+					<s-button positive v-command:ok type="submit">{{'Coller'|translate}} !</s-button>
+				</div>
+			</form>
+		</s-modal>
 		<div class="six wide column">
 			<mgd-table
 				style="width: 100%;"
@@ -83,10 +93,11 @@
 					<div class="ten wide column">
 						<div v-for="(ldenom, lcode) in languages" :key="lcode">
 							<div class="field ui segments">
-								<s-input class="ui segment labeled" v-model="scope.model.title[lcode]">
+								<s-input class="ui segment labeled action" v-model="scope.model.title[lcode]">
 									<label slot="prepend" class="ui label">
 										{{ldenom.self}}
 									</label>
+									<s-button slot="append" icon="paste" @click="paste(lcode)" />
 								</s-input>
 								<textarea class="ui input segment" rows="4" v-model="scope.model.description[lcode]" />
 							</div>
@@ -101,16 +112,8 @@
 .ui.segment.labeled {
 	padding: 0;
 }
-.dz-message {
-	padding: 70px;
-	border: 1px blue dashed;
-	background-color: white;
-	z-index: 1;
-	text-align: center;
-}
-.is-dragging {
-	border-style: solid;
-	background-color: lightblue;
+.dishes.modal textarea {
+	width: 100%;
 }
 </style>
 <script lang="js">
@@ -207,6 +210,19 @@ export default class Dishes extends Vue {
 			image.src = reader.result;
 		}, false);
 		reader.readAsDataURL(content);
+	}
+	pasted = ""
+	proposePaste
+	paste(lcode) {
+		this.proposePaste(()=> {
+			var text = /^\s*(.*?)\s*\((.*)\)\s*$/.exec(this.pasted);
+			if(!text) alertify.alert('Mauvais format');
+			function up1st(txt) {
+				return txt[0].toUpperCase() + txt.substr(1).toLowerCase();
+			}
+			this.selected.title[lcode] = up1st(text[1]);
+			this.selected.description[lcode] = up1st(text[2]);
+		});
 	}
 }
 </script>
